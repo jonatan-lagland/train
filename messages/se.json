@@ -1,0 +1,22 @@
+{
+    "TimeTable": {
+        "destination": "Destination",
+        "origin": "Ursprung",
+        "departure": "Avgång",
+        "arrival": "Ankomst",
+        "train": "Tåg",
+        "track": "Spår",
+        "placeholder": "Filtrera efter destination...",
+        "arrivalTrains": "Inkommande tåg",
+        "departureTrains": "Avgående tåg"
+    },
+    "AriaTimeTable": {
+        "select": "Välj alla"
+    },
+    "Navigation": {
+        "next": "Nästa",
+        "previous": "Föregående",
+        "columns": "Kolumner",
+        "searchnotfound": "Inga resultat."
+    }
+}

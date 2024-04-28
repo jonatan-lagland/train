@@ -1,0 +1,22 @@
+{
+    "TimeTable": {
+        "destination": "Määränpää",
+        "origin": "Lähtöpaikka",
+        "departure": "Lähtöaika",
+        "arrival": "Saapumisaika",
+        "train": "Juna",
+        "track": "Raide",
+        "placeholder": "Etsi määränpää...",
+        "arrivalTrains": "Saapuvat Junat",
+        "departureTrains": "Lähtevät Junat"
+    },
+    "AriaTimeTable": {
+        "select": "Valitse kaikki"
+    },
+    "Navigation": {
+        "next": "Seuraava",
+        "previous": "Edellinen",
+        "columns": "Sarake",
+        "searchnotfound": "Haulle ei löytynyt tuloksia."
+    }
+}

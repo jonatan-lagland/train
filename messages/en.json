@@ -1,0 +1,22 @@
+{
+    "TimeTable": {
+        "destination": "Destination",
+        "origin": "Origin",
+        "departure": "Departure",
+        "arrival": "Arrival",
+        "train": "Train",
+        "track": "Track",
+        "placeholder": "Filter by destination...",
+        "arrivalTrains": "Incoming Trains",
+        "departureTrains": "Outgoing Trains"
+    },
+    "AriaTimeTable": {
+        "select": "Select all"
+    },
+    "Navigation": {
+        "next": "Next",
+        "previous": "Previous",
+        "columns": "Columns",
+        "searchnotfound": "No results."
+    }
+}
