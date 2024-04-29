@@ -1,16 +1,19 @@
 import React from 'react'
-import { SelectLanguage } from './selectLanguage'
-import { languages } from '@/lib/languages'
-import { useLocale } from 'next-intl';
+import { NavigationSheet } from '../sidebar/navigationSheet';
+import { HomeSharp } from '@mui/icons-material';
+import Link from 'next/link';
 
 function Nav() {
-
-    const locale = useLocale();
-
     return (
         <>
-            <span>Logo</span>
-            <SelectLanguage languages={languages} currentLanguageId={locale}></SelectLanguage>
+            <div className='flex items-center'>
+                <Link href="/">
+                    <HomeSharp sx={{ fontSize: 32 }}></HomeSharp>
+                </Link>
+            </div>
+            <div>
+                <NavigationSheet></NavigationSheet>
+            </div>
         </>
     )
 }
