@@ -70,13 +70,16 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
             header: ({ column }) => {
                 const t = useTranslations('TimeTable');
                 return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        {t(`destination`)}
-                        <CaretSortIcon className="ml-2 h-4 w-4" />
-                    </Button>
+                    <div className="text-start">
+                        <Button
+                            className="p-1"
+                            variant="ghost"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        >
+                            {t(`destination`)}
+                            <CaretSortIcon className="ml-2 h-4 w-4" />
+                        </Button>
+                    </div>
                 )
             },
             cell: ({ row }) => {
@@ -91,6 +94,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                 return (
                     <div className="flex flex-row justify-start items-end">
                         <Button
+                            className="p-1"
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         >
@@ -114,6 +118,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                 return (
                     <div className="flex flex-row justify-end items-end">
                         <Button
+                            className="p-1"
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         >
@@ -179,32 +184,6 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="center">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
             <div className="rounded-md border">
                 <Table>

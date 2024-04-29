@@ -18,10 +18,10 @@ export default function LocaleLayout({
         <html lang={locale}>
             <NextIntlClientProvider messages={messages}>
                 <body className={clsx(inter.className)}>
-                    <header className='flex flex-row justify-around mx-auto py-3 px-3 md:px-12 md:py-8 min-w-full'>
+                    <header className='flex flex-row w-full px-2 sm:px-24 justify-between py-3'>
                         <Nav></Nav>
                     </header>
-                    <main className="flex flex-col justify-center w-full items-center p-24">
+                    <main className="px-2 sm:px-24">
                         {children}
                     </main>
                 </body>
