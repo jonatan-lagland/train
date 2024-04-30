@@ -11,14 +11,9 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { TableRows } from "@mui/icons-material"
-import { SelectLanguage } from "../nav/selectLanguage"
-import { languages } from "@/lib/languages"
-import { useLocale } from 'next-intl';
+import NavigationSheetContent from "./navigationSheetContent"
 
 export function NavigationSheet() {
-
-    const locale = useLocale();
-
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -26,20 +21,14 @@ export function NavigationSheet() {
                     <TableRows></TableRows>
                 </Button>
             </SheetTrigger>
-            <SheetContent side={"bottom"}>
+            <SheetContent side={"left"}>
                 <SheetHeader>
                     <SheetTitle>Edit profile</SheetTitle>
                     <SheetDescription>
                         Make changes to your profile here. Click save when you're done.
                     </SheetDescription>
                 </SheetHeader>
-                <div className="grid gap-4 py-4">
-                    <SelectLanguage languages={languages} currentLanguageId={locale}></SelectLanguage>
-                    <SelectLanguage languages={languages} currentLanguageId={locale}></SelectLanguage>
-                    <SelectLanguage languages={languages} currentLanguageId={locale}></SelectLanguage>
-                    <SelectLanguage languages={languages} currentLanguageId={locale}></SelectLanguage>
-
-                </div>
+                <NavigationSheetContent></NavigationSheetContent>
                 <SheetFooter>
                     <SheetClose asChild>
                         <Button type="submit">Save changes</Button>
