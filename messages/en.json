@@ -17,6 +17,10 @@
         "next": "Next",
         "previous": "Previous",
         "columns": "Columns",
-        "searchnotfound": "No results."
+        "searchnotfound": "No results.",
+        "settingsTitle": "Settings",
+        "settingsDescription": "Customize your settings.",
+        "language": "Language",
+        "home": "Home"
     }
 }

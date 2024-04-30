@@ -17,6 +17,10 @@
         "next": "Nästa",
         "previous": "Föregående",
         "columns": "Kolumner",
-        "searchnotfound": "Inga resultat."
+        "searchnotfound": "Inga resultat.",
+        "settingsTitle": "Inställningar",
+        "settingsDescription": "Anpassa dina inställningar.",
+        "language": "Språk",
+        "home": "Hem"
     }
 }

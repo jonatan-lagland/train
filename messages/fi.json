@@ -17,6 +17,10 @@
         "next": "Seuraava",
         "previous": "Edellinen",
         "columns": "Sarake",
-        "searchnotfound": "Haulle ei löytynyt tuloksia."
+        "searchnotfound": "Haulle ei löytynyt tuloksia.",
+        "settingsTitle": "Asetukset",
+        "settingsDescription": "Muokkaa asetuksia.",
+        "language": "Kieli",
+        "home": "Etusivu"
     }
 }
