@@ -74,3 +74,15 @@
       @apply bg-background text-foreground;
     }
   }
+
+  .sidebar-item {
+    @apply flex flex-col gap-1 py-1 px-4 items-center text-sm font-medium rounded-md transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring;
+  }
+
+  .rotate-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .rotate-icon:hover, .rotate-icon.rotated {
+    transform: rotate(90deg);
+  }
