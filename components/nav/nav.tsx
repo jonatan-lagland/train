@@ -4,9 +4,7 @@ import { NavigationSheet } from '../sidebar/navigationSheet';
 function Nav() {
     return (
         <>
-            <div>
-                <NavigationSheet></NavigationSheet>
-            </div>
+            <NavigationSheet></NavigationSheet>
         </>
     )
 }
