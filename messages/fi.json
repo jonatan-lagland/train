@@ -21,6 +21,10 @@
         "settingsTitle": "Asetukset",
         "settingsDescription": "Muokkaa asetuksia.",
         "language": "Kieli",
-        "home": "Etusivu"
+        "home": "Etusivu",
+        "selectCity": "Valitse kaupunki",
+        "searchCity": "Etsi kaupunki...",
+        "submitButton": "Hae matkoja",
+        "errorSelectLocation": "Ole hyvä ja valitse sijainti."
     }
 }

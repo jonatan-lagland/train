@@ -21,6 +21,10 @@
         "settingsTitle": "Settings",
         "settingsDescription": "Customize your settings.",
         "language": "Language",
-        "home": "Home"
+        "home": "Home",
+        "selectCity": "Select a city",
+        "searchCity": "Search for a city...",
+        "submitButton": "Find a route",
+        "errorSelectLocation": "Please select a location."
     }
 }

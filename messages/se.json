@@ -21,6 +21,10 @@
         "settingsTitle": "Inställningar",
         "settingsDescription": "Anpassa dina inställningar.",
         "language": "Språk",
-        "home": "Hem"
+        "home": "Hem",
+        "selectCity": "Välj en stad",
+        "searchCity": "Sök efter en stad...",
+        "submitButton": "Hitta en rutt",
+        "errorSelectLocation": "Vänligen välj en plats."
     }
 }
