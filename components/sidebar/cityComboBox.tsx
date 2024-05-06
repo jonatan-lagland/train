@@ -64,7 +64,7 @@ export function CityComboBoxForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 sm:flex sm:flex-row sm:items-center sm:justify-center sm:space-y-0 sm:space-x-2">
                 <FormField
                     control={form.control}
                     name="language"

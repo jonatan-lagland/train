@@ -86,3 +86,18 @@
   .rotate-icon:hover, .rotate-icon.rotated {
     transform: rotate(90deg);
   }
+
+  .wiggle-icon {
+    transition: transform 0.3s ease-in-out;
+    animation: wiggle 0.3s ease-in-out 1;
+    display: inline-block;  /* Ensure the transform applies correctly */
+  }
+
+  @keyframes wiggle {
+      0%, 100% {
+          transform: rotate(-7deg);
+      }
+      50% {
+          transform: rotate(7deg);
+      }
+  }
