@@ -20,10 +20,10 @@ export default function LocaleLayout({
                 <body className={clsx(inter.className)}>
                     <div className="flex h-screen">
                         <div className="flex-auto">
-                            <header className='flex-row w-full flex shadow-sm px-2 border-b sm:px-16 justify-between py-3'>
+                            <header className='flex-row w-full flex shadow-sm px-2 border-b sm:px-6 justify-evenly py-3'>
                                 <Nav></Nav>
                             </header>
-                            <main className="px-2 py-10 sm:px-16">
+                            <main className="px-2 py-10 sm:px-16 flex items-center justify-center">
                                 {children}
                             </main>
                         </div>

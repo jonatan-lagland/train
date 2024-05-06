@@ -1,6 +1,8 @@
 import { TimeTable } from "@/components/table/timetable";
 import { useTranslations } from "next-intl";
 import { TrainDestination } from "@/components/table/timetable";
+import Banner from "@/components/banner/banner";
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
 
@@ -48,14 +50,12 @@ export default function Home() {
   const destinationLabel: 'arrivalTrains' | 'departureTrains' = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains';
 
   return (
-    <div className="grid">
-      <div className="flex flex-col gap-8">
-        <div>
-          <h1 className="text-3xl font-semibold">Kokkola</h1>
-          <h2 className="text-xl font-semibold">{t(`TimeTable.${destinationLabel}`)}</h2>
-        </div>
-        <TimeTable data={data} destination={destination}></TimeTable>
+    <div className="flex flex-col flex-grow gap-8 max-w-3xl">
+      <div>
+        <h1 className="text-3xl font-semibold">Kokkola</h1>
+        <h2 className="text-xl font-semibold">{t(`TimeTable.${destinationLabel}`)}</h2>
       </div>
+      <TimeTable data={data} destination={destination}></TimeTable>
     </div>
   );
 }
