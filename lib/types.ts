@@ -44,3 +44,14 @@ export type Train = {
         }
     }
 }
+
+export type StationMetaData = {
+    passengerTraffic: boolean,
+    type: string,
+    stationName: string,
+    stationShortCode: string,
+    stationUICCode: number,
+    countryCode: "FI" | "RU",
+    longitude: number,
+    latitude: number
+}
