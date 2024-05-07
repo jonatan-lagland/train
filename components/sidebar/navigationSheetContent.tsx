@@ -1,7 +1,8 @@
 import React from 'react'
 import HomeIcon from './homeIcon'
 import SettingsDialog from './settingsDialog'
-import { CityComboBoxForm } from './cityComboBox'
+import CityComboBox from './cityComboBox'
+
 
 function NavigationSheetContent() {
     //flex flex-col sm:flex-row gap-12 py-8 sm:py-0
@@ -14,7 +15,7 @@ function NavigationSheetContent() {
                 <SettingsDialog></SettingsDialog>
             </div>
             <div className="flex items-center flex-grow justify-center">
-                <CityComboBoxForm></CityComboBoxForm>
+                <CityComboBox></CityComboBox>
             </div>
         </div>
     )

@@ -1,12 +1,15 @@
+'use client'
 import { TimeTable } from "@/components/table/timetable";
 import { useTranslations } from "next-intl";
 import { TrainDestination } from "@/components/table/timetable";
-import Banner from "@/components/banner/banner";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
-export default function Home() {
+
+export default function TimeTablePage() {
 
   const t = useTranslations()
+  const params = useParams()
+  console.log(params.city)
 
   const data: TimeTable[] = [
     {
@@ -52,7 +55,7 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-grow gap-8 max-w-3xl">
       <div>
-        <h1 className="text-3xl font-semibold">Kokkola</h1>
+        <h1 className="text-3xl font-semibold capitalize">{params.city}</h1>
         <h2 className="text-xl font-semibold">{t(`TimeTable.${destinationLabel}`)}</h2>
       </div>
       <TimeTable data={data} destination={destination}></TimeTable>
