@@ -1,16 +1,15 @@
-'use client'
 import { TimeTable } from "@/components/table/timetable";
-import { useTranslations } from "next-intl";
 import { TrainDestination } from "@/components/table/timetable";
-import { useParams } from "next/navigation";
+import Banner from "./banner";
+import fetchStationMetadata from "@/app/api/fetchStationMetadata";
+import { StationMetaData } from "@/lib/types";
 
 
-export default function TimeTablePage() {
+export type BannerProps = {
+  destinationLabel: 'arrivalTrains' | 'departureTrains';
+}
 
-  const t = useTranslations()
-  const params = useParams()
-  console.log(params.city)
-
+export default async function TimeTablePage() {
   const data: TimeTable[] = [
     {
       id: "m5gr84i9",
@@ -50,14 +49,14 @@ export default function TimeTablePage() {
   ]
 
   const destination: TrainDestination = 'DEPARTURE';
+  // Convert ARRIVAL or DEPARTURE to a format that is used in translation file
   const destinationLabel: 'arrivalTrains' | 'departureTrains' = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains';
+  const stationMetaData = await fetchStationMetadata();
+  console.log(stationMetaData)
 
   return (
     <div className="flex flex-col flex-grow gap-8 max-w-3xl">
-      <div>
-        <h1 className="text-3xl font-semibold capitalize">{params.city}</h1>
-        <h2 className="text-xl font-semibold">{t(`TimeTable.${destinationLabel}`)}</h2>
-      </div>
+      <Banner destinationLabel={destinationLabel}></Banner>
       <TimeTable data={data} destination={destination}></TimeTable>
     </div>
   );
