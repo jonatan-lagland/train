@@ -1,10 +1,18 @@
+import { StaticDataProvider } from "./[locale]/StaticDataProvider";
 import "./globals.css";
 import { ReactNode } from 'react';
+import fetchStationMetadata from "./api/fetchStationMetadata";
 
 type Props = {
     children: ReactNode;
 };
 
-export default function RootLayout({ children }: Props) {
-    return children;
+export default async function RootLayout({ children }: Props) {
+    const stationMetadata = await fetchStationMetadata();
+
+    return (
+        <StaticDataProvider stationMetaData={stationMetadata}>
+            {children}
+        </StaticDataProvider>
+    );
 }

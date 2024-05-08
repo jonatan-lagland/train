@@ -3,6 +3,7 @@ import { TrainDestination } from "@/components/table/timetable";
 import Banner from "./banner";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";
 import { StationMetaData } from "@/lib/types";
+import { StaticDataProvider } from "../StaticDataProvider";
 
 
 export type BannerProps = {
@@ -51,8 +52,6 @@ export default async function TimeTablePage() {
   const destination: TrainDestination = 'DEPARTURE';
   // Convert ARRIVAL or DEPARTURE to a format that is used in translation file
   const destinationLabel: 'arrivalTrains' | 'departureTrains' = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains';
-  const stationMetaData = await fetchStationMetadata();
-  console.log(stationMetaData)
 
   return (
     <div className="flex flex-col flex-grow h-full py-8 gap-8 max-w-4xl items-start">
