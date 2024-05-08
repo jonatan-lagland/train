@@ -55,7 +55,7 @@ export default async function TimeTablePage() {
   console.log(stationMetaData)
 
   return (
-    <div className="flex flex-col flex-grow gap-8 max-w-3xl">
+    <div className="flex flex-col flex-grow h-full py-8 gap-8 max-w-4xl items-start">
       <Banner destinationLabel={destinationLabel}></Banner>
       <TimeTable data={data} destination={destination}></TimeTable>
     </div>

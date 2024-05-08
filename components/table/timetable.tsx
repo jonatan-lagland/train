@@ -70,7 +70,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
             header: ({ column }) => {
                 const t = useTranslations('TimeTable');
                 return (
-                    <div className="text-start">
+                    <div className="text-start font-besley">
                         <Button
                             className="p-1"
                             variant="ghost"
@@ -84,7 +84,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
             },
             cell: ({ row }) => {
                 const stationName = row.getValue("stationName") as string;
-                return <div className="text-start font-medium">{stationName}</div>
+                return <div className="text-start ps-1 font-semibold">{stationName}</div>
             },
         },
         {
@@ -92,7 +92,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
             header: ({ column }) => {
                 const t = useTranslations('TimeTable');
                 return (
-                    <div className="flex flex-row justify-start items-end">
+                    <div className="flex flex-row justify-start items-end font-besley">
                         <Button
                             className="p-1"
                             variant="ghost"
@@ -116,7 +116,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                 const t = useTranslations('TimeTable');
                 const tableTypeFormatted = tableType.toLowerCase();
                 return (
-                    <div className="flex flex-row justify-end items-end">
+                    <div className="flex flex-row justify-end items-end font-besley">
                         <Button
                             className="p-1"
                             variant="ghost"
@@ -174,7 +174,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
     })
 
     return (
-        <div className="w-full">
+        <div className="w-full h-full bg-white p-4 shadow-md rounded-b-sm px-6">
             <div className="flex items-center py-4">
                 <Input
                     placeholder={t("TimeTable.placeholder")}
