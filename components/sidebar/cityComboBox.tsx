@@ -20,6 +20,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { StationMetaData } from "@/lib/types"
 
 const frameworks = [
     {
@@ -44,10 +45,17 @@ const frameworks = [
     },
 ]
 
-export default function CityComboBox() {
+type CityComboBoxProps = {
+    stationMetadata: StationMetaData[] | []
+    defaultCity: string | ''
+}
+
+export default function CityComboBox({ stationMetadata, defaultCity }: CityComboBoxProps) {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const t = useTranslations('Navigation');
+
+    console.log(stationMetadata)
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -58,9 +66,11 @@ export default function CityComboBox() {
                     aria-expanded={open}
                     className="w-[200px] justify-between"
                 >
-                    {value
-                        ? frameworks.find((framework) => framework.value === value)?.label
-                        : t("selectCity")}
+                    <span className="capitalize">
+                        {value
+                            ? stationMetadata.find((station) => station.stationName === value)?.stationName
+                            : defaultCity}
+                    </span>
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -70,24 +80,28 @@ export default function CityComboBox() {
                     <CommandEmpty>{t("searchnotfound")}</CommandEmpty>
                     <CommandList>
                         <CommandGroup>
-                            {frameworks.map((framework) => (
-                                <CommandItem
-                                    key={framework.value}
-                                    value={framework.value}
-                                    onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue)
-                                        setOpen(false)
-                                    }}
-                                >
-                                    {framework.label}
-                                    <CheckIcon
-                                        className={cn(
-                                            "ml-auto h-4 w-4",
-                                            value === framework.value ? "opacity-100" : "opacity-0"
-                                        )}
-                                    />
-                                </CommandItem>
-                            ))}
+                            {stationMetadata.map((station) => {
+                                // Remove "asema" from labels when preceded by a space or start of the string
+                                const sanitizedStationName = station.stationName.replace(/(^|\s)asema\b/gi, '').trim();
+                                return (
+                                    <CommandItem
+                                        key={station.stationShortCode}
+                                        value={sanitizedStationName} // Pass the sanitized station name as the value
+                                        onSelect={(currentValue) => {
+                                            setValue(currentValue === value ? "" : currentValue);
+                                            setOpen(false);
+                                        }}
+                                    >
+                                        {sanitizedStationName} {/* Display the sanitized station name */}
+                                        <CheckIcon
+                                            className={cn(
+                                                "ml-auto h-4 w-4",
+                                                value === station.stationShortCode ? "opacity-100" : "opacity-0"
+                                            )}
+                                        />
+                                    </CommandItem>
+                                );
+                            })}
                         </CommandGroup>
                     </CommandList>
                 </Command>

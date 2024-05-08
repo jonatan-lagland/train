@@ -1,11 +1,21 @@
-import React from 'react'
+'use client'
+import React, { useContext } from 'react'
 import HomeIcon from './homeIcon'
 import SettingsDialog from './settingsDialog'
 import CityComboBox from './cityComboBox'
+import { StationMetadataContext } from '@/lib/context/StationMetadataContext'
+import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 
 function NavigationSheetContent() {
-    //flex flex-col sm:flex-row gap-12 py-8 sm:py-0
+
+    const t = useTranslations('Navigation');
+    const stationMetadata = useContext(StationMetadataContext)
+    const params = useParams()
+    const selectCity = t('selectCity');
+    const defaultCity = params.city ? params.city as string : selectCity; // Localized label for "Select a city" used when on the home page
+
     return (
         <div className="flex flex-col sm:flex-row gap-12 py-0 items-center">
             <div className='flex-shrink'>
@@ -15,7 +25,7 @@ function NavigationSheetContent() {
                 <SettingsDialog></SettingsDialog>
             </div>
             <div className="flex items-center flex-grow justify-center">
-                <CityComboBox></CityComboBox>
+                <CityComboBox stationMetadata={stationMetadata} defaultCity={defaultCity}></CityComboBox>
             </div>
         </div>
     )
