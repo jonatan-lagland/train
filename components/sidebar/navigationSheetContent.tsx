@@ -9,7 +9,6 @@ import { useTranslations } from 'next-intl'
 
 
 function NavigationSheetContent() {
-
     const t = useTranslations('Navigation');
     const stationMetadata = useContext(StationMetadataContext)
     const params = useParams()

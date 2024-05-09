@@ -1,10 +1,6 @@
 import { TimeTable } from "@/components/table/timetable";
 import { TrainDestination } from "@/components/table/timetable";
 import Banner from "./banner";
-import fetchStationMetadata from "@/app/api/fetchStationMetadata";
-import { StationMetaData } from "@/lib/types";
-import { StaticDataProvider } from "../StaticDataProvider";
-
 
 export type BannerProps = {
   destinationLabel: 'arrivalTrains' | 'departureTrains';

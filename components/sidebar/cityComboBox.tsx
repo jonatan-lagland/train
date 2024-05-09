@@ -21,29 +21,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { StationMetaData } from "@/lib/types"
-
-const frameworks = [
-    {
-        value: "next.js",
-        label: "Next.js",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
+import { useRouter } from "@/navigation"
 
 type CityComboBoxProps = {
     stationMetadata: StationMetaData[] | []
@@ -53,9 +31,26 @@ type CityComboBoxProps = {
 export default function CityComboBox({ stationMetadata, defaultCity }: CityComboBoxProps) {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
+    const router = useRouter();
     const t = useTranslations('Navigation');
 
-    console.log(stationMetadata)
+    // Function to remove diacritical marks and convert to standard ASCII characters
+    const normalizeString = (str: string) =>
+        str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "") // Remove accents
+            .replace(/[^a-zA-Z0-9]/g, "") // Remove other special characters
+            .toLowerCase(); // Convert to lowercase
+
+    const handleSelect = (currentValue: string) => {
+        setValue(currentValue === value ? "" : currentValue);
+        setOpen(false);
+
+        // Use the normalizeString function to clean up the station name
+        const sanitizedURL = normalizeString(currentValue);
+        const url = `/${encodeURIComponent(sanitizedURL)}`;
+        router.push(url);
+    };
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -81,16 +76,18 @@ export default function CityComboBox({ stationMetadata, defaultCity }: CityCombo
                     <CommandList>
                         <CommandGroup>
                             {stationMetadata.map((station) => {
-                                // Remove "asema" from labels when preceded by a space or start of the string
-                                const sanitizedStationName = station.stationName.replace(/(^|\s)asema\b/gi, '').trim();
+                                const sanitizedStationName = station.stationName
+                                    // Remove "asema" when preceded by a space or at the start
+                                    .replace(/(^|\s)asema\b/gi, "")
+                                    // Replace underscores with spaces
+                                    .replace(/_/g, " ")
+                                    .trim(); // Remove leading/trailing spaces
+
                                 return (
                                     <CommandItem
                                         key={station.stationShortCode}
                                         value={sanitizedStationName} // Pass the sanitized station name as the value
-                                        onSelect={(currentValue) => {
-                                            setValue(currentValue === value ? "" : currentValue);
-                                            setOpen(false);
-                                        }}
+                                        onSelect={() => handleSelect(sanitizedStationName)}
                                     >
                                         {sanitizedStationName} {/* Display the sanitized station name */}
                                         <CheckIcon

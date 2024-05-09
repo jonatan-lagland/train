@@ -135,7 +135,6 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                 const dateTime: Date = new Date(isoDateString);
                 // Covert the date object into a localized timestamp
                 const timeStamp: string = format.dateTime(dateTime, { hour: 'numeric', minute: 'numeric' });
-                console.log(timeStamp)
                 return <div className="lowercase text-end">{timeStamp}</div>;
             }
         },

@@ -5,17 +5,24 @@ import { useTranslations } from 'next-intl';
 import { BannerProps } from './page';
 import { Train, ArrowOutward, ArrowBack } from '@mui/icons-material';
 import { Box } from '@mui/material';
+import useStationDestination from '@/lib/utils/useStationDestination';
+import { useContext } from 'react';
+import { StationMetadataContext } from '@/lib/context/StationMetadataContext';
 
 export default function Banner({ destinationLabel }: BannerProps) {
+    const params = useParams()
+
+    const city: string = params.city ? params.city as string : ""
+    const stationMetadata = useContext(StationMetadataContext)
+    const cityLabel = useStationDestination({ city, stationMetadata });
 
     const t = useTranslations('TimeTable')
-    const params = useParams()
     const iconColor: string = destinationLabel === 'arrivalTrains' ? '#1976d2' : '#b619d2'
 
     return (
         <div className='flex flex-row gap-8 items-center font-besley px-8 py-6 w-full shadow-md bg-white'>
             <span className='flex flex-col gap-1'>
-                <h1 className="text-5xl flex-auto font-semibold capitalize">{params.city}</h1>
+                <h1 className="text-5xl flex-auto font-semibold capitalize">{cityLabel}</h1>
                 <h2 className={`text-3xl flex-grow font-semibold text-blue-900`}>{t(`${destinationLabel}`)}</h2>
             </span>
             <div className='flex flex-row gap-2'>
