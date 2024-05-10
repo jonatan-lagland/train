@@ -3,8 +3,6 @@
 import * as React from "react"
 import {
     CaretSortIcon,
-    ChevronDownIcon,
-    DotsHorizontalIcon,
 } from "@radix-ui/react-icons"
 import {
     ColumnDef,
@@ -20,16 +18,6 @@ import {
 } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import {
     Table,
@@ -39,7 +27,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useLocale, useTimeZone, useNow, useTranslations } from 'next-intl';
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE";
 
@@ -62,6 +50,13 @@ type CreateColumnsProps = {
     tableType: TrainDestination
     format: any
 }
+
+// Workaround for useLocale not returning a full time format and causing issues with the swedish format.
+const localeMap: Record<string, string> = {
+    en: 'en-US',
+    se: 'sv-SE',
+    fi: 'fi-FI',
+};
 
 export const createColumns = ({ tableType, format }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
     return [
@@ -129,12 +124,17 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                 )
             },
             cell: ({ row }) => {
-                // Get the ISO date string from the row data
                 const isoDateString: string = row.getValue("scheduledTime") as string;
-                // Convert the ISO data to a date object
                 const dateTime: Date = new Date(isoDateString);
-                // Covert the date object into a localized timestamp
-                const timeStamp: string = format.dateTime(dateTime, { hour: 'numeric', minute: 'numeric' });
+                const currentLocale = useLocale();
+                const currentLocaleFull = localeMap[currentLocale] || 'fi-FI'; // Convert to full timestamp
+
+                // Covert date object into a localized timestamp
+                const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                });
+                const timeStamp: string = formatter.format(dateTime);
                 return <div className="lowercase text-end">{timeStamp}</div>;
             }
         },
