@@ -1,22 +1,26 @@
-'use client'
 import React from 'react'
-import { useParams } from "next/navigation";
-import { useTranslations } from 'next-intl';
-import { BannerProps } from './page';
-import { Train, ArrowOutward, ArrowBack } from '@mui/icons-material';
+import { getTranslations } from 'next-intl/server';
+import { BannerLabel } from './page';
+import { ArrowOutward, ArrowBack } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import useStationDestination from '@/lib/utils/useStationDestination';
-import { useContext } from 'react';
-import { StationMetadataContext } from '@/lib/context/StationMetadataContext';
+import fetchStationMetadata from '@/app/api/fetchStationMetadata';
 
-export default function Banner({ destinationLabel }: BannerProps) {
-    const params = useParams()
+type BannerProps = {
+    destinationLabel: BannerLabel
+    city: string
+}
 
-    const city: string = params.city ? params.city as string : ""
-    const stationMetadata = useContext(StationMetadataContext)
+/* 
+    * To keep the labels available for SSR, metadata has to be fetched a second time. The metadata is used in other components, like the navbar.
+    * Another option would be to prop drill the object all the way down, which would cause maintainability issues.
+    * TODO: If React Context API becomes available to server components, refractor to use that instead.
+*/
+
+export default async function Banner({ destinationLabel, city }: BannerProps) {
+    const stationMetadata = await fetchStationMetadata();
     const cityLabel = useStationDestination({ city, stationMetadata });
-
-    const t = useTranslations('TimeTable')
+    const t = await getTranslations('TimeTable')
     const iconColor: string = destinationLabel === 'arrivalTrains' ? '#1976d2' : '#b619d2'
 
     return (

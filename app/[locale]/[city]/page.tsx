@@ -2,11 +2,15 @@ import { TimeTable } from "@/components/table/timetable";
 import { TrainDestination } from "@/components/table/timetable";
 import Banner from "./banner";
 
-export type BannerProps = {
-  destinationLabel: 'arrivalTrains' | 'departureTrains';
+export type BannerLabel = 'arrivalTrains' | 'departureTrains';
+export type TimeTablePageProps = {
+  params: {
+    locale: string
+    city: string
+  }
 }
 
-export default async function TimeTablePage() {
+export default async function TimeTablePage({ params }: TimeTablePageProps) {
   const data: TimeTable[] = [
     {
       id: "m5gr84i9",
@@ -47,11 +51,12 @@ export default async function TimeTablePage() {
 
   const destination: TrainDestination = 'DEPARTURE';
   // Convert ARRIVAL or DEPARTURE to a format that is used in translation file
-  const destinationLabel: 'arrivalTrains' | 'departureTrains' = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains';
+  const destinationLabel: BannerLabel = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains';
+  const city: string = params.city ? params.city as string : ""
 
   return (
     <div className="flex flex-col flex-grow h-full py-8 gap-8 max-w-4xl items-start">
-      <Banner destinationLabel={destinationLabel}></Banner>
+      <Banner destinationLabel={destinationLabel} city={city}></Banner>
       <TimeTable data={data} destination={destination}></TimeTable>
     </div>
   );

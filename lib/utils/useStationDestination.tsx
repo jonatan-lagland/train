@@ -1,4 +1,3 @@
-'use client'
 import { StationMetaData } from '../types'
 import { notFound } from 'next/navigation'
 
