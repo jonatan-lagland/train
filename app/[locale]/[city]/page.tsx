@@ -1,6 +1,7 @@
 import { TimeTable } from "@/components/table/timetable";
 import { TrainDestination } from "@/components/table/timetable";
 import Banner from "./banner";
+import { getTranslations } from "next-intl/server";
 
 export type BannerLabel = 'arrivalTrains' | 'departureTrains';
 export type TimeTablePageProps = {
@@ -8,6 +9,16 @@ export type TimeTablePageProps = {
     locale: string
     city: string
   }
+}
+
+export async function generateMetadata({ params }: { params: { city: string } }) {
+  const { city } = params;
+  const t = await getTranslations('MetaData')
+
+  return {
+    title: `${city} | ${t('titleDeparture')}`,
+    description: t('description'),
+  };
 }
 
 export default async function TimeTablePage({ params }: TimeTablePageProps) {
