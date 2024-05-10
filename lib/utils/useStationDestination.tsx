@@ -7,12 +7,9 @@ type useStationDestinationProps = {
 }
 
 // Normalize function to handle diacritical marks, spaces, and special characters
-const normalizeString = (str: string) =>
-    str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Remove accents
-        .replace(/[\s\-\(\)]+/g, "") // Replace spaces, hyphens, and brackets with nothing (empty space)
-        .toLowerCase(); // Convert to lowercase
+const normalizeString = (str: string) => {
+    return decodeURIComponent(str.toLowerCase());
+};
 
 // Sanitize function to remove/replace specific patterns (e.g., "asema" and underscores)
 const sanitizeStationName = (stationName: string) =>

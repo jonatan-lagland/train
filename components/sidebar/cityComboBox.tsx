@@ -34,21 +34,18 @@ export default function CityComboBox({ stationMetadata, defaultCity }: CityCombo
     const router = useRouter();
     const t = useTranslations('Navigation');
 
-    // Function to remove diacritical marks and convert to standard ASCII characters
-    const normalizeString = (str: string) =>
-        str
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "") // Remove accents
-            .replace(/[^a-zA-Z0-9]/g, "") // Remove other special characters
-            .toLowerCase(); // Convert to lowercase
+    // Function to URL-encode special characters into UTF-8 percent encoding
+    const sanitizeForURL = (str: string) => {
+        return encodeURIComponent(str.toLowerCase());
+    };
 
+    // Function to handle selection and navigation
     const handleSelect = (currentValue: string) => {
         setValue(currentValue === value ? "" : currentValue);
         setOpen(false);
-
-        // Use the normalizeString function to clean up the station name
-        const sanitizedURL = normalizeString(currentValue);
-        const url = `/${encodeURIComponent(sanitizedURL)}`;
+        // Use the sanitizeForURL function to encode special characters
+        const sanitizedURL = sanitizeForURL(currentValue);
+        const url = `/${sanitizedURL}`;
         router.push(url);
     };
 
@@ -62,9 +59,7 @@ export default function CityComboBox({ stationMetadata, defaultCity }: CityCombo
                     className="w-[200px] justify-between"
                 >
                     <span className="capitalize">
-                        {value
-                            ? stationMetadata.find((station) => station.stationName === value)?.stationName
-                            : defaultCity}
+                        {decodeURIComponent(defaultCity)}
                     </span>
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -89,7 +84,8 @@ export default function CityComboBox({ stationMetadata, defaultCity }: CityCombo
                                         value={sanitizedStationName} // Pass the sanitized station name as the value
                                         onSelect={() => handleSelect(sanitizedStationName)}
                                     >
-                                        {sanitizedStationName} {/* Display the sanitized station name */}
+                                        <span className="capitalize">{sanitizedStationName}</span>
+
                                         <CheckIcon
                                             className={cn(
                                                 "ml-auto h-4 w-4",
