@@ -26,5 +26,11 @@
         "searchCity": "Search for a city...",
         "submitButton": "Find a route",
         "errorSelectLocation": "Please select a location."
+    },
+    "MetaData": {
+        "title": "Train timetables",
+        "titleDeparture": "Departing trains",
+        "titleArrival": "Arriving trains",
+        "description": "Track real-time VR train timetables in Finland. Access up-to-date schedules, route information, and platform details to ensure a smooth journey across the Finnish rail network."
     }
 }
