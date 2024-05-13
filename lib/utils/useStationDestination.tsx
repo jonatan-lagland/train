@@ -38,13 +38,10 @@ function useStationDestination({ city, stationMetadata }: useStationDestinationP
         (station) => normalizeAndSanitize(station.stationName) === normalizedAndSanitizedCity
     );
 
-
     // If no station matches, trigger the 404 error page
     if (!matchedStation) {
         notFound();
     }
-
-
 
     // Return sanitized but non-normalized station name if found
     return sanitizeStationName(matchedStation!.stationName); // Non-null assertion since notFound handles missing

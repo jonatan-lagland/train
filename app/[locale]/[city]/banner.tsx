@@ -23,21 +23,21 @@ export default async function Banner({ destinationLabel, city }: BannerProps) {
             <div className='flex flex-row gap-2'>
                 <Box
                     sx={{
-                        backgroundColor: iconColor, // Your desired background color
-                        padding: "10px", // Adjust padding as needed
-                        borderRadius: "50%", // Optional, makes the icon container circular
+                        backgroundColor: iconColor,
+                        padding: "10px",
+                        borderRadius: "50%",
                         display: "inline-flex",
                     }}
                 >
                     {destinationLabel === 'arrivalTrains' ?
                         <ArrowBack
                             style={{
-                                color: "#FFFFFF", // Set the icon color to white
+                                color: "#FFFFFF",
                             }}
                         /> :
                         <ArrowOutward
                             style={{
-                                color: "#FFFFFF", // Set the icon color to white
+                                color: "#FFFFFF",
                             }}
                         />
                     }

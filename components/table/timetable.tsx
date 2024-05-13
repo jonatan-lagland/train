@@ -28,16 +28,16 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useFormatter, useLocale, useTimeZone, useNow, useTranslations } from 'next-intl';
+import { Train } from "@/lib/types"
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE";
 
 export type TimeTable = {
-    id: string
     stationName: string
     type: TrainDestination;
     scheduledTime: string
     trainType: string
-    operatorUICCode: number
+    trainNumber: number
     differenceInMinutes?: number
 }
 
@@ -101,8 +101,8 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
 
             },
             cell: ({ row }) => {
-                const { trainType, operatorUICCode } = row.original;
-                return <div className="text-start">{`${trainType} ${operatorUICCode}`}</div>
+                const { trainType, trainNumber } = row.original;
+                return <div className="text-start">{`${trainType} ${trainNumber}`}</div>
             },
         },
         {
