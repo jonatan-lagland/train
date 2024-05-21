@@ -48,7 +48,8 @@ export type TimeTableProps = {
 
 type CreateColumnsProps = {
     tableType: TrainDestination
-    format: any
+    locale: any
+    translation: any
 }
 
 // Workaround for useLocale not returning a full time format and causing issues with the swedish format.
@@ -58,12 +59,11 @@ const localeMap: Record<string, string> = {
     fi: 'fi-FI',
 };
 
-export const createColumns = ({ tableType, format }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
+export const createColumns = ({ tableType, locale, translation }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
     return [
         {
             accessorKey: "stationName",
             header: ({ column }) => {
-                const t = useTranslations('TimeTable');
                 return (
                     <div className="text-start font-besley">
                         <Button
@@ -71,7 +71,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         >
-                            {t(`destination`)}
+                            {translation(`destination`)}
                             <CaretSortIcon className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
@@ -85,7 +85,6 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
         {
             accessorKey: "trainType",
             header: ({ column }) => {
-                const t = useTranslations('TimeTable');
                 return (
                     <div className="flex flex-row justify-start items-end font-besley">
                         <Button
@@ -93,7 +92,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         >
-                            {t('train')}
+                            {translation('train')}
                             <CaretSortIcon className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
@@ -108,7 +107,6 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
         {
             accessorKey: "scheduledTime",
             header: ({ column }) => {
-                const t = useTranslations('TimeTable');
                 const tableTypeFormatted = tableType.toLowerCase();
                 return (
                     <div className="flex flex-row justify-end items-end font-besley">
@@ -117,7 +115,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         >
-                            {t(`${tableTypeFormatted}`)}
+                            {translation(`${tableTypeFormatted}`)}
                             <CaretSortIcon className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
@@ -126,8 +124,7 @@ export const createColumns = ({ tableType, format }: CreateColumnsProps): Column
             cell: ({ row }) => {
                 const isoDateString: string = row.getValue("scheduledTime") as string;
                 const dateTime: Date = new Date(isoDateString);
-                const currentLocale = useLocale();
-                const currentLocaleFull = localeMap[currentLocale] || 'fi-FI'; // Convert to full timestamp
+                const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
 
                 // Covert date object into a localized timestamp
                 const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
@@ -150,8 +147,9 @@ export function TimeTable({ data, destination }: TimeTableProps) {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-    const format = useFormatter();
-    const columns = createColumns({ tableType: destination, format: format });
+    const timetableTranslations = useTranslations('TimeTable');
+    const locale = useLocale();
+    const columns = createColumns({ tableType: destination, locale: locale, translation: timetableTranslations });
 
     const table = useReactTable({
         data,
