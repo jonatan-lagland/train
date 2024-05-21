@@ -36,7 +36,8 @@ function transformTrainData(trains: any[], stationMetaData: { stationName: strin
                 scheduledTime: row.scheduledTime,
                 trainType: train.trainType,
                 trainNumber: train.trainNumber,
-                differenceInMinutes: row.differenceInMinutes
+                differenceInMinutes: row.differenceInMinutes,
+                commercialTrack: row.commercialTrack
             };
         });
 
@@ -62,8 +63,8 @@ function TimetableContainer({ destination, city }: TimetableContainerProps) {
             }
             try {
                 const response = await fetchLiveTrain({ station: stationShortCode, type: destination });
-                console.log(response);
                 const transformedData = transformTrainData(response, stationMetaData, stationShortCode, destination);
+                console.log(transformedData);
                 setLiveTrainData(transformedData);
             } catch (error) {
                 console.error('Failed to fetch train data:', error);

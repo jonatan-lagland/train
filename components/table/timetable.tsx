@@ -27,8 +27,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useFormatter, useLocale, useTimeZone, useNow, useTranslations } from 'next-intl';
-import { Train } from "@/lib/types"
+import { useLocale, useTranslations } from 'next-intl';
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE";
 
@@ -39,6 +38,7 @@ export type TimeTable = {
     trainType: string
     trainNumber: number
     differenceInMinutes?: number
+    commercialTrack: number
 }
 
 export type TimeTableProps = {
@@ -62,46 +62,46 @@ const localeMap: Record<string, string> = {
 export const createColumns = ({ tableType, locale, translation }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
     return [
         {
-            accessorKey: "stationName",
-            header: ({ column }) => {
-                return (
-                    <div className="text-start font-besley">
-                        <Button
-                            className="p-1"
-                            variant="ghost"
-                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        >
-                            {translation(`destination`)}
-                            <CaretSortIcon className="ml-2 h-4 w-4" />
-                        </Button>
-                    </div>
-                )
-            },
-            cell: ({ row }) => {
-                const stationName = row.getValue("stationName") as string;
-                return <div className="text-start ps-1 font-semibold">{stationName}</div>
-            },
-        },
-        {
             accessorKey: "trainType",
-            header: ({ column }) => {
+            header: () => {
                 return (
-                    <div className="flex flex-row justify-start items-end font-besley">
-                        <Button
-                            className="p-1"
-                            variant="ghost"
-                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        >
-                            {translation('train')}
-                            <CaretSortIcon className="ml-2 h-4 w-4" />
-                        </Button>
-                    </div>
+                    <span className="font-besley">
+                        {translation('train')}
+                    </span>
                 )
 
             },
             cell: ({ row }) => {
                 const { trainType, trainNumber } = row.original;
                 return <div className="text-start">{`${trainType} ${trainNumber}`}</div>
+            },
+        },
+        {
+            accessorKey: "commercialTrack",
+            header: () => {
+                return (
+                    <div className="flex flex-row justify-center items-end font-besley">
+                        {translation(`track`)}
+                    </div>
+                )
+            },
+            cell: ({ row }) => {
+                const commercialTrack = row.getValue("commercialTrack") as string;
+                return <div className="text-center font-semibold">{commercialTrack}</div>
+            },
+        },
+        {
+            accessorKey: "stationName",
+            header: () => {
+                return (
+                    <span className="font-besley">
+                        {translation(`destination`)}
+                    </span>
+                )
+            },
+            cell: ({ row }) => {
+                const stationName = row.getValue("stationName") as string;
+                return <div className="text-start ps-1 font-semibold">{stationName}</div>
             },
         },
         {
@@ -140,7 +140,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
 
 export function TimeTable({ data, destination }: TimeTableProps) {
     const t = useTranslations();
-    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
@@ -171,7 +171,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
     })
 
     return (
-        <div className="w-full h-full bg-white p-4 shadow-md rounded-b-sm px-6">
+        <div className="h-full w-full bg-white p-4 shadow-md rounded-b-sm px-6">
             <div className="flex items-center py-4">
                 <Input
                     placeholder={t("TimeTable.placeholder")}
@@ -189,7 +189,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id}>
+                                        <TableHead key={header.id} className="flex-1">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -223,7 +223,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
-                                    className="h-24 text-center"
+                                    className="h-24 text-center flex-1"
                                 >
                                     {t('Navigation.searchnotfound')}
                                 </TableCell>
@@ -231,26 +231,6 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                         )}
                     </TableBody>
                 </Table>
-            </div>
-            <div className="flex items-center justify-start space-x-2 py-4">
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        {t('Navigation.previous')}
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        {t('Navigation.next')}
-                    </Button>
-                </div>
             </div>
         </div>
     )
