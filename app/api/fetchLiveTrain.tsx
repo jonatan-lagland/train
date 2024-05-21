@@ -2,7 +2,8 @@ import { TrainDestination } from "@/components/table/timetable";
 import { Train } from "@/lib/types";
 
 const fetchArrivingAmount: number = 10;
-const fetchArrivedAmount: number = 2;
+const fetchArrivedAmount: number = 0;
+const revalidateDuration: number = 30;
 
 type fetchLiveTrainProps = {
     station: string
@@ -16,7 +17,7 @@ async function fetchLiveTrain({ station, type }: fetchLiveTrainProps): Promise<T
         if (type === 'ARRIVAL') {
             const response = await fetch(
                 arrivalTrains,
-                { next: { revalidate: 30 } }
+                { next: { revalidate: revalidateDuration } }
             );
             const data: Train[] = await response.json();
             return data;
@@ -24,13 +25,12 @@ async function fetchLiveTrain({ station, type }: fetchLiveTrainProps): Promise<T
         if (type === 'DEPARTURE') {
             const response = await fetch(
                 departingTrains,
-                { next: { revalidate: 30 } }
+                { next: { revalidate: revalidateDuration } }
             );
             const data: Train[] = await response.json();
             return data;
         }
-
-        return []; // If neither arrival or departure due to some unknown error, avoid sending incorrect data
+        return []; // If neither arrival or departure due to some error, avoid sending incorrect data
     } catch (error) {
         console.error('Error fetching live train data:', error);
         return [];
