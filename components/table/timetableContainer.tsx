@@ -5,6 +5,7 @@ import { TimeTable, TrainDestination } from './timetable'
 import { BannerLabel } from '@/app/[locale]/[city]/page'
 import fetchLiveTrain from '@/app/api/fetchLiveTrain'
 import { Train } from '@/lib/types'
+import sanitizeStationName from '@/lib/utils/sanitizeStationName'
 
 type TimetableContainerProps = {
     destination: TrainDestination
@@ -29,12 +30,7 @@ function transformTrainData(trains: any[], stationMetaData: { stationName: strin
             const finalDestinationData = stationMetaData.find(code => code.stationShortCode === lastRow.stationShortCode);
 
             return {
-                stationName: finalDestinationData ? finalDestinationData.stationName
-                    // Remove "asema" when preceded by a space or at the start
-                    .replace(/(^|\s)asema\b/gi, "")
-                    // Replace underscores with spaces
-                    .replace(/_/g, " ")
-                    .trim() // Remove leading/trailing spaces 
+                stationName: finalDestinationData ? sanitizeStationName(finalDestinationData.stationName)
                     : "", // Use the last station name or default
                 type: row.type,
                 scheduledTime: row.scheduledTime,
@@ -54,7 +50,7 @@ function transformTrainData(trains: any[], stationMetaData: { stationName: strin
 function TimetableContainer({ destination, city }: TimetableContainerProps) {
     const stationMetaData = useContext(StationMetadataContext)
     const decodedStation = decodeURIComponent(city.toLowerCase());
-    const station = stationMetaData.find(code => decodedStation === code.stationName.toLowerCase().replace(/(^|\s)asema\b/gi, "").replace(/_/g, " ").trim());
+    const station = stationMetaData.find(code => decodedStation === sanitizeStationName(code.stationName.toLowerCase()));
     const stationShortCode = station ? station.stationShortCode : undefined;
     const [liveTrainData, setLiveTrainData] = useState<TimeTable[]>([]);
 
@@ -77,7 +73,7 @@ function TimetableContainer({ destination, city }: TimetableContainerProps) {
         //const intervalId = setInterval(fetchLiveTrainData, 30000); // Interval to re-fetch data every 30 seconds
         //return () => clearInterval(intervalId);
 
-    }, [stationShortCode, destination, stationMetaData]);
+    }, [stationShortCode, destination, stationMetaData, city]);
 
     //console.log(data, liveTrainData)
 

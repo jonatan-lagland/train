@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/popover"
 import { StationMetaData } from "@/lib/types"
 import { useRouter } from "@/navigation"
+import sanitizeStationName from "@/lib/utils/sanitizeStationName"
 
 type CityComboBoxProps = {
     stationMetadata: StationMetaData[] | []
@@ -71,13 +72,7 @@ export default function CityComboBox({ stationMetadata, defaultCity }: CityCombo
                     <CommandList>
                         <CommandGroup>
                             {stationMetadata.map((station) => {
-                                const sanitizedStationName = station.stationName
-                                    // Remove "asema" when preceded by a space or at the start
-                                    .replace(/(^|\s)asema\b/gi, "")
-                                    // Replace underscores with spaces
-                                    .replace(/_/g, " ")
-                                    .trim(); // Remove leading/trailing spaces
-
+                                const sanitizedStationName = sanitizeStationName(station.stationName)
                                 return (
                                     <CommandItem
                                         key={station.stationShortCode}

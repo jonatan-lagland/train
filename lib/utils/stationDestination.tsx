@@ -1,7 +1,8 @@
 import { StationMetaData } from '../types'
 import { notFound } from 'next/navigation'
+import sanitizeStationName from './sanitizeStationName'
 
-type useStationDestinationProps = {
+type getStationDestinationProps = {
     city: string
     stationMetadata: StationMetaData[]
 }
@@ -11,19 +12,12 @@ const normalizeString = (str: string) => {
     return decodeURIComponent(str.toLowerCase());
 };
 
-// Sanitize function to remove/replace specific patterns (e.g., "asema" and underscores)
-const sanitizeStationName = (stationName: string) =>
-    stationName
-        .replace(/(^|\s)asema\b/gi, "") // Remove "asema" when preceded by a space or at the start
-        .replace(/_/g, " ") // Replace underscores with spaces
-        .trim(); // Remove leading/trailing spaces
-
 // Combine normalization and sanitization into one function for comparison
 const normalizeAndSanitize = (name: string) => normalizeString(sanitizeStationName(name));
 
 
 /**
- * A hook that searches for a station by its name based on the provided string and stations object.
+ * A function that searches for a station by its name based on the provided string and stations object.
  * If a station name isn't found in the metadata, the `notFound` function will be called.
  *
  * @param {string} city - A string containing the city name to search for.
@@ -32,7 +26,7 @@ const normalizeAndSanitize = (name: string) => normalizeString(sanitizeStationNa
  * @returns {string} - The original, non-sanitized station name if found.
  */
 
-function useStationDestination({ city, stationMetadata }: useStationDestinationProps): string {
+function getStationDestination({ city, stationMetadata }: getStationDestinationProps): string {
     const normalizedAndSanitizedCity = normalizeAndSanitize(city);
     const matchedStation = stationMetadata.find(
         (station) => normalizeAndSanitize(station.stationName) === normalizedAndSanitizedCity
@@ -47,4 +41,4 @@ function useStationDestination({ city, stationMetadata }: useStationDestinationP
     return sanitizeStationName(matchedStation!.stationName); // Non-null assertion since notFound handles missing
 }
 
-export default useStationDestination
+export default getStationDestination
