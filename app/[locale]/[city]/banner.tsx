@@ -20,29 +20,6 @@ export default async function Banner({ destinationLabel, city }: BannerProps) {
                 <h1 className="text-5xl flex-auto font-semibold capitalize">{cityLabel}</h1>
                 <h2 className={`text-3xl flex-grow font-semibold text-blue-900`}>{t(`${destinationLabel}`)}</h2>
             </span>
-            <div className='flex flex-row gap-2'>
-                <Box
-                    sx={{
-                        backgroundColor: iconColor,
-                        padding: "10px",
-                        borderRadius: "50%",
-                        display: "inline-flex",
-                    }}
-                >
-                    {destinationLabel === 'arrivalTrains' ?
-                        <ArrowBack
-                            style={{
-                                color: "#FFFFFF",
-                            }}
-                        /> :
-                        <ArrowOutward
-                            style={{
-                                color: "#FFFFFF",
-                            }}
-                        />
-                    }
-                </Box>
-            </div>
         </div>
     )
 }
