@@ -8,7 +8,9 @@
         "track": "Track",
         "placeholder": "Filter by destination...",
         "arrivalTrains": "Incoming Trains",
-        "departureTrains": "Outgoing Trains"
+        "departureTrains": "Outgoing Trains",
+        "shortHour": "h",
+        "shortMin": "m"
     },
     "AriaTimeTable": {
         "select": "Select all"

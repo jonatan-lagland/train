@@ -8,7 +8,9 @@
         "track": "Raide",
         "placeholder": "Etsi määränpää...",
         "arrivalTrains": "Saapuvat Junat",
-        "departureTrains": "Lähtevät Junat"
+        "departureTrains": "Lähtevät Junat",
+        "shortHour": "t",
+        "shortMin": "m"
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"

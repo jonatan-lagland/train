@@ -8,7 +8,9 @@
         "track": "Spår",
         "placeholder": "Filtrera efter destination...",
         "arrivalTrains": "Inkommande tåg",
-        "departureTrains": "Avgående tåg"
+        "departureTrains": "Avgående tåg",
+        "shortHour": "t",
+        "shortMin": "m"
     },
     "AriaTimeTable": {
         "select": "Välj alla"
