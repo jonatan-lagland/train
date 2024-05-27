@@ -34,6 +34,7 @@ function transformTrainData(trains: any[], stationMetaData: { stationName: strin
                     : "", // Use the last station name or default
                 type: row.type,
                 scheduledTime: row.scheduledTime,
+                scheduledFinalDestination: finalDestinationData ? lastRow.scheduledTime : "",
                 trainType: train.trainType,
                 trainNumber: train.trainNumber,
                 differenceInMinutes: row.differenceInMinutes,

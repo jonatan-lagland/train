@@ -17,6 +17,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -35,6 +37,7 @@ export type TimeTable = {
     stationName: string
     type: TrainDestination;
     scheduledTime: string
+    scheduledFinalDestination: string
     trainType: string
     trainNumber: number
     differenceInMinutes?: number
@@ -109,7 +112,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             header: ({ column }) => {
                 const tableTypeFormatted = tableType.toLowerCase();
                 return (
-                    <div className="flex flex-row justify-end items-end font-besley">
+                    <div className="flex flex-row justify-center items-end font-besley">
                         <Button
                             className="p-1"
                             variant="ghost"
@@ -122,8 +125,10 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                 )
             },
             cell: ({ row }) => {
-                const isoDateString: string = row.getValue("scheduledTime") as string;
-                const dateTime: Date = new Date(isoDateString);
+                const scheduledTime: string = row.getValue("scheduledTime") as string;
+                const { scheduledFinalDestination } = row.original;
+                const dateTime: Date = new Date(scheduledTime);
+                const dateTimeFinalDestination: Date = new Date(scheduledFinalDestination);
                 const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
 
                 // Covert date object into a localized timestamp
@@ -132,7 +137,35 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                     minute: 'numeric',
                 });
                 const timeStamp: string = formatter.format(dateTime);
-                return <div className="lowercase text-end">{timeStamp}</div>;
+                const timeStampFinalDestination: string = formatter.format(dateTimeFinalDestination);
+
+                const timeDifference = dateTimeFinalDestination.getTime() - dateTime.getTime();
+                const totalMinutes = Math.floor(timeDifference / 60000);
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+
+                const travelTime = hours > 0
+                    ? `${hours} ${translation('shortHour')} ${minutes} ${translation('shortMin')}`
+                    : `${minutes} ${translation('shortMin')}`;
+
+                return (
+                    <div className="flex justify-center">
+                        <div className="flex flex-col justify-end items-center lowercase">
+                            <div className="flex flex-row items-center">
+                                <span className="font-bold">
+                                    {timeStamp}
+                                </span>
+                                <ArrowRightAltIcon style={{ color: 'grey' }} />
+                                <span className="font-medium">
+                                    {timeStampFinalDestination}
+                                </span>
+                            </div>
+                            <span className=" text-gray-500">
+                                ({travelTime})
+                            </span>
+                        </div>
+                    </div>
+                );
             }
         },
     ]
@@ -189,7 +222,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} className="flex-1">
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -220,14 +253,25 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                                 </TableRow>
                             ))
                         ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center flex-1"
-                                >
-                                    {t('Navigation.searchnotfound')}
-                                </TableCell>
-                            </TableRow>
+
+                            table ?
+                                <TableRow className="h-full">
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className="text-center flex-1"
+                                    >
+                                        yesdata
+                                    </TableCell>
+                                </TableRow>
+                                :
+                                <TableRow className="h-full">
+                                    <TableCell
+
+                                        className="text-center flex-1"
+                                    >
+                                        {t('Navigation.searchnotfound')}
+                                    </TableCell>
+                                </TableRow>
                         )}
                     </TableBody>
                 </Table>
