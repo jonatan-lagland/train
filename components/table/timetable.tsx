@@ -16,8 +16,24 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-
+import sanitizeStationName from "@/lib/utils/sanitizeStationName"
+import { cn } from "@/lib/utils"
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { CheckIcon } from "@radix-ui/react-icons"
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command"
+import { useParams } from 'next/navigation'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,6 +46,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useLocale, useTranslations } from 'next-intl';
+import { StationMetaData } from "@/lib/types"
+import CityComboBox from "../sidebar/cityComboBox"
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE";
 
@@ -46,7 +64,8 @@ export type TimeTable = {
 
 export type TimeTableProps = {
     data: TimeTable[]
-    destination: TrainDestination;
+    destination: TrainDestination
+    stationMetaData: StationMetaData[];
 }
 
 type CreateColumnsProps = {
@@ -171,7 +190,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
     ]
 }
 
-export function TimeTable({ data, destination }: TimeTableProps) {
+export function TimeTable({ data, destination, stationMetaData }: TimeTableProps) {
     const t = useTranslations();
     const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -203,8 +222,67 @@ export function TimeTable({ data, destination }: TimeTableProps) {
         },
     })
 
+    const [open, setOpen] = React.useState(false)
+    const [value, setValue] = React.useState("")
+
+    const handleSelect = (currentValue: string) => {
+        setValue(currentValue === value ? "" : currentValue);
+        setOpen(false);
+    };
+
+    const params = useParams()
+    const selectCity = t('selectCity');
+    const defaultCity = params.city ? params.city as string : selectCity;
+
     return (
         <div className="h-full w-full bg-white p-4 shadow-md rounded-b-sm px-6">
+            <div className="flex flex-row gap-2">
+                <CityComboBox stationMetadata={stationMetaData} defaultCity={defaultCity}></CityComboBox>
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className="w-[200px] justify-between"
+                        >
+                            <span className="capitalize">
+                                Minne
+                            </span>
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                            <CommandInput placeholder={t("searchCity")} className="h-9" />
+                            <CommandEmpty>{t("searchnotfound")}</CommandEmpty>
+                            <CommandList>
+                                <CommandGroup>
+                                    {stationMetaData.map((station) => {
+                                        const sanitizedStationName = sanitizeStationName(station.stationName)
+                                        return (
+                                            <CommandItem
+                                                key={station.stationShortCode}
+                                                value={sanitizedStationName} // Pass the sanitized station name as the value
+                                                onSelect={() => handleSelect(sanitizedStationName)}
+                                            >
+                                                <span className="capitalize">{sanitizedStationName}</span>
+
+                                                <CheckIcon
+                                                    className={cn(
+                                                        "ml-auto h-4 w-4",
+                                                        value === station.stationShortCode ? "opacity-100" : "opacity-0"
+                                                    )}
+                                                />
+                                            </CommandItem>
+                                        );
+                                    })}
+                                </CommandGroup>
+                            </CommandList>
+                        </Command>
+                    </PopoverContent>
+                </Popover>
+            </div>
             <div className="flex items-center py-4">
                 <Input
                     placeholder={t("TimeTable.placeholder")}
@@ -212,8 +290,9 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                     onChange={(event) =>
                         table.getColumn("stationName")?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="max-w-xs"
                 />
+
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -254,24 +333,14 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                             ))
                         ) : (
 
-                            table ?
-                                <TableRow className="h-full">
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="text-center flex-1"
-                                    >
-                                        yesdata
-                                    </TableCell>
-                                </TableRow>
-                                :
-                                <TableRow className="h-full">
-                                    <TableCell
-
-                                        className="text-center flex-1"
-                                    >
-                                        {t('Navigation.searchnotfound')}
-                                    </TableCell>
-                                </TableRow>
+                            <TableRow className="h-full">
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="text-center flex-1"
+                                >
+                                    {t('Navigation.searchnotfound')}
+                                </TableCell>
+                            </TableRow>
                         )}
                     </TableBody>
                 </Table>

@@ -80,7 +80,7 @@ function TimetableContainer({ destination, city }: TimetableContainerProps) {
     //console.log(data, liveTrainData)
 
     return (
-        <TimeTable data={liveTrainData} destination={destination}></TimeTable>
+        <TimeTable data={liveTrainData} destination={destination} stationMetaData={stationMetaData}></TimeTable>
     )
 }
 
