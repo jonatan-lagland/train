@@ -37,14 +37,15 @@ export default async function TimeTablePage({ params }: TimeTablePageProps) {
       <div className="flex relative flex-wrap items-center justify-evenly w-full min-h-[30vh]">
         <Banner destinationLabel={destinationLabel} city={city}></Banner>
         <NavigationContainer></NavigationContainer>
-        <div className="absolute -z-10 w-full h-full items-center">
+        <div className="absolute -z-10 w-full h-full items-center ">
           <Image
-            src="/connor-gan-M1RaOiz0g7Y-unsplash.jpg"
+            src="/detait-1cXB1KBLcFo-unsplash.jpg"
             layout="fill"
             objectFit="cover"
             alt="Banner"
             quality={25}
           />
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 to-transparent"></div>
         </div>
       </div>
       <div className="w-full max-w-4xl py-4">
