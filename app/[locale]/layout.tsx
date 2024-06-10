@@ -31,7 +31,7 @@ export default function LocaleLayout({
                         <Nav />
                     </header>
                     {/* Main */}
-                    <main className="px-2 sm:px-0 flex items-start justify-center flex-grow">
+                    <main className="flex items-start justify-center flex-grow">
                         {children}
                     </main>
                 </body>

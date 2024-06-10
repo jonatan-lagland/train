@@ -5,7 +5,7 @@ import NavigationSheetContent from '../sidebar/navigationSheetContent';
 function Nav() {
     return (
         <>
-            <div className='w-full'>
+            <div className='w-full drop-shadow-md	'>
                 <NavigationSheetContent></NavigationSheetContent>
             </div>
         </>

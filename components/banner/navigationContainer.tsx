@@ -27,8 +27,8 @@ function NavigationContainer() {
     }
 
     return (
-        <div className='flex flex-col p-4 shadow-md rounded-lg px-6'>
-            <div className="flex flex-wrap gap-2">
+        <div className='flex flex-col p-4 shadow-md bg-white rounded-lg px-6'>
+            <div className="flex flex-col flex-wrap gap-2">
                 <CityComboBox stationMetadata={stationMetaData} defaultCity={defaultCity}></CityComboBox>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>

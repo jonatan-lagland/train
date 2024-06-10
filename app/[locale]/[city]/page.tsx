@@ -34,9 +34,13 @@ export default async function TimeTablePage({ params }: TimeTablePageProps) {
 
   return (
     <div className="flex flex-col flex-grow h-full gap-2 justify-start items-center">
-      <div className="flex relative flex-wrap items-center justify-evenly w-full min-h-[30vh]">
-        <Banner destinationLabel={destinationLabel} city={city}></Banner>
-        <NavigationContainer></NavigationContainer>
+      <div className="grid grid-cols-2 items-center justify-center relative w-full min-h-[30vh]">
+        <div className="flex flex-row items-center justify-center">
+          <Banner destinationLabel={destinationLabel} city={city}></Banner>
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          <NavigationContainer></NavigationContainer>
+        </div>
         <div className="absolute -z-10 w-full h-full items-center ">
           <Image
             src="/detait-1cXB1KBLcFo-unsplash.jpg"
@@ -48,7 +52,7 @@ export default async function TimeTablePage({ params }: TimeTablePageProps) {
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 to-transparent"></div>
         </div>
       </div>
-      <div className="w-full max-w-4xl py-4">
+      <div className="w-full max-w-4xl py-4 px-1">
         <TimetableContainer destination={destination} city={city}></TimetableContainer>
       </div>
     </div>
