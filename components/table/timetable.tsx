@@ -129,6 +129,9 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             cell: ({ row }) => {
                 const scheduledTime: string = row.getValue("scheduledTime") as string;
                 const { scheduledFinalDestination } = row.original;
+
+                if (!scheduledFinalDestination) return null; // Exit early to avoid errors with converting undefined timestamps
+
                 const dateTime: Date = new Date(scheduledTime);
                 const dateTimeFinalDestination: Date = new Date(scheduledFinalDestination);
                 const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
