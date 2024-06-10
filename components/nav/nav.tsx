@@ -5,10 +5,7 @@ import NavigationSheetContent from '../sidebar/navigationSheetContent';
 function Nav() {
     return (
         <>
-            <div className='block sm:hidden h-full'>
-                <NavigationSheet></NavigationSheet>
-            </div>
-            <div className='sm:block hidden w-full'>
+            <div className='w-full'>
                 <NavigationSheetContent></NavigationSheetContent>
             </div>
         </>
