@@ -116,7 +116,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                 return (
                     <div className="flex flex-row justify-center items-end font-besley">
                         <Button
-                            className="p-1"
+                            className="px-1 py-7"
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         >
@@ -221,7 +221,7 @@ export function TimeTable({ data, destination, stationMetaData }: TimeTableProps
                 />
 
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border bg-white">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -260,10 +260,10 @@ export function TimeTable({ data, destination, stationMetaData }: TimeTableProps
                             ))
                         ) : (
 
-                            <TableRow className="h-full">
+                            <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
-                                    className="text-center flex-1"
+                                    className="text-center h-32 flex-1"
                                 >
                                     {t('Navigation.searchnotfound')}
                                 </TableCell>
