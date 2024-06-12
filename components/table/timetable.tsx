@@ -32,7 +32,7 @@ import {
 import { useLocale, useTranslations } from 'next-intl';
 import { StationMetaData } from "@/lib/types"
 
-export type TrainDestination = "ARRIVAL" | "DEPARTURE";
+export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
 
 export type TimeTable = {
     stationName: string
@@ -219,7 +219,6 @@ export function TimeTable({ data, destination, stationMetaData }: TimeTableProps
                     }
                     className="max-w-xs"
                 />
-
             </div>
             <div className="rounded-md border bg-white">
                 <Table>

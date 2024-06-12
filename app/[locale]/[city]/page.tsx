@@ -12,6 +12,9 @@ export type TimeTablePageProps = {
     locale: string
     city: string
   }
+  searchParams?: {
+    type?: string
+  }
 }
 
 export async function generateMetadata({ params }: { params: { city: string } }) {
@@ -25,11 +28,10 @@ export async function generateMetadata({ params }: { params: { city: string } })
   };
 }
 
-export default async function TimeTablePage({ params }: TimeTablePageProps) {
+export default async function TimeTablePage({ params, searchParams }: TimeTablePageProps) {
 
-  const destination: TrainDestination = 'DEPARTURE';
-  // Convert ARRIVAL or DEPARTURE to a format that is used in translation file
-  const destinationLabel: BannerLabel = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains';
+  const destination: TrainDestination = searchParams?.type?.toUpperCase() || 'ARRIVAL' as TrainDestination;
+  const destinationLabel: BannerLabel = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains'; // For localization
   const city: string = params.city ? params.city as string : ""
 
   return (
@@ -47,6 +49,7 @@ export default async function TimeTablePage({ params }: TimeTablePageProps) {
             fill
             style={{ objectFit: 'cover' }}
             alt="Banner"
+            priority={true}
             quality={80}
             sizes="(max-width: 600px) 600px, 
            (max-width: 1200px) 1400px, 
