@@ -9,6 +9,8 @@
         "placeholder": "Etsi määränpää...",
         "arrivalTrains": "Saapuvat Junat",
         "departureTrains": "Lähtevät Junat",
+        "incoming": "Saapuvat",
+        "outgoing": "Lähtevät",
         "shortHour": "t",
         "shortMin": "m"
     },
@@ -27,7 +29,8 @@
         "selectCity": "Mistä",
         "searchCity": "Etsi kaupunki...",
         "submitButton": "Hae matkoja",
-        "errorSelectLocation": "Ole hyvä ja valitse sijainti."
+        "errorSelectLocation": "Ole hyvä ja valitse sijainti.",
+        "search": "Hae"
     },
     "MetaData": {
         "title": "Juna-aikataulut",

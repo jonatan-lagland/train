@@ -9,6 +9,8 @@
         "placeholder": "Filter by destination...",
         "arrivalTrains": "Incoming Trains",
         "departureTrains": "Outgoing Trains",
+        "incoming": "Incoming",
+        "outgoing": "Outgoing",
         "shortHour": "h",
         "shortMin": "m"
     },
@@ -27,7 +29,8 @@
         "selectCity": "From",
         "searchCity": "Search for a city...",
         "submitButton": "Find a route",
-        "errorSelectLocation": "Please select a location."
+        "errorSelectLocation": "Please select a location.",
+        "search": "Search"
     },
     "MetaData": {
         "title": "Train timetables",

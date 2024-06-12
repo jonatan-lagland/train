@@ -9,6 +9,8 @@
         "placeholder": "Filtrera efter destination...",
         "arrivalTrains": "Inkommande tåg",
         "departureTrains": "Avgående tåg",
+        "incoming": "Inkommande",
+        "outgoing": "Avgående",
         "shortHour": "t",
         "shortMin": "m"
     },
@@ -27,7 +29,8 @@
         "selectCity": "Från",
         "searchCity": "Sök efter en stad...",
         "submitButton": "Hitta en rutt",
-        "errorSelectLocation": "Vänligen välj en plats."
+        "errorSelectLocation": "Vänligen välj en plats.",
+        "search": "Sök"
     },
     "MetaData": {
         "title": "Tågtidtabeller",
