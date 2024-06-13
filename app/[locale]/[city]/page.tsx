@@ -46,7 +46,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
 
   return (
     <div className="flex flex-col flex-grow h-screen gap-2 justify-start items-center">
-      <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full min-h-[40vh]">
+      <div className="grid grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full h-[80rem]">
         <div className="flex flex-row items-center justify-center h-full">
           <Banner destinationLabel={destinationLabel} city={city}></Banner>
         </div>
