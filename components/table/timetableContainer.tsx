@@ -4,16 +4,20 @@ import React, { useContext, useEffect, useState } from 'react'
 import { TimeTable, TrainDestination } from './timetable'
 import fetchLiveTrain from '@/app/api/fetchLiveTrain'
 import sanitizeStationName from '@/lib/utils/sanitizeStationName'
+import { StationMetaData, Train } from '@/lib/types'
 
 type TimetableContainerProps = {
+    liveTrainData: Train[]
+    finalStationShortCode: string | undefined
+    stationMetadata: StationMetaData[]
+    stationShortCode: string
     destination: TrainDestination
-    city: string
 }
 
-function transformTrainData(trains: any[], finalStationShortCode: string | undefined, stationMetaData: { stationName: string; stationShortCode: string; }[], stationShortCode: string, destination: string): TimeTable[] {
+function transformTrainData(liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination): TimeTable[] {
     let result: TimeTable[] = [];
 
-    trains.forEach(train => {
+    liveTrainData.forEach(train => {
         // Filter the timeTableRows that match the criteria for the current station
         const filteredRows = train.timeTableRows.filter(row => {
             const matchesStationAndDestination = row.stationShortCode === stationShortCode &&
@@ -32,8 +36,8 @@ function transformTrainData(trains: any[], finalStationShortCode: string | undef
             // Get the last timetable row to find the final destination stationName
             const lastRow = train.timeTableRows[train.timeTableRows.length - 1];
             const finalDestinationData = finalStationShortCode ?
-                stationMetaData.find(code => code.stationShortCode === finalStationShortCode) :
-                stationMetaData.find(code => code.stationShortCode === lastRow.stationShortCode);
+                stationMetadata.find(code => code.stationShortCode === finalStationShortCode) :
+                stationMetadata.find(code => code.stationShortCode === lastRow.stationShortCode);
 
             return {
                 stationName: finalDestinationData ? sanitizeStationName(finalDestinationData.stationName) : "", // Use the last station name or default
@@ -55,40 +59,12 @@ function transformTrainData(trains: any[], finalStationShortCode: string | undef
 }
 
 
-function TimetableContainer({ destination, city }: TimetableContainerProps) {
-    const stationMetaData = useContext(StationMetadataContext)
-    const decodedStation = decodeURIComponent(city.toLowerCase());
-    const station = stationMetaData.find(code => decodedStation === sanitizeStationName(code.stationName.toLowerCase()));
-    const stationShortCode = station ? station.stationShortCode : undefined;
-    const [liveTrainData, setLiveTrainData] = useState<TimeTable[]>([]);
-    const [finalStationShortCode, setFinalStationShortCode] = useState<string | undefined>(undefined);
+function TimetableContainer({ liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination }: TimetableContainerProps) {
 
-    useEffect(() => {
-        const fetchLiveTrainData = async () => {
-            if (!stationShortCode) {
-                console.log(city)
-                return;
-            }
-            try {
-                const response = await fetchLiveTrain({ station: stationShortCode, type: destination });
-                const transformedData = transformTrainData(response, finalStationShortCode, stationMetaData, stationShortCode, destination);
-                console.log(transformedData);
-                setLiveTrainData(transformedData);
-            } catch (error) {
-                console.error('Failed to fetch train data:', error);
-            }
-        };
-        fetchLiveTrainData();
-        //const intervalId = setInterval(fetchLiveTrainData, 30000); // Interval to re-fetch data every 30 seconds
-        //return () => clearInterval(intervalId);
-
-    }, [stationShortCode, destination, stationMetaData, city, finalStationShortCode]);
-
-
-
+    const transformedData = transformTrainData(liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination);
 
     return (
-        <TimeTable data={liveTrainData} destination={destination} stationMetaData={stationMetaData}></TimeTable>
+        <TimeTable data={transformedData} destination={destination} stationMetaData={stationMetadata}></TimeTable>
     )
 }
 

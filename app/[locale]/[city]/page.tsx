@@ -5,6 +5,10 @@ import capitalizeTitle from "@/lib/utils/capitalizeTitle";
 import TimetableContainer from "@/components/table/timetableContainer";
 import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
+import fetchStationMetadata from "@/app/api/fetchStationMetadata";
+import filterStationMetadata from "@/lib/utils/filterStationMetadata";
+import sanitizeStationName from "@/lib/utils/sanitizeStationName";
+import fetchLiveTrain from "@/app/api/fetchLiveTrain";
 
 export type BannerLabel = 'arrivalTrains' | 'departureTrains';
 export type TimeTablePageProps = {
@@ -29,10 +33,16 @@ export async function generateMetadata({ params }: { params: { city: string } })
 }
 
 export default async function TimeTablePage({ params, searchParams }: TimeTablePageProps) {
-
-  const destination: TrainDestination = searchParams?.type?.toUpperCase() || 'ARRIVAL' as TrainDestination;
-  const destinationLabel: BannerLabel = destination === 'ARRIVAL' ? 'arrivalTrains' : 'departureTrains'; // For localization
+  const destination: TrainDestination = searchParams?.type?.toUpperCase() as TrainDestination || 'DEPARTURE' as TrainDestination;
+  const destinationLabel: BannerLabel = destination === 'DEPARTURE' ? 'departureTrains' : 'arrivalTrains'; // For localization
   const city: string = params.city ? params.city as string : ""
+  const stationMetadata = await fetchStationMetadata();
+  const filteredStations = filterStationMetadata(stationMetadata)
+  const decodedStation = decodeURIComponent(city.toLowerCase());
+  const station = stationMetadata.find(code => decodedStation === sanitizeStationName(code.stationName.toLowerCase()));
+  const stationShortCode = station ? station.stationShortCode : undefined;
+  const liveTrainData = await fetchLiveTrain({ station: stationShortCode, type: destination });
+  const finalStationShortCode = undefined;
 
   return (
     <div className="flex flex-col flex-grow h-screen gap-2 justify-start items-center">
@@ -60,7 +70,13 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
         </div>
       </div>
       <div className="w-full h-full max-w-4xl rounded-md py-3 md:px-6 px-1">
-        <TimetableContainer destination={destination} city={city}></TimetableContainer>
+        <TimetableContainer
+          liveTrainData={liveTrainData}
+          finalStationShortCode={finalStationShortCode}
+          stationMetadata={filteredStations}
+          stationShortCode={stationShortCode}
+          destination={destination}
+        ></TimetableContainer>
       </div>
     </div>
   );

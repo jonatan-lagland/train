@@ -61,6 +61,12 @@ function NavigationContainer() {
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const { location, destination, type } = data;
         const sanitizedLocation = encodeURIComponent(location)
+
+        if (destination) {
+            const url = `/${locale}/${sanitizedLocation}?type=${type}&destination=${destination}`;
+            router.push(url);
+            return;
+        }
         const url = `/${locale}/${sanitizedLocation}?type=${type}`;
         router.push(url);
     }

@@ -3,18 +3,15 @@
 import { StationMetadataContext } from "@/lib/context/StationMetadataContext";
 import { ReactNode } from "react";
 import { StationMetaData } from "@/lib/types";
+import filterStationMetadata from "@/lib/utils/filterStationMetadata";
 
 type StaticDataProviderProps = {
     children: ReactNode;
-    stationMetaData: StationMetaData[] | [];
+    stationMetadata: StationMetaData[] | [];
 }
 
-export const StaticDataProvider = ({ children, stationMetaData }: StaticDataProviderProps) => {
-    const filteredStations = stationMetaData
-        ? stationMetaData.filter(
-            (station) => station.passengerTraffic === true && station.type === "STATION"
-        )
-        : [];
+export const StaticDataProvider = ({ children, stationMetadata }: StaticDataProviderProps) => {
+    const filteredStations = filterStationMetadata(stationMetadata)
 
     return (
         <StationMetadataContext.Provider value={filteredStations}>
