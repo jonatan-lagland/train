@@ -11,7 +11,7 @@ export default async function RootLayout({ children }: Props) {
     const stationMetadata = await fetchStationMetadata();
 
     return (
-        <StaticDataProvider stationMetaData={stationMetadata}>
+        <StaticDataProvider stationMetadata={stationMetadata}>
             {children}
         </StaticDataProvider>
     );

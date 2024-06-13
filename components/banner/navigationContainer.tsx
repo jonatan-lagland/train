@@ -25,7 +25,7 @@ import {
 import { useForm } from 'react-hook-form';
 
 function NavigationContainer() {
-    const stationMetaData = useContext(StationMetadataContext)
+    const stationMetadata = useContext(StationMetadataContext)
     const t = useTranslations()
     const params = useParams()
     const router = useRouter()
@@ -34,11 +34,6 @@ function NavigationContainer() {
     const locationRequired = t('Navigation.errorSelectLocation');
     const placeholderLabel = t('TimeTable.placeholder');
     const defaultCity = params.city ? params.city as string : selectCity;
-
-    // Function to URL-encode special characters into UTF-8 percent encoding
-    const sanitizeForURL = (str: string) => {
-        return encodeURIComponent(str.toLowerCase());
-    };
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
@@ -106,7 +101,7 @@ function NavigationContainer() {
                                                 <CommandEmpty>{t("Navigation.searchnotfound")}</CommandEmpty>
                                                 <CommandList>
                                                     <CommandGroup>
-                                                        {stationMetaData.map((station) => {
+                                                        {stationMetadata.map((station) => {
                                                             const sanitizedStationName = sanitizeStationName(station.stationName)
                                                             return (
                                                                 <CommandItem
@@ -165,7 +160,7 @@ function NavigationContainer() {
                                                 <CommandEmpty>{t("Navigation.searchnotfound")}</CommandEmpty>
                                                 <CommandList>
                                                     <CommandGroup>
-                                                        {stationMetaData.map((station) => {
+                                                        {stationMetadata.map((station) => {
                                                             const sanitizedStationName = sanitizeStationName(station.stationName)
                                                             return (
                                                                 <CommandItem

@@ -7,7 +7,7 @@ import filterStationMetadata from "@/lib/utils/filterStationMetadata";
 
 type StaticDataProviderProps = {
     children: ReactNode;
-    stationMetadata: StationMetaData[] | [];
+    stationMetadata: StationMetaData[];
 }
 
 export const StaticDataProvider = ({ children, stationMetadata }: StaticDataProviderProps) => {
