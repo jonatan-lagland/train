@@ -4,23 +4,39 @@ import React, { useContext, useEffect, useState } from 'react'
 import { TimeTable, TrainDestination } from './timetable'
 import fetchLiveTrain from '@/app/api/fetchLiveTrain'
 import sanitizeStationName from '@/lib/utils/sanitizeStationName'
-import { StationMetaData, Train } from '@/lib/types'
+import { StationMetaData, Train, TrainError } from '@/lib/types'
+import { isTrainError } from '@/lib/utils/liveTrainUtils'
 
 type TimetableContainerProps = {
-    liveTrainData: Train[]
+    liveTrainData: Train[] | TrainError | undefined
+    liveDestinationTrainData: Train[] | undefined
     finalStationShortCode: string | undefined
     stationMetadata: StationMetaData[]
-    stationShortCode: string
+    stationShortCode: string | undefined
     destination: TrainDestination
 }
 
-function transformTrainData(liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination): TimeTable[] {
-    let result: TimeTable[] = [];
 
-    liveTrainData.forEach(train => {
-        // Filter the timeTableRows that match the criteria for the current station
+function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination }: TimetableContainerProps) {
+    let data = undefined;
+    let transformedData: TimeTable[] = [];
+
+    if (liveTrainData)
+        data = liveTrainData
+    if (liveDestinationTrainData)
+        data = liveDestinationTrainData
+    if (!data || isTrainError(data)) {
+        return (
+            <TimeTable data={transformedData} destination={destination} stationMetaData={stationMetadata}></TimeTable>
+        )
+    }
+    console.log(data)
+
+    data.forEach(train => {
+        // Filter trains so that only trains where station and journey type match (e.g. arrival or destination) AND the train stops at the location
         const filteredRows = train.timeTableRows.filter(row => {
-            const matchesStationAndDestination = row.stationShortCode === stationShortCode &&
+            const matchesStationAndDestination =
+                row.stationShortCode === stationShortCode &&
                 row.type === destination &&
                 row.trainStopping === true;
 
@@ -51,17 +67,8 @@ function transformTrainData(liveTrainData, finalStationShortCode, stationMetadat
             };
         });
 
-        result = result.concat(transformedRows);
+        transformedData = transformedData.concat(transformedRows);
     });
-
-
-    return result;
-}
-
-
-function TimetableContainer({ liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination }: TimetableContainerProps) {
-
-    const transformedData = transformTrainData(liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination);
 
     return (
         <TimeTable data={transformedData} destination={destination} stationMetaData={stationMetadata}></TimeTable>

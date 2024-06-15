@@ -55,3 +55,9 @@ export type StationMetaData = {
     longitude: number,
     latitude: number
 }
+
+export type TrainError = {
+    code: string
+    errorMessage: string
+    queryString: string
+}
