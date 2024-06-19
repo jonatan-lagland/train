@@ -30,7 +30,6 @@ function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStat
             <TimeTable data={transformedData} destination={destination} stationMetaData={stationMetadata}></TimeTable>
         )
     }
-    console.log(data)
 
     data.forEach(train => {
         // Filter trains so that only trains where station and journey type match (e.g. arrival or destination) AND the train stops at the location
@@ -71,7 +70,7 @@ function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStat
     });
 
     return (
-        <TimeTable data={transformedData} destination={destination} stationMetaData={stationMetadata}></TimeTable>
+        <TimeTable data={transformedData} destination={destination}></TimeTable>
     )
 }
 

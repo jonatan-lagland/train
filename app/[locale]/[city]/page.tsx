@@ -42,9 +42,6 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
   const stationMetadata = await fetchStationMetadata();
   const filteredStations = filterStationMetadata(stationMetadata)
   const liveTrain = await liveTrainUtils(city, cityDestination, destinationType, stationMetadata)
-  console.log(liveTrain)
-
-
   const { liveTrainData, liveDestinationTrainData, stationShortCode, finalStationShortCode } = liveTrain;
 
   return (

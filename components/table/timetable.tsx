@@ -48,7 +48,6 @@ export type TimeTable = {
 export type TimeTableProps = {
     data: TimeTable[]
     destination: TrainDestination
-    stationMetaData: StationMetaData[];
 }
 
 type CreateColumnsProps = {
@@ -176,7 +175,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
     ]
 }
 
-export function TimeTable({ data, destination, stationMetaData }: TimeTableProps) {
+export function TimeTable({ data, destination }: TimeTableProps) {
     const t = useTranslations();
     const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -188,7 +187,6 @@ export function TimeTable({ data, destination, stationMetaData }: TimeTableProps
     const timetableTranslations = useTranslations('TimeTable');
     const locale = useLocale();
     const columns = createColumns({ tableType: destination, locale: locale, translation: timetableTranslations });
-
     const table = useReactTable({
         data,
         columns,
