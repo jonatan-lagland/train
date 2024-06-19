@@ -6,7 +6,7 @@
         "arrival": "Saapumisaika",
         "train": "Juna",
         "track": "Raide",
-        "placeholder": "Etsi määränpää...",
+        "placeholder": "Etsi sijainti...",
         "arrivalTrains": "Saapuvat Junat",
         "departureTrains": "Lähtevät Junat",
         "incoming": "Saapuvat",

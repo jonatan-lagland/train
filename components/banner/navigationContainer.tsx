@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useRef } from 'react'
+import React, { useContext } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
@@ -7,11 +7,10 @@ import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
 import { cn } from '@/lib/utils';
 import { useTranslations, useLocale } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import sanitizeStationName from '@/lib/utils/sanitizeStationName';
 import { StationMetadataContext } from '@/lib/context/StationMetadataContext';
 import capitalizeTitle from '@/lib/utils/capitalizeTitle';
-import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { z } from "zod"
 import {
@@ -28,12 +27,13 @@ function NavigationContainer() {
     const stationMetadata = useContext(StationMetadataContext)
     const t = useTranslations()
     const params = useParams()
+    const searchParams = useSearchParams()
     const router = useRouter()
     const locale = useLocale()
-    const selectCity = t('Navigation.selectCity');
     const locationRequired = t('Navigation.errorSelectLocation');
     const placeholderLabel = t('TimeTable.placeholder');
-    const defaultCity = params.city ? params.city as string : selectCity;
+    const defaultCity = params.city as string;
+    const destinationParam = searchParams.get('destination') as string;
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
@@ -49,7 +49,8 @@ function NavigationContainer() {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             type: "departure",
-            location: decodeURIComponent(defaultCity)
+            location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
+            destination: destinationParam ? decodeURIComponent(destinationParam) : undefined
         },
     })
 
@@ -89,7 +90,7 @@ function NavigationContainer() {
                                                     )}
                                                 >
                                                     <span>
-                                                        {capitalizeTitle(field.value)}
+                                                        {field.value ? capitalizeTitle(field.value) : placeholderLabel}
                                                     </span>
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>

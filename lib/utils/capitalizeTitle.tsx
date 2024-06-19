@@ -1,5 +1,6 @@
 export default function capitalizeTitle(str: string) {
     // Split by spaces, hyphens, underscores, and brackets
+    if (!str) return undefined;
     return str
         .split(/([-_\s()\[\]{}])/g) // Match and capture delimiters (spaces, hyphens, brackets)
         .map((part, index, array) => {
