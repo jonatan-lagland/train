@@ -7,8 +7,6 @@ import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";
 import filterStationMetadata from "@/lib/utils/filterStationMetadata";
-import sanitizeStationName from "@/lib/utils/sanitizeStationName";
-import fetchLiveTrain from "@/app/api/fetchLiveTrain";
 import liveTrainUtils from "@/lib/utils/liveTrainUtils";
 
 export type BannerLabel = 'arrivalTrains' | 'departureTrains';
@@ -46,14 +44,14 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
 
   return (
     <div className="flex flex-col flex-grow h-screen gap-2 justify-start items-center">
-      <div className="grid grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full h-[80rem]">
+      <div className="grid grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full py-5">
         <div className="flex flex-row items-center justify-center h-full">
           <Banner destinationLabel={destinationLabel} city={city}></Banner>
         </div>
         <div className="flex flex-row items-center justify-center">
           <NavigationContainer></NavigationContainer>
         </div>
-        <div className="absolute -z-10 w-full h-full items-center ">
+        <div className="absolute -z-10 w-full h-full items-center">
           <Image
             src="/tapio-haaja-XEjE_7wXAI8-unsplash.jpg"
             fill

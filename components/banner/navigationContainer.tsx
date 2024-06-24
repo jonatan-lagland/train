@@ -70,7 +70,7 @@ function NavigationContainer() {
     return (
         <div className=''>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col p-4 gap-6 shadow-md h-80 bg-white rounded-lg px-6 justify-between">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col p-4 gap-6 shadow-md bg-white rounded-lg px-6 justify-between">
                     <div className="flex flex-col gap-4">
                         <FormField
                             control={form.control}
