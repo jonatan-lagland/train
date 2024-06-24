@@ -1,8 +1,6 @@
 'use client'
-import { StationMetadataContext } from '@/lib/context/StationMetadataContext'
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { TimeTable, TrainDestination } from './timetable'
-import fetchLiveTrain from '@/app/api/fetchLiveTrain'
 import sanitizeStationName from '@/lib/utils/sanitizeStationName'
 import { StationMetaData, Train, TrainError } from '@/lib/types'
 import { isTrainError } from '@/lib/utils/liveTrainUtils'
@@ -70,7 +68,10 @@ function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStat
     });
 
     return (
-        <TimeTable data={transformedData} destination={destination}></TimeTable>
+        <div className='grid grid-cols-2'>
+            <h1>Section</h1>
+            <TimeTable data={transformedData} destination={destination}></TimeTable>
+        </div>
     )
 }
 

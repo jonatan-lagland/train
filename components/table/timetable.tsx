@@ -30,7 +30,6 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useLocale, useTranslations } from 'next-intl';
-import { StationMetaData } from "@/lib/types"
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
 
@@ -69,9 +68,9 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             accessorKey: "trainType",
             header: () => {
                 return (
-                    <span className="font-besley">
+                    <div className="flex flex-row justify-center items-end">
                         {translation('train')}
-                    </span>
+                    </div>
                 )
 
             },
@@ -84,7 +83,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             accessorKey: "commercialTrack",
             header: () => {
                 return (
-                    <div className="flex flex-row justify-center items-end font-besley">
+                    <div className="flex flex-row justify-center items-end">
                         {translation(`track`)}
                     </div>
                 )
@@ -98,7 +97,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             accessorKey: "stationName",
             header: () => {
                 return (
-                    <span className="font-besley">
+                    <span>
                         {translation(`destination`)}
                     </span>
                 )
@@ -111,18 +110,18 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
         {
             accessorKey: "scheduledTime",
             header: ({ column }) => {
+                if (!tableType) return null;
                 const tableTypeFormatted = tableType.toLowerCase();
                 return (
-                    <div className="flex flex-row justify-center items-end font-besley">
-                        <Button
-                            className="px-1 py-7"
-                            variant="ghost"
-                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        >
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        <div className="flex flex-row bg-white border rounded-full px-6 py-2 justify-center items-end">
                             {translation(`${tableTypeFormatted}`)}
                             <CaretSortIcon className="ml-2 h-4 w-4" />
-                        </Button>
-                    </div>
+                        </div>
+                    </Button>
                 )
             },
             cell: ({ row }) => {
@@ -207,25 +206,25 @@ export function TimeTable({ data, destination }: TimeTableProps) {
     })
 
     return (
-        <div className="h-full w-full">
-            <div className="flex items-center py-4">
+        <div className="flex flex-col gap-10">
+            <div className="flex items-center">
                 <Input
                     placeholder={t("TimeTable.placeholder")}
                     value={(table.getColumn("stationName")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn("stationName")?.setFilterValue(event.target.value)
                     }
-                    className="max-w-xs"
+                    className=""
                 />
             </div>
-            <div className="rounded-md border bg-white">
-                <Table>
+            <div>
+                <Table className="border-separate border-spacing-y-2">
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id}>
+                                        <TableHead key={header.id} className="">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -243,10 +242,11 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
+                                    className=" bg-white hover:bg-white transition duration-300 ease-in-out"
                                     data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell key={cell.id} className="py-6 first:rounded-l-xl last:rounded-r-xl last:border-e first:border-s border-y">
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()

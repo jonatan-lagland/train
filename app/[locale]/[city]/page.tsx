@@ -67,7 +67,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 to-transparent"></div>
         </div>
       </div>
-      <div className="w-full h-full max-w-4xl rounded-md py-3 md:px-6 px-1">
+      <div className="py-8 md:px-6 px-1">
         <TimetableContainer
           liveTrainData={liveTrainData}
           liveDestinationTrainData={liveDestinationTrainData}
