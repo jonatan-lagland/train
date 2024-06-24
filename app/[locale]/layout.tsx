@@ -27,7 +27,7 @@ export default function LocaleLayout({
             <NextIntlClientProvider messages={messages}>
                 <body className={`${inter.variable} ${besley.variable} bg-[#F3F3F3] h-screen flex flex-col`}>
                     {/* Header */}
-                    <header className="flex-row w-full flex shadow-sm px-2 border-b sm:px-6 justify-evenly py-3 bg-white">
+                    <header className="flex-row w-full flex shadow-sm px-2 border-b justify-evenly bg-white">
                         <Nav />
                     </header>
                     {/* Main */}
