@@ -1,7 +1,7 @@
 "use client";
 
 import { languages } from "@/lib/languages";
-import { SelectLanguage } from "../sidebar/selectLanguage";
+import { SelectLanguage } from "./selectLanguage";
 import { useLocale } from "next-intl";
 
 const LanguageContainer = () => {

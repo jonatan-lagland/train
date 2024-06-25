@@ -4,7 +4,7 @@ import { TimeTable, TrainDestination } from './timetable'
 import sanitizeStationName from '@/lib/utils/sanitizeStationName'
 import { StationMetaData, Train, TrainError } from '@/lib/types'
 import { isTrainError } from '@/lib/utils/liveTrainUtils'
-import Sidebar from './sidebar'
+import Sidebar from '../sidebar/sidebar'
 
 type TimetableContainerProps = {
     liveTrainData: Train[] | TrainError | undefined
