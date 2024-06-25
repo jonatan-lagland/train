@@ -30,9 +30,10 @@ export type LanguagesProps = {
 type SelectItemLanguageProps = {
     lang: Languages
     size: number
+    displayLabel?: boolean
 }
 
-const SelectItemLanguage = ({ lang, size }: SelectItemLanguageProps) => {
+const SelectItemLanguage = ({ lang, size, displayLabel = false }: SelectItemLanguageProps) => {
     return (
         <div className="flex flex-row items-center gap-4">
             <Image
@@ -41,7 +42,7 @@ const SelectItemLanguage = ({ lang, size }: SelectItemLanguageProps) => {
                 height={size}
                 alt={lang.alt}
             />
-            <span>{lang.name}</span>
+            {displayLabel ? <span>{lang.name}</span> : null}
         </div>
     )
 }
@@ -66,10 +67,10 @@ export function SelectLanguage({ languages, currentLanguageId, size = 24 }: Lang
 
     return (
         <Select onValueChange={useChangeLocale}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-max">
                 <SelectValue placeholder={
                     currentLanguage ?
-                        <SelectItemLanguage lang={currentLanguage} size={size} /> :
+                        <SelectItemLanguage lang={currentLanguage} size={size} displayLabel={true} /> :
                         "Select a language" // Fallback placeholder text
                 } />
             </SelectTrigger>
@@ -78,7 +79,7 @@ export function SelectLanguage({ languages, currentLanguageId, size = 24 }: Lang
                     <SelectLabel>{label}</SelectLabel>
                     {languages.map(lang => (
                         <SelectItem key={lang.id} value={lang.id}>
-                            <SelectItemLanguage lang={lang} size={size}></SelectItemLanguage>
+                            <SelectItemLanguage lang={lang} size={size} displayLabel={true}></SelectItemLanguage>
                         </SelectItem>
                     ))}
                 </SelectGroup>
