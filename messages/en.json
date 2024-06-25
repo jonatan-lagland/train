@@ -12,7 +12,11 @@
         "incoming": "Incoming",
         "outgoing": "Outgoing",
         "shortHour": "h",
-        "shortMin": "m"
+        "shortMin": "m",
+        "longHour": "hours",
+        "longMin": "minutes",
+        "disclaimer": "Train schedules may differ from the announced time. Please double-check the schedule on your ticket or the VR app.",
+        "noJourneyFound": "There are currently no scheduled journeys."
     },
     "AriaTimeTable": {
         "select": "Select all"

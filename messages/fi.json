@@ -12,7 +12,11 @@
         "incoming": "Saapuvat",
         "outgoing": "Lähtevät",
         "shortHour": "t",
-        "shortMin": "m"
+        "shortMin": "m",
+        "longHour": "tunnin",
+        "longMin": "minuutin",
+        "disclaimer": "Junien aikataulut voivat poiketa ilmoitetusta ajasta. Tarkista aikataulu lipusta tai VR:n sovelluksesta.",
+        "noJourneyFound": "Aikatauluun ei tällä hetkellä ole merkitty matkoja."
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"

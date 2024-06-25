@@ -12,7 +12,11 @@
         "incoming": "Inkommande",
         "outgoing": "Avgående",
         "shortHour": "t",
-        "shortMin": "m"
+        "shortMin": "m",
+        "longHour": "timmar",
+        "longMin": "minuter",
+        "disclaimer": "Tågplaner kan avvika från den angivna tiden. Kontrollera tidtabellen på din biljett eller i VR-appen.",
+        "noJourneyFound": "Det finns för närvarande inga resor inlagda i tidtabellen."
     },
     "AriaTimeTable": {
         "select": "Välj alla"

@@ -4,6 +4,7 @@ import { TimeTable, TrainDestination } from './timetable'
 import sanitizeStationName from '@/lib/utils/sanitizeStationName'
 import { StationMetaData, Train, TrainError } from '@/lib/types'
 import { isTrainError } from '@/lib/utils/liveTrainUtils'
+import Sidebar from './sidebar'
 
 type TimetableContainerProps = {
     liveTrainData: Train[] | TrainError | undefined
@@ -13,7 +14,6 @@ type TimetableContainerProps = {
     stationShortCode: string | undefined
     destination: TrainDestination
 }
-
 
 function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStationShortCode, stationMetadata, stationShortCode, destination }: TimetableContainerProps) {
     let data = undefined;
@@ -68,8 +68,8 @@ function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStat
     });
 
     return (
-        <div className='grid grid-cols-2'>
-            <h1>Section</h1>
+        <div className='grid grid-cols-1 grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-1 gap-14 md:gap-0'>
+            <Sidebar data={transformedData} destination={destination}></Sidebar>
             <TimeTable data={transformedData} destination={destination}></TimeTable>
         </div>
     )
