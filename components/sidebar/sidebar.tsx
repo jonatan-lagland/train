@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import ArrivalTimestamp from './arrivalTimestamp'
 import useSortedStationData from '@/lib/utils/sortedStationData'
 import useTimestampInterval from '@/lib/utils/timestampInterval'
+import { useRouter } from 'next/navigation';
 
 type SidebarProps = {
     data: TimeTable[]
@@ -12,9 +13,10 @@ type SidebarProps = {
 }
 
 function Sidebar({ data, destination }: SidebarProps) {
+    const router = useRouter();
     const translation = useTranslations('TimeTable');
     const timeStampNow = useTimestampInterval();
-    const nextStation = useSortedStationData(data, timeStampNow)
+    const nextStation = useSortedStationData(data, timeStampNow, router)
     const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;
 
     return (
