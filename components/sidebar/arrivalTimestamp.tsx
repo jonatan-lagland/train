@@ -22,7 +22,7 @@ type ArrivalTimestampProps = {
 export default function ArrivalTimestamp({ stationNextTimestamp, stationNextTrainTrack, timeStampNow, data }: ArrivalTimestampProps): React.ReactElement {
     const translation = useTranslations('TimeTable');
     const timeDifference = new Date(stationNextTimestamp).getTime() - new Date(timeStampNow).getTime();
-    const totalMinutes = Math.max(Math.floor(timeDifference / 60000), 0); // Ensure the value is not negative with Math.max
+    const totalMinutes = Math.max(Math.ceil(timeDifference / 60000), 0); // Ensure the value is not negative with Math.max
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 

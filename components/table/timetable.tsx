@@ -242,7 +242,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    className=" bg-white hover:bg-white transition duration-300 ease-in-out"
+                                    className=" bg-white transition duration-300 ease-in-out"
                                     data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
