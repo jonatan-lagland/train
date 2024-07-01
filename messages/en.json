@@ -16,7 +16,11 @@
         "longHour": "hours",
         "longMin": "minutes",
         "disclaimer": "Train schedules may differ from the announced time. Please double-check the schedule on your ticket or the VR app.",
-        "noJourneyFound": "There are currently no scheduled journeys."
+        "noJourneyFound": "There are currently no scheduled journeys.",
+        "nextDestination": "The next train's destination",
+        "nextDeparture": "The next train's departure station",
+        "arrivesAt": "Arrives at station",
+        "leavesFrom": "Leaves from station"
     },
     "AriaTimeTable": {
         "select": "Select all"

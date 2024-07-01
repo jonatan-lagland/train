@@ -16,7 +16,11 @@
         "longHour": "timmar",
         "longMin": "minuter",
         "disclaimer": "Tågplaner kan avvika från den angivna tiden. Kontrollera tidtabellen på din biljett eller i VR-appen.",
-        "noJourneyFound": "Det finns för närvarande inga resor inlagda i tidtabellen."
+        "noJourneyFound": "Det finns för närvarande inga resor inlagda i tidtabellen.",
+        "nextDestination": "Nästa tåg till",
+        "nextDeparture": "Nästa tåg från",
+        "arrivesAt": "Anländer till stationen",
+        "leavesFrom": "Avgår från stationen"
     },
     "AriaTimeTable": {
         "select": "Välj alla"

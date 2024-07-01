@@ -16,7 +16,11 @@
         "longHour": "tunnin",
         "longMin": "minuutin",
         "disclaimer": "Junien aikataulut voivat poiketa ilmoitetusta ajasta. Tarkista aikataulu lipusta tai VR:n sovelluksesta.",
-        "noJourneyFound": "Aikatauluun ei tällä hetkellä ole merkitty matkoja."
+        "noJourneyFound": "Aikatauluun ei tällä hetkellä ole merkitty matkoja.",
+        "nextDestination": "Seuraavan junan määränpää",
+        "nextDeparture": "Seuraavan junan lähtöasema",
+        "arrivesAt": "Saapuu asemalle",
+        "leavesFrom": "Lähtee asemalta"
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"

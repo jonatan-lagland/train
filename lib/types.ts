@@ -61,3 +61,5 @@ export type TrainError = {
     errorMessage: string
     queryString: string
 }
+
+export type SiteLocale = 'fi' | 'se' | 'en'

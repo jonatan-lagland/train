@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
 import { TimeTable, TrainDestination } from '../table/timetable'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import ArrivalTimestamp from './arrivalTimestamp'
 import useSortedStationData from '@/lib/utils/sortedStationData'
 import useTimestampInterval from '@/lib/utils/timestampInterval'
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'
 
 type SidebarProps = {
     data: TimeTable[]
@@ -14,6 +14,9 @@ type SidebarProps = {
 
 function Sidebar({ data, destination }: SidebarProps) {
     const router = useRouter();
+    const params = useParams();
+    const city = params.city
+    const locale = useLocale();
     const translation = useTranslations('TimeTable');
     const timeStampNow = useTimestampInterval();
     const nextStation = useSortedStationData(data, timeStampNow, router)
@@ -24,7 +27,7 @@ function Sidebar({ data, destination }: SidebarProps) {
             <div className='flex flex-wrap justify-between py-8'>
                 <div className='flex flex-col flex-grow'>
                     <span className='uppercase font-medium text-slate-500'>
-                        {destination === 'ARRIVAL' ? 'Seuraavan junan lähtöasema' : 'Seuraavan junan määränpää'}
+                        {destination === 'ARRIVAL' ? translation('nextDeparture') : translation('nextDestination')}
                     </span>
                     <div className='flex flex-wrap'>
                         <span className='font-bold text-4xl text-blue-400'>
@@ -40,6 +43,9 @@ function Sidebar({ data, destination }: SidebarProps) {
             </div>
             <div className='flex flex-col gap-2'>
                 <ArrivalTimestamp
+                    city={city}
+                    destination={destination}
+                    locale={locale}
                     stationNextTimestamp={stationNextTimestamp}
                     stationNextTrainTrack={stationNextTrainTrack}
                     timeStampNow={timeStampNow}
