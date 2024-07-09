@@ -210,9 +210,9 @@ export function TimeTable({ data, destination }: TimeTableProps) {
             <div className="flex items-center">
                 <Input
                     placeholder={t("TimeTable.placeholder")}
-                    value={(table.getColumn("stationName")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn("trainType")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("stationName")?.setFilterValue(event.target.value)
+                        table.getColumn("trainType")?.setFilterValue(event.target.value)
                     }
                     className=""
                 />
