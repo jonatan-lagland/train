@@ -11,6 +11,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import sanitizeStationName from '@/lib/utils/sanitizeStationName';
 import { StationMetadataContext } from '@/lib/context/StationMetadataContext';
 import capitalizeTitle from '@/lib/utils/capitalizeTitle';
+
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { z } from "zod"
 import {
@@ -22,6 +23,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { useForm } from 'react-hook-form';
+
 
 function NavigationContainer() {
     const stationMetadata = useContext(StationMetadataContext)
@@ -59,13 +61,15 @@ function NavigationContainer() {
         const sanitizedLocation = encodeURIComponent(location)
 
         if (destination) {
-            const url = `/${locale}/${sanitizedLocation}?type=${type}&destination=${destination}`;
+            const url = `/${locale}/${sanitizedLocation}?type=departure&destination=${destination}`;
             router.push(url);
             return;
         }
         const url = `/${locale}/${sanitizedLocation}?type=${type}`;
         router.push(url);
     }
+
+    const destinationValue = form.watch("destination");
 
     return (
         <div className=''>
@@ -201,6 +205,7 @@ function NavigationContainer() {
                                         <RadioGroup
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
+                                            disabled={!!destinationValue}
                                             className="flex flex-col space-y-1"
                                         >
                                             <FormItem className="flex items-center space-x-3 space-y-0">

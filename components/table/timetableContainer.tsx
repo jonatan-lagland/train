@@ -24,6 +24,7 @@ function TimetableContainer({ liveTrainData, liveDestinationTrainData, finalStat
     if (liveDestinationTrainData)
         data = liveDestinationTrainData
     if (!data || isTrainError(data)) {
+        // Return empty values for the time table, which will still render the UI but display a no results found message.
         return (
             <TimeTable data={transformedData} destination={destination} stationMetaData={stationMetadata}></TimeTable>
         )
