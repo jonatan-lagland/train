@@ -1,4 +1,4 @@
-import { StaticDataProvider } from "./[locale]/StaticDataProvider";
+import { StaticDataProvider } from "@/lib/contextProvider/StaticDataProvider";
 import "./globals.css";
 import { ReactNode } from 'react';
 import fetchStationMetadata from "./api/fetchStationMetadata";
