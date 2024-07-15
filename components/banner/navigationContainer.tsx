@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState, useTransition } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import { CaretSortIcon, CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
 import { cn } from '@/lib/utils';
 import { useTranslations, useLocale } from 'next-intl';
@@ -24,6 +24,9 @@ import {
 } from "@/components/ui/form"
 import { useForm } from 'react-hook-form';
 import { SpinnerSm } from '../ui/spinner';
+import { Check, SwapVert } from '@mui/icons-material';
+
+type DestinationType = "departure" | "arrival" | undefined;
 
 
 function NavigationContainer() {
@@ -50,13 +53,19 @@ function NavigationContainer() {
         destination: z.string().optional(),
     })
 
+    const initialDefaultValues = {
+        type: "departure" as DestinationType,
+        location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
+        destination: destinationParam ? decodeURIComponent(destinationParam) : undefined,
+    };
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            type: "departure",
-            location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
-            destination: destinationParam ? decodeURIComponent(destinationParam) : undefined
-        },
+            type: initialDefaultValues.type,
+            location: undefined,
+            destination: undefined
+        }
     })
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -79,8 +88,10 @@ function NavigationContainer() {
         return navigationPath;
     }
 
+
     // Watch changes in value for destination
     const destinationValue = form.watch("destination");
+    const locationValue = form.watch('location');
 
     // If destination has been selected OR form is being submitted, disable radio buttons
     useEffect(() => {
@@ -90,6 +101,16 @@ function NavigationContainer() {
             setIsDisableRadioButtons(false)
         }
     }, [destinationValue, isPending])
+
+    useEffect(() => {
+        if (defaultCity) {
+            form.setValue('location', decodeURIComponent(defaultCity));
+        }
+        if (destinationParam) {
+            form.setValue('destination', decodeURIComponent(destinationParam));
+        }
+    }, []);
+
 
 
     return (
@@ -114,10 +135,21 @@ function NavigationContainer() {
                                                     !field.value && "text-muted-foreground"
                                                 )}
                                             >
-                                                <span>
+                                                <span className='truncate'>
                                                     {field.value ? capitalizeTitle(field.value) : placeholderLabel}
                                                 </span>
-                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                <div className='flex flex-row justify-end'>
+                                                    {field.value && (
+                                                        <Cross2Icon
+                                                            className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                form.resetField("location")
+                                                            }}
+                                                        />
+                                                    )}
+                                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                </div>
                                             </Button>
                                         </FormControl>
                                     </PopoverTrigger>
@@ -137,14 +169,17 @@ function NavigationContainer() {
                                                                     form.setValue("location", sanitizedStationName)
                                                                 }}
                                                             >
-                                                                <span className="capitalize">{sanitizedStationName}</span>
-
-                                                                <CheckIcon
+                                                                <Check
                                                                     className={cn(
-                                                                        "ml-auto h-4 w-4",
-                                                                        station.stationShortCode === field.value ? "opacity-100" : "opacity-0"
+                                                                        "mr-2 h-4 w-4",
+                                                                        station.stationShortCode === field.value
+                                                                            ? "opacity-100"
+                                                                            : "opacity-0"
                                                                     )}
                                                                 />
+                                                                <span className="capitalize">{sanitizedStationName}</span>
+
+
                                                             </CommandItem>
                                                         );
                                                     })}
@@ -162,7 +197,23 @@ function NavigationContainer() {
                         name="destination"
                         render={({ field }) => (
                             <FormItem className='flex flex-col gap-1'>
-                                <FormLabel className='pointer-events-none'>{t('TimeTable.destination')}</FormLabel>
+                                <div className='flex flex-row items-center justify-between gap-1'>
+                                    <FormLabel className='pointer-events-none'>{t('TimeTable.destination')}</FormLabel>
+                                    <Button
+                                        disabled={!locationValue || !destinationValue}
+                                        variant="ghost"
+                                        role="swap"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            const currentLocation = form.getValues("location");
+                                            const currentDestination = field.value as string;
+                                            form.setValue("location", currentDestination);
+                                            form.setValue("destination", currentLocation);
+                                        }}
+                                    >
+                                        <SwapVert className='opacity-50' />
+                                    </Button>
+                                </div>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -175,10 +226,21 @@ function NavigationContainer() {
                                                     !field.value && "text-muted-foreground"
                                                 )}
                                             >
-                                                <span>
+                                                <span className='truncate'>
                                                     {field.value ? capitalizeTitle(field.value) : placeholderLabel}
                                                 </span>
-                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                <div className='flex flex-row justify-end'>
+                                                    {field.value && (
+                                                        <Cross2Icon
+                                                            className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                form.resetField("destination")
+                                                            }}
+                                                        />
+                                                    )}
+                                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                </div>
                                             </Button>
                                         </FormControl>
                                     </PopoverTrigger>
