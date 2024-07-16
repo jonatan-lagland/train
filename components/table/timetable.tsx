@@ -151,6 +151,9 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                     ? `${hours} ${translation('shortHour')} ${minutes} ${translation('shortMin')}`
                     : `${minutes} ${translation('shortMin')}`;
 
+                if (!tableType) return null;
+                const tableTypeFormatted = tableType.toLowerCase();
+
                 return (
                     <div className="flex justify-center">
                         <div className="flex flex-col justify-end items-center lowercase">
@@ -158,14 +161,20 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                                 <span className="font-bold">
                                     {timeStamp}
                                 </span>
-                                <ArrowRightAltIcon style={{ color: 'grey' }} />
-                                <span className="font-medium">
-                                    {timeStampFinalDestination}
-                                </span>
+                                {totalMinutes > 0 ?
+                                    <>
+                                        <ArrowRightAltIcon style={{ color: 'grey' }} />
+                                        <span className="font-medium">
+                                            {timeStampFinalDestination}
+                                        </span>
+                                    </>
+                                    : null}
                             </div>
-                            <span className=" text-gray-500">
-                                ({travelTime})
-                            </span>
+                            {totalMinutes > 0 ?
+                                <span className=" text-gray-500">
+                                    ({travelTime})
+                                </span>
+                                : null}
                         </div>
                     </div>
                 );
