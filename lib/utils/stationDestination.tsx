@@ -2,11 +2,6 @@ import { StationMetaData } from '../types'
 import { notFound } from 'next/navigation'
 import sanitizeStationName from './sanitizeStationName'
 
-type getStationDestinationProps = {
-    city: string
-    stationMetadata: StationMetaData[]
-}
-
 // Normalize function to handle diacritical marks, spaces, and special characters
 const normalizeString = (str: string) => {
     return decodeURIComponent(str.toLowerCase());
@@ -23,10 +18,9 @@ const normalizeAndSanitize = (name: string) => normalizeString(sanitizeStationNa
  * @param {string} city - A string containing the city name to search for.
  * @param {StationMetaData[]} stationMetadata - An array of objects representing station metadata.
  *
- * @returns {string} - The original, non-sanitized station name if found.
  */
 
-function getStationDestination({ city, stationMetadata }: getStationDestinationProps): string {
+function findStationDestination(city: string, stationMetadata: StationMetaData[]): void {
     const normalizedAndSanitizedCity = normalizeAndSanitize(city);
     const matchedStation = stationMetadata.find(
         (station) => normalizeAndSanitize(station.stationName) === normalizedAndSanitizedCity
@@ -38,7 +32,7 @@ function getStationDestination({ city, stationMetadata }: getStationDestinationP
     }
 
     // Return sanitized but non-normalized station name if found
-    return sanitizeStationName(matchedStation!.stationName); // Non-null assertion since notFound handles missing
+    //return sanitizeStationName(matchedStation!.stationName); // Non-null assertion since notFound handles missing
 }
 
-export default getStationDestination
+export default findStationDestination
