@@ -63,6 +63,7 @@ export function SelectLanguage({ languages, currentLanguageId, size = 24 }: Lang
 
     const useChangeLocale = (selectedLanguage: string) => {
         router.replace(pathname, { locale: `${selectedLanguage}` });
+        router.refresh()
     }
 
     return (

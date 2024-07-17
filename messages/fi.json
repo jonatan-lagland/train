@@ -45,5 +45,10 @@
         "titleDeparture": "Lähtevät junat",
         "titleArrival": "Saapuvat junat",
         "description": "Seuraa VR:n juna-aikatauluja reaaliajassa. Pääset käsiksi ajantasaisiin aikatauluihin, reittitietoihin ja laituritietoihin varmistaaksesi sujuvan matkan Suomen rautatieverkossa."
+    },
+    "NotFoundPage": {
+        "title": "Sivua ei löytynyt",
+        "description": "Emme valitettavasti löytäneet etsimääsi sivua.",
+        "return": "Palaa takaisin"
     }
 }

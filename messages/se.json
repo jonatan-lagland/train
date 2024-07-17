@@ -45,5 +45,10 @@
         "titleDeparture": "Avgående tåg",
         "titleArrival": "Ankommande tåg",
         "description": "Följ VR:s tågtidtabeller i realtid i Finland. Få tillgång till aktuella tidtabeller, ruttinformation och plattformsdetaljer för att säkerställa en smidig resa genom det finska järnvägsnätet."
+    },
+    "NotFoundPage": {
+        "title": "Sidan hittades inte",
+        "description": "Tyvärr, sidan du letar efter finns inte.",
+        "return": "Återvänd"
     }
 }

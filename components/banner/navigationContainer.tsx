@@ -27,9 +27,11 @@ import { SpinnerSm } from '../ui/spinner';
 import { Check, SwapVert } from '@mui/icons-material';
 
 type DestinationType = "departure" | "arrival" | undefined;
+type NavigationContainerProps = {
+    isNotFoundPage?: boolean
+}
 
-
-function NavigationContainer() {
+function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
     const stationMetadata = useContext(StationMetadataContext)
     const [isDisableRadioButtons, setIsDisableRadioButtons] = useState(false)
     const t = useTranslations()
@@ -40,8 +42,8 @@ function NavigationContainer() {
     const locale = useLocale()
     const locationRequired = t('Navigation.errorSelectLocation');
     const placeholderLabel = t('TimeTable.placeholder');
-    const defaultCity = params.city as string;
-    const destinationParam = searchParams.get('destination') as string;
+    const defaultCity = isNotFoundPage ? undefined : params.city as string;
+    const destinationParam = isNotFoundPage ? undefined : searchParams.get('destination') as string;
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
