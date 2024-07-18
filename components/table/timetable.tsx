@@ -46,12 +46,12 @@ export type TimeTable = {
 
 export type TimeTableProps = {
     data: TimeTable[]
-    destination: TrainDestination
+    destinationType: TrainDestination
 }
 
 type CreateColumnsProps = {
     tableType: TrainDestination
-    locale: any
+    locale: string
     translation: any
 }
 
@@ -61,6 +61,36 @@ const localeMap: Record<string, string> = {
     se: 'sv-SE',
     fi: 'fi-FI',
 };
+
+function getTimeStamp(scheduledTime: string, scheduledFinalDestination: string, locale: string, translation: any) {
+    const dateTime: Date = new Date(scheduledTime);
+    const dateTimeFinalDestination: Date = new Date(scheduledFinalDestination);
+    const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
+
+    // Covert date object into a localized timestamp
+    const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+    const timeStamp: string = formatter.format(dateTime);
+    const timeStampFinalDestination: string = formatter.format(dateTimeFinalDestination);
+
+    const timeDifference = dateTimeFinalDestination.getTime() - dateTime.getTime();
+    const totalMinutes = Math.floor(timeDifference / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    const travelTime = hours > 0
+        ? `${hours} ${translation('shortHour')} ${minutes} ${translation('shortMin')}`
+        : `${minutes} ${translation('shortMin')}`;
+
+    return ({
+        timeStamp,
+        totalMinutes,
+        timeStampFinalDestination,
+        travelTime
+    })
+}
 
 export const createColumns = ({ tableType, locale, translation }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
     return [
@@ -96,9 +126,15 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
         {
             accessorKey: "stationName",
             header: () => {
+                if (!tableType) return null;
+                const tableTypeFormatted = tableType.toLowerCase();
+
                 return (
                     <span>
-                        {translation(`destination`)}
+                        {tableTypeFormatted === 'arrival' ?
+                            translation(`origin`) :
+                            translation(`destination`)
+                        }
                     </span>
                 )
             },
@@ -129,30 +165,8 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                 const { scheduledFinalDestination } = row.original;
 
                 if (!scheduledFinalDestination) return null; // Exit early to avoid errors with converting undefined timestamps
-
-                const dateTime: Date = new Date(scheduledTime);
-                const dateTimeFinalDestination: Date = new Date(scheduledFinalDestination);
-                const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
-
-                // Covert date object into a localized timestamp
-                const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
-                    hour: 'numeric',
-                    minute: 'numeric',
-                });
-                const timeStamp: string = formatter.format(dateTime);
-                const timeStampFinalDestination: string = formatter.format(dateTimeFinalDestination);
-
-                const timeDifference = dateTimeFinalDestination.getTime() - dateTime.getTime();
-                const totalMinutes = Math.floor(timeDifference / 60000);
-                const hours = Math.floor(totalMinutes / 60);
-                const minutes = totalMinutes % 60;
-
-                const travelTime = hours > 0
-                    ? `${hours} ${translation('shortHour')} ${minutes} ${translation('shortMin')}`
-                    : `${minutes} ${translation('shortMin')}`;
-
                 if (!tableType) return null;
-                const tableTypeFormatted = tableType.toLowerCase();
+                const { timeStamp, totalMinutes, timeStampFinalDestination, travelTime } = getTimeStamp(scheduledTime, scheduledFinalDestination, locale, translation)
 
                 return (
                     <div className="flex justify-center">
@@ -183,7 +197,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
     ]
 }
 
-export function TimeTable({ data, destination }: TimeTableProps) {
+export function TimeTable({ data, destinationType }: TimeTableProps) {
     const t = useTranslations();
     const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -194,7 +208,7 @@ export function TimeTable({ data, destination }: TimeTableProps) {
     const [rowSelection, setRowSelection] = React.useState({})
     const timetableTranslations = useTranslations('TimeTable');
     const locale = useLocale();
-    const columns = createColumns({ tableType: destination, locale: locale, translation: timetableTranslations });
+    const columns = createColumns({ tableType: destinationType, locale: locale, translation: timetableTranslations });
     const table = useReactTable({
         data,
         columns,

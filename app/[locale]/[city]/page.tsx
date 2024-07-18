@@ -1,4 +1,4 @@
-import { TrainDestination } from "@/components/table/timetable";
+import { TimeTable, TrainDestination } from "@/components/table/timetable";
 import Banner from "../../../components/banner/banner";
 import { getTranslations } from "next-intl/server";
 import capitalizeTitle from "@/lib/utils/capitalizeTitle";
@@ -7,8 +7,9 @@ import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";
 import filterStationMetadata from "@/lib/utils/filterStationMetadata";
-import liveTrainUtils from "@/lib/utils/liveTrainUtils";
+import liveTrainUtils, { useTransformTrainData } from "@/lib/utils/liveTrainUtils";
 import findStationDestination from "@/lib/utils/stationDestination";
+import Sidebar from "@/components/sidebar/sidebar";
 
 export type BannerLabel = 'arrivalTrains' | 'departureTrains';
 export type TimeTablePageProps = {
@@ -42,14 +43,15 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
   /* Fetch all known stations */
   const stationMetadata = await fetchStationMetadata();
 
-  /* Verify the URL params indeed have cities that exist */
+  /* Verify the URL params indeed have cities that exist. Invokes 404 page if city does not exist. */
   if (city) findStationDestination(city, stationMetadata)
   if (cityDestination) findStationDestination(cityDestination, stationMetadata)
 
   /* After cities have been verified to exist, filter and fetch data */
-  const filteredStations = filterStationMetadata(stationMetadata)
-  const liveTrain = await liveTrainUtils(city, cityDestination, destinationType, stationMetadata)
-  const { liveTrainData, liveDestinationTrainData, stationShortCode, finalStationShortCode } = liveTrain;
+  const filteredStationMetadata = filterStationMetadata(stationMetadata)
+  const liveTrain = await liveTrainUtils(city, cityDestination, destinationType, filteredStationMetadata)
+  const { liveTrainData, stationShortCode, finalStationShortCode } = liveTrain;
+  const data = useTransformTrainData(liveTrainData, finalStationShortCode, filteredStationMetadata, stationShortCode, destinationType)
 
   return (
     <div className="flex flex-col flex-grow h-screen gap-2 justify-start items-center">
@@ -76,15 +78,9 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 to-transparent"></div>
         </div>
       </div>
-      <div className="py-8 md:px-6 px-1">
-        <TimetableContainer
-          liveTrainData={liveTrainData}
-          liveDestinationTrainData={liveDestinationTrainData}
-          finalStationShortCode={finalStationShortCode}
-          stationMetadata={filteredStations}
-          stationShortCode={stationShortCode}
-          destination={destinationType}
-        ></TimetableContainer>
+      <div className='grid grid-cols-1 grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-1 gap-14 md:gap-0 py-8 md:px-6 px-1'>
+        <Sidebar data={data} destinationType={destinationType}></Sidebar>
+        <TimeTable data={data} destinationType={destinationType}></TimeTable>
       </div>
     </div>
   );

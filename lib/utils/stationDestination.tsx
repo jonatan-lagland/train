@@ -13,7 +13,7 @@ const normalizeAndSanitize = (name: string) => normalizeString(sanitizeStationNa
 
 /**
  * A function that searches for a station by its name based on the provided string and stations object.
- * If a station name isn't found in the metadata, the `notFound` function will be called.
+ * If a station name isn't found in the metadata, the `notFound` function will be invoked.
  *
  * @param {string} city - A string containing the city name to search for.
  * @param {StationMetaData[]} stationMetadata - An array of objects representing station metadata.

@@ -8,7 +8,7 @@ export default async function Home() {
                 <div className="flex items-start justify-center order-2 md:order-1 md:items-center">
                     <NavigationContainer />
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center md:justify-end">
                     <h1 className="text-4xl text-center font-semibold text-white">Etsi junamatkoja</h1>
                 </div>
             </div>

@@ -44,6 +44,7 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
     const placeholderLabel = t('TimeTable.placeholder');
     const defaultCity = isNotFoundPage ? undefined : params.city as string;
     const destinationParam = isNotFoundPage ? undefined : searchParams.get('destination') as string;
+    const typeParam = searchParams.get('type') as DestinationType;
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
@@ -56,7 +57,7 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
     })
 
     const initialDefaultValues = {
-        type: "departure" as DestinationType,
+        type: typeParam ? typeParam : "departure" as DestinationType,
         location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
         destination: destinationParam ? decodeURIComponent(destinationParam) : undefined,
     };

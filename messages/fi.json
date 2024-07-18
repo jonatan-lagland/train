@@ -1,7 +1,7 @@
 {
     "TimeTable": {
         "destination": "Määränpää",
-        "origin": "Lähtöpaikka",
+        "origin": "Lähtöasema",
         "departure": "Lähtöaika",
         "arrival": "Saapumisaika",
         "train": "Juna",

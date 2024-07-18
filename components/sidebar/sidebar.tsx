@@ -6,17 +6,18 @@ import ArrivalTimestamp from './arrivalTimestamp'
 import useSortedStationData from '@/lib/utils/sortedStationData'
 import useTimestampInterval from '@/lib/utils/timestampInterval'
 import { useParams, useRouter } from 'next/navigation'
+import { SiteLocale } from '@/lib/types'
 
 type SidebarProps = {
     data: TimeTable[]
-    destination: TrainDestination
+    destinationType: TrainDestination
 }
 
-function Sidebar({ data, destination }: SidebarProps) {
+function Sidebar({ data, destinationType }: SidebarProps) {
     const router = useRouter();
     const params = useParams();
     const city = params.city
-    const locale = useLocale();
+    const locale = useLocale() as SiteLocale;
     const translation = useTranslations('TimeTable');
     const timeStampNow = useTimestampInterval();
     const nextStation = useSortedStationData(data, timeStampNow, router)
@@ -27,7 +28,7 @@ function Sidebar({ data, destination }: SidebarProps) {
             <div className='flex flex-wrap justify-between py-8'>
                 <div className='flex flex-col flex-grow'>
                     <span className='uppercase font-medium text-slate-500'>
-                        {destination === 'ARRIVAL' ? translation('nextDeparture') : translation('nextDestination')}
+                        {destinationType === 'ARRIVAL' ? translation('nextDeparture') : translation('nextDestination')}
                     </span>
                     <div className='flex flex-wrap'>
                         <span className='font-bold text-4xl text-blue-400'>
@@ -44,12 +45,13 @@ function Sidebar({ data, destination }: SidebarProps) {
             <div className='flex flex-col gap-2'>
                 <ArrivalTimestamp
                     city={city}
-                    destination={destination}
+                    destinationType={destinationType}
                     locale={locale}
                     stationNextTimestamp={stationNextTimestamp}
                     stationNextTrainTrack={stationNextTrainTrack}
                     timeStampNow={timeStampNow}
-                    data={data}></ArrivalTimestamp>
+                    data={data}>
+                </ArrivalTimestamp>
                 <span className='text-slate-400 text-sm'>
                     {translation('disclaimer')}
                 </span>
