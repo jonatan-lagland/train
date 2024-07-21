@@ -2,7 +2,7 @@ import { TrainDestination } from "@/components/table/timetable";
 import { Train, TrainError } from "@/lib/types";
 
 const amount = 10;
-const revalidateDuration: number = 30;
+const revalidateDuration: number = 120;
 
 type fetchLiveDestinationTrainProps = {
     departure_station: string | undefined

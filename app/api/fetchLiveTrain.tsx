@@ -3,7 +3,7 @@ import { Train, TrainError } from "@/lib/types";
 
 const fetchArrivingAmount: number = 10;
 const fetchArrivedAmount: number = 0;
-const revalidateDuration: number = 30;
+const revalidateDuration: number = 120;
 
 type fetchLiveTrainProps = {
     stationShortCode: string | undefined
@@ -13,8 +13,8 @@ type fetchLiveTrainProps = {
 /**
  * A function that takes in a station short code and destination type to fetch live train data using the Fintraffic API.
 
- * @param {string} stationShortCode - A string containing a station's short code.
- * @param {TrainDestination} type - A string containing the destination type.
+ * @param {string} props.stationShortCode - A string containing a station's short code.
+ * @param {TrainDestination} props.type - A string containing the destination type.
  * @returns {Promise<Train[] | TrainError | []>} Returns either an array of live train data or an error object as a promise from the API, or an empty array in case of a server-side exception.
  */
 

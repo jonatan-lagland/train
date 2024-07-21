@@ -20,7 +20,9 @@
         "nextDestination": "Nästa tåg till",
         "nextDeparture": "Nästa tåg från",
         "arrivesAt": "Anländer till stationen",
-        "leavesFrom": "Avgår från stationen"
+        "leavesFrom": "Avgår från stationen",
+        "unknown": "Ingen tid",
+        "cancelled": "Inställt"
     },
     "AriaTimeTable": {
         "select": "Välj alla"

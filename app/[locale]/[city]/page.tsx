@@ -2,7 +2,6 @@ import { TimeTable, TrainDestination } from "@/components/table/timetable";
 import Banner from "../../../components/banner/banner";
 import { getTranslations } from "next-intl/server";
 import capitalizeTitle from "@/lib/utils/capitalizeTitle";
-import TimetableContainer from "@/components/table/timetableContainer";
 import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";

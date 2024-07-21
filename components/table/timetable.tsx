@@ -38,10 +38,13 @@ export type TimeTable = {
     type: TrainDestination;
     scheduledTime: string
     scheduledFinalDestination: string
+    liveEstimateTime?: string
+    unknownDelay?: boolean
     trainType: string
     trainNumber: number
     differenceInMinutes?: number
     commercialTrack: number
+    cancelled: boolean
 }
 
 export type TimeTableProps = {
@@ -62,8 +65,9 @@ const localeMap: Record<string, string> = {
     fi: 'fi-FI',
 };
 
-function getTimeStamp(scheduledTime: string, scheduledFinalDestination: string, locale: string, translation: any) {
+function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefined, scheduledFinalDestination: string, locale: string, translation: any) {
     const dateTime: Date = new Date(scheduledTime);
+    let liveTimeStamp: string | undefined = undefined;
     const dateTimeFinalDestination: Date = new Date(scheduledFinalDestination);
     const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
 
@@ -73,7 +77,18 @@ function getTimeStamp(scheduledTime: string, scheduledFinalDestination: string, 
         minute: 'numeric',
     });
     const timeStamp: string = formatter.format(dateTime);
+    //const 
     const timeStampFinalDestination: string = formatter.format(dateTimeFinalDestination);
+
+    if (liveEstimateTime) {
+        const liveDateTime = new Date(liveEstimateTime);
+        const oneMinuteInMillis = 60 * 1000; // Number of milliseconds in one minute
+
+        if (dateTime.getTime() < liveDateTime.getTime() && (liveDateTime.getTime() - dateTime.getTime() > oneMinuteInMillis)) {
+            liveTimeStamp = formatter.format(liveDateTime);
+        }
+    }
+
 
     const timeDifference = dateTimeFinalDestination.getTime() - dateTime.getTime();
     const totalMinutes = Math.floor(timeDifference / 60000);
@@ -86,6 +101,7 @@ function getTimeStamp(scheduledTime: string, scheduledFinalDestination: string, 
 
     return ({
         timeStamp,
+        liveTimeStamp,
         totalMinutes,
         timeStampFinalDestination,
         travelTime
@@ -163,18 +179,40 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             cell: ({ row }) => {
                 const scheduledTime: string = row.getValue("scheduledTime") as string;
                 const { scheduledFinalDestination } = row.original;
+                const { liveEstimateTime } = row.original;
+                const { unknownDelay } = row.original;
+                const { cancelled } = row.original;
+                const cancelledStyle = cancelled ? "text-red-500 line-through" : "";
+                const cancelledTimeStyle = cancelled ? "text-red-500 line-through" : "text-gray-500"
 
                 if (!scheduledFinalDestination) return null; // Exit early to avoid errors with converting undefined timestamps
                 if (!tableType) return null;
-                const { timeStamp, totalMinutes, timeStampFinalDestination, travelTime } = getTimeStamp(scheduledTime, scheduledFinalDestination, locale, translation)
+
+                const { timeStamp, liveTimeStamp, totalMinutes, timeStampFinalDestination, travelTime } = getTimeStamp(scheduledTime, liveEstimateTime, scheduledFinalDestination, locale, translation)
 
                 return (
                     <div className="flex justify-center">
                         <div className="flex flex-col justify-end items-center lowercase">
-                            <div className="flex flex-row items-center">
-                                <span className="font-bold">
-                                    {timeStamp}
+                            {cancelled ?
+                                <span className="capitalize font-bold">
+                                    {translation("cancelled")}
                                 </span>
+                                : null}
+                            <div className={`flex flex-row items-center ${cancelledStyle}`}>
+                                {liveTimeStamp || unknownDelay ?
+                                    <div className="flex flex-col items-center justify-center gap-1">
+                                        <span className="font-medium line-through text-red-500">
+                                            {timeStamp}
+                                        </span>
+                                        <span className="font-bold">
+                                            {unknownDelay && !liveTimeStamp ? "?" : liveTimeStamp}
+                                        </span>
+                                    </div>
+                                    :
+                                    <span className="font-bold">
+                                        {timeStamp}
+                                    </span>
+                                }
                                 {totalMinutes > 0 ?
                                     <>
                                         <ArrowRightAltIcon style={{ color: 'grey' }} />
@@ -185,7 +223,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                                     : null}
                             </div>
                             {totalMinutes > 0 ?
-                                <span className=" text-gray-500">
+                                <span className={`${cancelledTimeStyle}`}>
                                     ({travelTime})
                                 </span>
                                 : null}
@@ -233,9 +271,9 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
             <div className="flex items-center">
                 <Input
                     placeholder={t("TimeTable.placeholder")}
-                    value={(table.getColumn("trainType")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn("stationName")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("trainType")?.setFilterValue(event.target.value)
+                        table.getColumn("stationName")?.setFilterValue(event.target.value)
                     }
                     className=""
                 />

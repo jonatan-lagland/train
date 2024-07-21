@@ -20,7 +20,9 @@
         "nextDestination": "Seuraavan junan määränpää",
         "nextDeparture": "Seuraavan junan lähtöasema",
         "arrivesAt": "Saapuu asemalle",
-        "leavesFrom": "Lähtee asemalta"
+        "leavesFrom": "Lähtee asemalta",
+        "unknown": "Ei arviota",
+        "cancelled": "Peruutettu"
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"

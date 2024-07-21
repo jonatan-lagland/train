@@ -20,7 +20,9 @@
         "nextDestination": "The next train's destination",
         "nextDeparture": "The next train's departure station",
         "arrivesAt": "Arrives at station",
-        "leavesFrom": "Leaves from station"
+        "leavesFrom": "Leaves from station",
+        "unknown": "No estimate",
+        "cancelled": "Cancelled"
     },
     "AriaTimeTable": {
         "select": "Select all"
