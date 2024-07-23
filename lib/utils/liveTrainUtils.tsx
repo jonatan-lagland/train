@@ -1,11 +1,21 @@
 import sanitizeStationName from './sanitizeStationName';
 import fetchLiveTrain from '@/app/api/fetchLiveTrain';
-import { StationMetaData, Train, TrainError } from '../types';
+import { StationMetaData, TimeTableRow, Train, TrainError } from '../types';
 import { TimeTable, TrainDestination } from '@/components/table/timetable';
 import fetchLiveDestinationTrain from '@/app/api/fetchLiveDestinationTrain';
 
-
-export default async function liveTrainUtils(city: string, cityDestination: string, destinationType: TrainDestination, stationMetadata: StationMetaData[]) {
+/**
+ * Description placeholder
+ *
+ * @export
+ * @async
+ * @param {string} city A value representing an encoded URI component of a given city name.
+ * @param {string} cityDestination 
+ * @param {TrainDestination} destinationType
+ * @param {StationMetaData[]} stationMetadata
+ * @returns {unknown}
+ */
+export default async function useLiveTrainData(city: string, destinationType: TrainDestination, stationMetadata: StationMetaData[], isCommuter: string, cityDestination?: string) {
     const decodedStation = decodeURIComponent(city.toLowerCase());
     const station = stationMetadata.find(code => decodedStation === sanitizeStationName(code.stationName.toLowerCase()));
     const stationShortCode = station?.stationShortCode;
@@ -19,7 +29,7 @@ export default async function liveTrainUtils(city: string, cityDestination: stri
 
     /* If no destination has been defined, fetch and return a station with no pre-defined destination */
     if (!cityDestination) {
-        liveTrainData = await fetchLiveTrain({ stationShortCode: stationShortCode, type: destinationType });
+        liveTrainData = await fetchLiveTrain({ stationShortCode: stationShortCode, type: destinationType, isCommuter: isCommuter });
         return {
             liveTrainData,
             stationShortCode,
@@ -36,7 +46,7 @@ export default async function liveTrainUtils(city: string, cityDestination: stri
         throw new Error(`Destination station not found for city: ${cityDestination}`);
     }
 
-    liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode });
+    liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode, isCommuter: isCommuter });
     return {
         liveTrainData,
         stationShortCode,
@@ -44,15 +54,26 @@ export default async function liveTrainUtils(city: string, cityDestination: stri
     };
 }
 
+/**
+ * Uses unfiltered data from the Fintraffic API and filters it by only including stations at which a train stops at.
+ *
+ * @export
+ * @param {(Train[] | TrainError)} liveTrainData An array of Train objects or a Train error object
+ * @param {(string | undefined)} finalStationShortCode A train journey's final stopping destination short code
+ * @param {StationMetaData[]} stationMetadata Metadata for a station.
+ * @param {(string | undefined)} stationShortCode A station short code for the starting station.
+ * @param {TrainDestination} destinationType Destination type of either 'ARRIVAL' or 'DEPARTURE'
+ * @returns {TimeTable[] | [] } An array of TimeTable objects that represent the station stops of a given train journey, or an empty array in the case of an error.
+ */
 export function useTransformTrainData(
     liveTrainData: Train[] | TrainError,
     finalStationShortCode: string | undefined,
     stationMetadata: StationMetaData[],
     stationShortCode: string | undefined,
     destinationType: TrainDestination
-) {
+): TimeTable[] | [] {
     if (isTrainError(liveTrainData)) return [] // exit early and return an empty array in case of a TrainError
-    let transformedData: TimeTable[] = [];
+    let stationStopData: TimeTable[] = [];
 
     liveTrainData.forEach(train => {
         // Filter trains so that only trains where station and journey type match (e.g. arrival or destination) AND the train stops at the location
@@ -68,6 +89,19 @@ export function useTransformTrainData(
 
             return matchesStationAndDestination && matchesFinalStationShortCode;
         });
+
+        const trainJourney = train.timeTableRows
+            .filter((row) => {
+                const isNonStopping = row.trainStopping === true && row.commercialStop === true;
+                return isNonStopping;
+            })
+            .map((row) => {
+                const station = stationMetadata.find(metadata => metadata.stationShortCode === row.stationShortCode);
+                return {
+                    ...row,
+                    stationName: station ? sanitizeStationName(station.stationName) : row.stationShortCode
+                };
+            });
 
         // Map to TimeTable structure
         const transformedRows = filteredRows.map(row => {
@@ -88,17 +122,16 @@ export function useTransformTrainData(
                 trainNumber: train.trainNumber,
                 differenceInMinutes: row.differenceInMinutes,
                 commercialTrack: row.commercialTrack,
-                cancelled: row.cancelled
+                cancelled: row.cancelled,
+                trainJourney: trainJourney
             };
         });
 
-        transformedData = transformedData.concat(transformedRows);
+        stationStopData = stationStopData.concat(transformedRows);
     });
 
-    return transformedData;
+    return stationStopData;
 }
-
-
 
 /**
  * A TypeScript type guard function that validates whether data is of type Train or TrainError.

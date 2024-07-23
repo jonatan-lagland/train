@@ -1,7 +1,16 @@
-export default function capitalizeTitle(str: string) {
+/**
+ * Utility function that capitalizes a city name while taking into consideration spaces, hyphens, underscores and brackets.
+ *
+ * @export
+ * @param {string} cityLabel City name in a decoded plain text format.
+ * @returns {string} A capitalized city name.
+ */
+export default function capitalizeTitle(cityLabel: string): string {
+    if (!cityLabel) {
+        throw new Error(`City name not defined: ${cityLabel}`);
+    }
     // Split by spaces, hyphens, underscores, and brackets
-    if (!str) return undefined;
-    return str
+    return cityLabel
         .split(/([-_\s()\[\]{}])/g) // Match and capture delimiters (spaces, hyphens, brackets)
         .map((part, index, array) => {
             // If part is a delimiter, return it directly

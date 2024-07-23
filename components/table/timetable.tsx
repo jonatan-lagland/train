@@ -7,6 +7,7 @@ import {
 import {
     ColumnDef,
     ColumnFiltersState,
+    Row,
     SortingState,
     VisibilityState,
     flexRender,
@@ -17,7 +18,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-
+import LaunchRounded from '@mui/icons-material/LaunchRounded';
+import CircleIcon from '@mui/icons-material/Circle';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,8 +32,14 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useLocale, useTranslations } from 'next-intl';
+import Link from "next/link";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { Skeleton } from "../ui/skeleton";
+import useTimestampInterval from "@/lib/utils/timestampInterval";
+import { TimeTableRow } from "@/lib/types";
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
+export type Locale = 'en | se | fi'
 
 export type TimeTable = {
     stationName: string
@@ -45,6 +53,7 @@ export type TimeTable = {
     differenceInMinutes?: number
     commercialTrack: number
     cancelled: boolean
+    trainJourney: []
 }
 
 export type TimeTableProps = {
@@ -54,7 +63,7 @@ export type TimeTableProps = {
 
 type CreateColumnsProps = {
     tableType: TrainDestination
-    locale: string
+    locale: Locale
     translation: any
 }
 
@@ -65,10 +74,22 @@ const localeMap: Record<string, string> = {
     fi: 'fi-FI',
 };
 
-function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefined, scheduledFinalDestination: string, locale: string, translation: any) {
-    const dateTime: Date = new Date(scheduledTime);
+/**
+ * Creates a localized timestamp for the scheduled time and the travel time 
+ * from point A to point B. 
+ * Optionally, provides a localized timestamp for the live estimate time if a value has been provided and the difference
+ * between the live estimate time and the previously scheduled time is more than one minute.
+ *
+ * @param {string} scheduledTime Epoch timestamp of the scheduled train arrival or departure time.
+ * @param {(string | undefined)} liveEstimateTime Epoch timestamp of the estimated train arrival of departure time. Used to indicate delay.
+ * @param {string} scheduledFinalDestination Epoch timestamp for the final scheduled arrival station in a train's journey.
+ * @param {Locale} locale Locale in se | fi | en format.
+ * @param {*} translation useTranslations() hook
+ */
+function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefined, scheduledFinalDestination: string, locale: Locale, translation: any) {
+    const dateTime = new Date(scheduledTime).getTime();
     let liveTimeStamp: string | undefined = undefined;
-    const dateTimeFinalDestination: Date = new Date(scheduledFinalDestination);
+    const dateTimeFinalDestination = new Date(scheduledFinalDestination).getTime();
     const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
 
     // Covert date object into a localized timestamp
@@ -76,25 +97,28 @@ function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefine
         hour: 'numeric',
         minute: 'numeric',
     });
-    const timeStamp: string = formatter.format(dateTime);
-    //const 
-    const timeStampFinalDestination: string = formatter.format(dateTimeFinalDestination);
+    const timeStamp = getJourneyTimeStamp(dateTime, locale)
+    const timeStampFinalDestination = getJourneyTimeStamp(dateTimeFinalDestination, locale);
 
+    /* 
+        * If liveEstimateTime exists, which is used to track train delay, calculate the difference in delay
+        * using the scheduled time in when the delay is at least one minute
+    */
     if (liveEstimateTime) {
-        const liveDateTime = new Date(liveEstimateTime);
+        const liveDateTime = new Date(liveEstimateTime).getTime();
         const oneMinuteInMillis = 60 * 1000; // Number of milliseconds in one minute
 
-        if (dateTime.getTime() < liveDateTime.getTime() && (liveDateTime.getTime() - dateTime.getTime() > oneMinuteInMillis)) {
+        if (dateTime < liveDateTime && (liveDateTime - dateTime > oneMinuteInMillis)) {
             liveTimeStamp = formatter.format(liveDateTime);
         }
     }
 
-
-    const timeDifference = dateTimeFinalDestination.getTime() - dateTime.getTime();
+    const timeDifference = dateTimeFinalDestination - dateTime;
     const totalMinutes = Math.floor(timeDifference / 60000);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 
+    // String used for displaying the time it takes to complete the train journey in localized format
     const travelTime = hours > 0
         ? `${hours} ${translation('shortHour')} ${minutes} ${translation('shortMin')}`
         : `${minutes} ${translation('shortMin')}`;
@@ -107,6 +131,137 @@ function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefine
         travelTime
     })
 }
+
+/**
+ * Provides a localized timestamp with the use of Intl date and time formatting.
+ *
+ * @param {number} time A timestamp in milliseconds.
+ * @param {Locale} locale Locale in en | se | fi format.
+ * @returns {string} Localized timestamp.
+ */
+const getJourneyTimeStamp = (time: number, locale: Locale): string => {
+    const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
+
+    // Covert date object into a localized timestamp
+    const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+
+    const timeStamp = formatter.format(time);
+    return timeStamp;
+};
+
+type ExternalLinkProps = {
+    href: string
+    className?: string
+    children: React.ReactNode
+
+}
+
+/**
+ * Provides a Next.js link with legacy behavior that allows links to open in another browser tab. 
+ */
+const ExternalLink = ({ href, className, children }: ExternalLinkProps) => {
+    return (
+        <Link href={href} passHref legacyBehavior>
+            <a className={`${className}`} target="_blank" rel="noopener noreferrer">
+                {children}
+            </a>
+        </Link>
+    );
+};
+
+type ColorIconProps = {
+    currentScheduledTime: number
+    nextScheduledTime: number | null
+}
+
+/**
+ * Component that returns a styled icon and applies a color to it based on a train's current and future scheduled time.
+ *
+ * @param {number} param.currentScheduledTime The scheduled time of the current journey in milliseconds.
+ * @param {number} param.nextScheduledTime The scheduled time of the journey after the current journey in milliseconds.
+ */
+const ColorIcon = ({ currentScheduledTime, nextScheduledTime }: ColorIconProps) => {
+    const currentTime = useTimestampInterval();
+    const isOnGoingTrain = nextScheduledTime && currentTime >= currentScheduledTime && currentTime < nextScheduledTime;
+    const isPassedTrain = currentTime > currentScheduledTime;
+
+    if (isOnGoingTrain) {
+        return <Skeleton className="rounded-full w-3 h-3 bg-yellow-500" />;
+    }
+    if (isPassedTrain) {
+        return <div className="rounded-full w-3 h-3 bg-green-800"></div>;
+    }
+    // Return gray icon by default to signal a journey has not been started or completed
+    return <div className="rounded-full w-3 h-3 bg-neutral-400"></div>;
+};
+
+type JourneyItemProps = {
+    index: number
+    timeTableRow: TimeTableRow[]
+    journey: TimeTable
+    locale: Locale
+}
+
+/**
+ * Component that returns either a colored icon, a link with a timestamp or an arrow pointing right
+ * depending on the index of the list of station arrival and departure items.
+ *
+ * @param {number} param.index Current index of the list of items
+ * @param {Row<TimeTable>} param.timeTableRow An array of all possible journeys, used to compare the current timestamp with the next scheduled timestamp. 
+ * @param {TimeTable} param.journey TimeTable object of the current index's journey.
+ * @param {("en | se | fi")} param.locale Locale used to set timestamp localization.
+ */
+
+const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps) => {
+    const nextJourney: any = timeTableRow[index + 1];
+    const currentScheduledTime = new Date(journey.liveEstimateTime ?? journey.scheduledTime).getTime();
+    const nextScheduledTime = nextJourney ? new Date(nextJourney.liveEstimateTime ?? nextJourney.scheduledTime).getTime() : null;
+
+    return (
+        <React.Fragment key={`fragment-${index}`}>
+            {index % 2 === 0 && (
+                <>
+                    <li key={`icon-${index}`} className="flex items-center justify-start">
+                        <ColorIcon currentScheduledTime={currentScheduledTime} nextScheduledTime={nextScheduledTime} />
+                    </li>
+                    <li key={`station-${index}`} className="flex flex-col items-start justify-center">
+                        <ExternalLink className="hover:underline text-blue-600 font-medium" href={`/${locale}/${journey.stationName}`}>
+                            <div className="flex flex-row items-center justify-center gap-1">
+                                {journey.stationName}
+                                <LaunchRounded sx={{ fontSize: 14 }} />
+                            </div>
+                        </ExternalLink>
+                        <span>{getJourneyTimeStamp(currentScheduledTime, locale)}</span>
+                    </li>
+                    {index < timeTableRow.length - 1 && (
+                        <li key={`arrow-${index}`} className="flex items-center justify-center">
+                            <ArrowRightAltIcon style={{ color: 'grey', margin: '0 8px' }} />
+                        </li>
+                    )}
+                </>
+            )}
+            {index % 2 !== 0 && (
+                <>
+                    <li key={`station-${index}`} className="flex flex-col items-start justify-center">
+                        <ExternalLink className="hover:underline text-blue-600 font-medium" href={`/${locale}/${journey.stationName}`}>
+                            <div className="flex flex-row items-center justify-center gap-1">
+                                {journey.stationName}
+                                <LaunchRounded sx={{ fontSize: 14 }} />
+                            </div>
+                        </ExternalLink>
+                        <span>{getJourneyTimeStamp(currentScheduledTime, locale)}</span>
+                    </li>
+                    <div className="col-start-1 col-end-5"></div>
+                </>
+            )}
+        </React.Fragment>
+    );
+};
+
+
 
 export const createColumns = ({ tableType, locale, translation }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
     return [
@@ -245,7 +400,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const timetableTranslations = useTranslations('TimeTable');
-    const locale = useLocale();
+    const locale = useLocale() as Locale;
     const columns = createColumns({ tableType: destinationType, locale: locale, translation: timetableTranslations });
     const table = useReactTable({
         data,
@@ -279,7 +434,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                 />
             </div>
             <div>
-                <Table className="border-separate border-spacing-y-2">
+                <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
@@ -298,36 +453,60 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="bg-white border">
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    className=" bg-white transition duration-300 ease-in-out"
-                                    data-state={row.getIsSelected() && "selected"}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="py-6 first:rounded-l-xl last:rounded-r-xl last:border-e first:border-s border-y">
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
+                                <React.Fragment key={row.id}>
+                                    <TableRow
+                                        className="border-none hover:bg-inherit"
+                                        data-state={row.getIsSelected() && "selected"}
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell
+                                                key={cell.id}
+                                                className="pt-8"
+                                            >
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                    <TableRow className="transition duration-300 ease-in-out hover:bg-inherit">
+                                        <TableCell className="p-0" colSpan={row.getVisibleCells().length}>
+                                            <Accordion type="single" collapsible>
+                                                <AccordionItem className="border-none" value="item-1">
+                                                    <AccordionTrigger className="flex-row justify-start items-center p-3 hover:bg-muted/50"></AccordionTrigger>
+                                                    <AccordionContent>
+                                                        <div className="pt-12 pb-0 px-4">
+                                                            <ul className="grid grid-cols-[1fr_min-content_1fr_5fr] w-full items-center gap-2">
+                                                                {row.original.trainJourney.map((journey, index) => {
+                                                                    return (
+                                                                        <JourneyItem
+                                                                            key={index}
+                                                                            index={index}
+                                                                            timeTableRow={(row.original.trainJourney) as TimeTableRow[]}
+                                                                            journey={journey}
+                                                                            locale={locale}
+                                                                        />
+                                                                    );
+                                                                })}
+                                                            </ul>
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
                                         </TableCell>
-                                    ))}
-                                </TableRow>
+                                    </TableRow>
+                                </React.Fragment>
                             ))
                         ) : (
-
                             <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="text-center h-32 flex-1"
-                                >
+                                <TableCell colSpan={columns.length} className="text-center h-32 flex-1">
                                     {t('Navigation.searchnotfound')}
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
+
                 </Table>
             </div>
         </div>
