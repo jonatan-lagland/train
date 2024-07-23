@@ -25,6 +25,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { SpinnerSm } from '../ui/spinner';
 import { Check, SwapVert } from '@mui/icons-material';
+import { Checkbox } from '../ui/checkbox';
 
 type DestinationType = "departure" | "arrival" | undefined;
 type NavigationContainerProps = {
@@ -45,6 +46,8 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
     const defaultCity = isNotFoundPage ? undefined : params.city as string;
     const destinationParam = isNotFoundPage ? undefined : searchParams.get('destination') as string;
     const typeParam = searchParams.get('type') as DestinationType;
+    const commuterParam = searchParams.get('commuter') as string;
+    const isCommuter = commuterParam === 'true' ? true : false; // search params are treated as a string
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
@@ -54,12 +57,14 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
             required_error: locationRequired,
         }),
         destination: z.string().optional(),
+        commuter: z.boolean(),
     })
 
     const initialDefaultValues = {
         type: typeParam ? typeParam : "departure" as DestinationType,
         location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
         destination: destinationParam ? decodeURIComponent(destinationParam) : undefined,
+        commuter: isCommuter
     };
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -67,26 +72,27 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
         defaultValues: {
             type: initialDefaultValues.type,
             location: undefined,
-            destination: undefined
+            destination: undefined,
+            commuter: initialDefaultValues.commuter,
         }
     })
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { location, destination, type } = data;
+        const { location, destination, commuter, type } = data;
         const sanitizedLocation = encodeURIComponent(location)
-        const navigationPath = setNavigationPath(sanitizedLocation, type, destination)
+        const navigationPath = setNavigationPath(sanitizedLocation, type, commuter, destination)
 
         startTransition(() => {
             router.push(navigationPath);
         });
     }
 
-    function setNavigationPath(sanitizedLocation: string, type: "departure" | "arrival", destination?: string) {
+    function setNavigationPath(sanitizedLocation: string, type: "departure" | "arrival", commuter: boolean, destination?: string) {
         let navigationPath = '';
         if (destination) {
-            navigationPath = `/${locale}/${sanitizedLocation}?type=departure&destination=${destination}`;
+            navigationPath = `/${locale}/${sanitizedLocation}?type=departure&destination=${destination}&commuter=${commuter}`;
         } else {
-            navigationPath = `/${locale}/${sanitizedLocation}?type=${type}`;
+            navigationPath = `/${locale}/${sanitizedLocation}?type=${type}&commuter=${commuter}`;
         }
         return navigationPath;
     }
@@ -284,6 +290,25 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
                             )}
                         />
                     </div>
+                    <FormField
+                        control={form.control}
+                        name="commuter"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row justify-start items-center">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <div className="leading-none">
+                                    <FormLabel>
+                                        Include commuter rail
+                                    </FormLabel>
+                                </div>
+                            </FormItem>
+                        )}
+                    />
                     <div className='flex flex-grow flex-col gap-3 justify-between'>
                         <FormField
                             control={form.control}

@@ -12,7 +12,7 @@ export default async function middleware(request: NextRequest) {
 
     // Remove any unwanted parameters
     params.forEach((value, key) => {
-        if (key !== 'type' && key !== 'destination') {
+        if (key !== 'type' && key !== 'destination' && key !== 'commuter') {
             params.delete(key);
             shouldRedirect = true;
         }
@@ -31,6 +31,10 @@ export default async function middleware(request: NextRequest) {
         // Introduce ?type=departure if no params are present
         if (!params.has('type') || (params.get('type') !== 'departure' && params.get('type') !== 'arrival')) {
             params.set('type', 'departure');
+            shouldRedirect = true;
+        }
+        if (!params.has('commuter') || (params.get('commuter') !== 'false' && params.get('commuter') !== 'true')) {
+            params.set('commuter', 'false');
             shouldRedirect = true;
         }
         // Ensure destination trains are always of type departure

@@ -6,7 +6,7 @@ import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";
 import filterStationMetadata from "@/lib/utils/filterStationMetadata";
-import liveTrainUtils, { useTransformTrainData } from "@/lib/utils/liveTrainUtils";
+import useLiveTrainData, { useTransformTrainData } from "@/lib/utils/liveTrainUtils";
 import findStationDestination from "@/lib/utils/stationDestination";
 import Sidebar from "@/components/sidebar/sidebar";
 
@@ -17,8 +17,9 @@ export type TimeTablePageProps = {
     city: string
   }
   searchParams?: {
-    type?: string
-    destination?: string
+    type: string
+    destination: string
+    commuter: string
   }
 }
 
@@ -38,6 +39,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
   const destinationLabel: BannerLabel = destinationType === 'DEPARTURE' ? 'departureTrains' : 'arrivalTrains'; // For localization
   const city: string = params.city ? params.city as string : ""
   const cityDestination: string = searchParams?.destination as string
+  const isCommuter: string = searchParams?.commuter as string
 
   /* Fetch all known stations */
   const stationMetadata = await fetchStationMetadata();
@@ -48,7 +50,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
 
   /* After cities have been verified to exist, filter and fetch data */
   const filteredStationMetadata = filterStationMetadata(stationMetadata)
-  const liveTrain = await liveTrainUtils(city, cityDestination, destinationType, filteredStationMetadata)
+  const liveTrain = await useLiveTrainData(city, destinationType, filteredStationMetadata, isCommuter, cityDestination)
   const { liveTrainData, stationShortCode, finalStationShortCode } = liveTrain;
   const data = useTransformTrainData(liveTrainData, finalStationShortCode, filteredStationMetadata, stationShortCode, destinationType)
 

@@ -1,24 +1,26 @@
 import { TrainDestination } from "@/components/table/timetable";
 import { Train, TrainError } from "@/lib/types";
 
-const amount = 10;
+const amount = 20;
 const revalidateDuration: number = 120;
 
 type fetchLiveDestinationTrainProps = {
-    departure_station: string | undefined
-    arrival_station: string | undefined
+    departure_station: string
+    arrival_station: string
+    isCommuter: string
 }
 
 /**
  * A function that takes in two station short codes and attempts to fetch route-based live train data from the Fintraffic API.
 
- * @param {string} departure_station - A string containing the station short code for the departure location.
- * @param {string} arrival_station - A string containing the station short code for the destination.
+ * @param {string} props.departure_station - A string containing the station short code for the departure location.
+ * @param {string} props.arrival_station - A string containing the station short code for the destination.
  * @returns {Promise<Train[] | TrainError | []>} Returns either an array of live train data or an error object as a promise from the API, or an empty array in case of a server-side exception.
  */
 
-async function fetchLiveDestinationTrain({ departure_station, arrival_station }: fetchLiveDestinationTrainProps): Promise<Train[] | TrainError | []> {
-    const URL = `https://rata.digitraffic.fi/api/v1/live-trains/station/${arrival_station}/${departure_station}?limit=${amount}`;
+async function fetchLiveDestinationTrain({ departure_station, arrival_station, isCommuter }: fetchLiveDestinationTrainProps): Promise<Train[] | TrainError | []> {
+    const trainCategory = isCommuter === 'false' ? "&train_categories=Long-distance" : "" // React props are treated as strings
+    const URL = `https://rata.digitraffic.fi/api/v1/live-trains/station/${arrival_station}/${departure_station}?limit=${amount}${trainCategory}`;
 
     if (!departure_station || !arrival_station) return [];
     try {
