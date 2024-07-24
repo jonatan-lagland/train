@@ -1,5 +1,4 @@
 'use client'
-import { useEffect, useState } from "react"
 import { TimeTable, TrainDestination } from "../table/timetable"
 import { useTranslations } from "next-intl"
 import { SiteLocale } from "@/lib/types"
@@ -51,7 +50,7 @@ export default function ArrivalTimestamp({ city, destinationType, locale, statio
     };
 
     return (
-        <span className='font-medium text-xl text-slate-400'>
+        <span className='font-medium text-xl text-slate-600'>
             {data.length === 0 ? <span>{translation('noJourneyFound')}</span> : (
                 <>{translated()}</>
             )}

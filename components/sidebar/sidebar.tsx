@@ -7,6 +7,8 @@ import useSortedStationData from '@/lib/utils/sortedStationData'
 import useTimestampInterval from '@/lib/utils/timestampInterval'
 import { useParams, useRouter } from 'next/navigation'
 import { SiteLocale } from '@/lib/types'
+import LiveTrainGPS from './liveTrainGPS'
+
 
 type SidebarProps = {
     data: TimeTable[]
@@ -24,25 +26,26 @@ function Sidebar({ data, destinationType }: SidebarProps) {
     const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;
 
     return (
-        <div className='grid grid-rows-[min-content_1fr] px-4 max-w-lg'>
-            <div className='flex flex-wrap justify-between py-8'>
-                <div className='flex flex-col flex-grow'>
-                    <span className='uppercase font-medium text-slate-500'>
-                        {destinationType === 'ARRIVAL' ? translation('nextDeparture') : translation('nextDestination')}
-                    </span>
-                    <div className='flex flex-wrap'>
-                        <span className='font-bold text-4xl text-blue-400'>
-                            {stationNextName}
+        <div className='flex flex-col gap-5 px-4 max-w-lg'>
+            <div className='grid grid-rows-[min-content_1fr]'>
+                <div className='flex flex-wrap justify-between py-8'>
+                    <div className='flex flex-col flex-grow'>
+                        <span className='uppercase font-medium text-slate-600'>
+                            {destinationType === 'ARRIVAL' ? translation('nextDeparture') : translation('nextDestination')}
                         </span>
-                        <div className='flex flex-grow items-center justify-center'>
-                            <span className='font-medium text-xl text-slate-400'>
-                                {stationNextTrainType} {stationNextTrainNumber}
+                        <div className='flex flex-wrap'>
+                            <span className='font-bold text-4xl text-blue-400'>
+                                {stationNextName}
                             </span>
+                            <div className='flex flex-grow items-center justify-center'>
+                                <span className='font-medium text-xl text-slate-700'>
+                                    {stationNextTrainType} {stationNextTrainNumber}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className='flex flex-col gap-2'>
+
                 <ArrivalTimestamp
                     city={city}
                     destinationType={destinationType}
@@ -52,9 +55,13 @@ function Sidebar({ data, destinationType }: SidebarProps) {
                     timeStampNow={timeStampNow}
                     data={data}>
                 </ArrivalTimestamp>
-                <span className='text-slate-400 text-sm'>
-                    {translation('disclaimer')}
-                </span>
+
+            </div>
+            <div className='flex flex-col gap-2'>
+                <LiveTrainGPS stationNextTrainNumber={stationNextTrainNumber}></LiveTrainGPS>
+                <div className='text-sm text-slate-600'>
+                    <span className='font-medium'>{translation('disclaimerTitle')}: </span><span>{translation('disclaimer')}</span>
+                </div>
             </div>
         </div>
     )

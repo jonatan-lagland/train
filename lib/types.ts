@@ -1,6 +1,6 @@
 export type Train = {
     trainNumber: number
-    departureDate: string
+    departureDate: Date
     operatorUICCode: number
     operatorShortCode: string
     trainType: string
@@ -42,7 +42,7 @@ export type TimeTableRow = {
     trainReady: {
         source: string
         accepted: string,
-        timestamp: string
+        timestamp: Date
     }
 }
 
@@ -61,6 +61,18 @@ export type TrainError = {
     code: string
     errorMessage: string
     queryString: string
+}
+
+export type TrainGPS = {
+    trainNumber: number
+    departureDate: Date
+    timestamp: Date
+    location: {
+        type: 'Point',
+        coordinates: [number, number]
+    },
+    speed: number,
+    accuracy?: number
 }
 
 export type SiteLocale = 'fi' | 'se' | 'en'

@@ -15,14 +15,18 @@
         "shortMin": "m",
         "longHour": "timmar",
         "longMin": "minuter",
-        "disclaimer": "Tågplaner kan avvika från den angivna tiden. Kontrollera tidtabellen på din biljett eller i VR-appen.",
+        "disclaimerTitle": "Ansvarsfriskrivning",
+        "disclaimer": "Tågets faktiska position kan avvika med flera meter. Använd inte kartapplikationen för att fastställa exakt plats. För exakt tidtabellsinformation, kontrollera din biljett eller VR-appen.",
         "noJourneyFound": "Det finns för närvarande inga resor inlagda i tidtabellen.",
         "nextDestination": "Nästa tåg till",
         "nextDeparture": "Nästa tåg från",
         "arrivesAt": "Anländer till stationen",
         "leavesFrom": "Avgår från stationen",
         "unknown": "Ingen tid",
-        "cancelled": "Inställt"
+        "cancelled": "Inställt",
+        "trainNumber": "Tåg",
+        "trainSpeed": "Hastighet",
+        "trainAccuracy": "Noggrannhet"
     },
     "AriaTimeTable": {
         "select": "Välj alla"

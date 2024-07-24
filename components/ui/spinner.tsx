@@ -7,3 +7,13 @@ export const SpinnerSm = () => {
         </div>
     );
 };
+
+
+export const SpinnerMd = () => {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <div className="w-8 h-8 border-4 border-white border-t-indigo-300 rounded-full animate-spin"></div>
+        </div>
+    );
+};
+
