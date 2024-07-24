@@ -19,7 +19,6 @@ import {
 } from "@tanstack/react-table"
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import LaunchRounded from '@mui/icons-material/LaunchRounded';
-import CircleIcon from '@mui/icons-material/Circle';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -88,15 +87,12 @@ const localeMap: Record<string, string> = {
  */
 function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefined, scheduledFinalDestination: string, locale: Locale, translation: any) {
     const dateTime = new Date(scheduledTime).getTime();
-    let liveTimeStamp: string | undefined = undefined;
+    const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : undefined;
+    const liveTimeStamp = getLiveEstimateTimestamp(liveDateTime, dateTime, locale);
     const dateTimeFinalDestination = new Date(scheduledFinalDestination).getTime();
-    const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
 
     // Covert date object into a localized timestamp
-    const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
-        hour: 'numeric',
-        minute: 'numeric',
-    });
+
     const timeStamp = getJourneyTimeStamp(dateTime, locale)
     const timeStampFinalDestination = getJourneyTimeStamp(dateTimeFinalDestination, locale);
 
@@ -104,14 +100,7 @@ function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefine
         * If liveEstimateTime exists, which is used to track train delay, calculate the difference in delay
         * using the scheduled time in when the delay is at least one minute
     */
-    if (liveEstimateTime) {
-        const liveDateTime = new Date(liveEstimateTime).getTime();
-        const oneMinuteInMillis = 60 * 1000; // Number of milliseconds in one minute
 
-        if (dateTime < liveDateTime && (liveDateTime - dateTime > oneMinuteInMillis)) {
-            liveTimeStamp = formatter.format(liveDateTime);
-        }
-    }
 
     const timeDifference = dateTimeFinalDestination - dateTime;
     const totalMinutes = Math.floor(timeDifference / 60000);
@@ -130,6 +119,25 @@ function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefine
         timeStampFinalDestination,
         travelTime
     })
+}
+
+const getLiveEstimateTimestamp = (liveDateTime: number | undefined, dateTime: number, locale: Locale) => {
+    let liveTimeStamp: string | undefined = undefined;
+
+    const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
+    const formatter = new Intl.DateTimeFormat(currentLocaleFull, {
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+
+    if (liveDateTime) {
+        const oneMinuteInMillis = 60 * 1000; // Number of milliseconds in one minute
+
+        if (dateTime < liveDateTime && (liveDateTime - dateTime > oneMinuteInMillis)) {
+            liveTimeStamp = formatter.format(liveDateTime);
+        }
+    }
+    return liveTimeStamp;
 }
 
 /**
@@ -217,7 +225,9 @@ type JourneyItemProps = {
 
 const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps) => {
     const nextJourney: any = timeTableRow[index + 1];
-    const currentScheduledTime = new Date(journey.liveEstimateTime ?? journey.scheduledTime).getTime();
+    const dateTime = new Date(journey.scheduledTime).getTime();
+    const liveEstimateTime = journey.liveEstimateTime ? new Date(journey.liveEstimateTime).getTime() : undefined;
+    const liveEstimateTimeStamp = getLiveEstimateTimestamp(liveEstimateTime, dateTime, locale)
     const nextScheduledTime = nextJourney ? new Date(nextJourney.liveEstimateTime ?? nextJourney.scheduledTime).getTime() : null;
 
     return (
@@ -225,7 +235,7 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
             {index % 2 === 0 && (
                 <>
                     <li key={`icon-${index}`} className="flex items-center justify-start">
-                        <ColorIcon currentScheduledTime={currentScheduledTime} nextScheduledTime={nextScheduledTime} />
+                        <ColorIcon currentScheduledTime={liveEstimateTime ?? dateTime} nextScheduledTime={nextScheduledTime} />
                     </li>
                     <li key={`station-${index}`} className="flex flex-col items-start justify-center">
                         <ExternalLink className="hover:underline text-blue-600 font-medium" href={`/${locale}/${journey.stationName}`}>
@@ -234,7 +244,14 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
                                 <LaunchRounded sx={{ fontSize: 14 }} />
                             </div>
                         </ExternalLink>
-                        <span>{getJourneyTimeStamp(currentScheduledTime, locale)}</span>
+                        {liveEstimateTimeStamp ?
+                            <div className="flex flex-row gap-1 ">
+                                <span className="line-through text-red-700">{getJourneyTimeStamp(dateTime, locale)}</span>
+                                <span className="">{liveEstimateTimeStamp}</span>
+                            </div>
+                            :
+                            <span className="">{getJourneyTimeStamp(dateTime, locale)}</span>
+                        }
                     </li>
                     {index < timeTableRow.length - 1 && (
                         <li key={`arrow-${index}`} className="flex items-center justify-center">
@@ -252,7 +269,14 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
                                 <LaunchRounded sx={{ fontSize: 14 }} />
                             </div>
                         </ExternalLink>
-                        <span>{getJourneyTimeStamp(currentScheduledTime, locale)}</span>
+                        {liveEstimateTimeStamp ?
+                            <div className="flex flex-row gap-1 ">
+                                <span className="line-through text-red-700">{getJourneyTimeStamp(dateTime, locale)}</span>
+                                <span className="">{liveEstimateTimeStamp}</span>
+                            </div>
+                            :
+                            <span className="">{getJourneyTimeStamp(dateTime, locale)}</span>
+                        }
                     </li>
                     <div className="col-start-1 col-end-5"></div>
                 </>
@@ -337,8 +361,8 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                 const { liveEstimateTime } = row.original;
                 const { unknownDelay } = row.original;
                 const { cancelled } = row.original;
-                const cancelledStyle = cancelled ? "text-red-500 line-through" : "";
-                const cancelledTimeStyle = cancelled ? "text-red-500 line-through" : "text-gray-500"
+                const cancelledStyle = cancelled ? "text-red-700 line-through" : "";
+                const cancelledTimeStyle = cancelled ? "text-red-700 line-through" : "text-gray-500"
 
                 if (!scheduledFinalDestination) return null; // Exit early to avoid errors with converting undefined timestamps
                 if (!tableType) return null;
@@ -356,7 +380,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
                             <div className={`flex flex-row items-center ${cancelledStyle}`}>
                                 {liveTimeStamp || unknownDelay ?
                                     <div className="flex flex-col items-center justify-center gap-1">
-                                        <span className="font-medium line-through text-red-500">
+                                        <span className="font-medium line-through text-red-700">
                                             {timeStamp}
                                         </span>
                                         <span className="font-bold">
@@ -389,6 +413,8 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
         },
     ]
 }
+
+
 
 export function TimeTable({ data, destinationType }: TimeTableProps) {
     const t = useTranslations();
