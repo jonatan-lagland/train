@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useContext } from 'react'
 import { TimeTable, TrainDestination } from '../table/timetable'
 import { useLocale, useTranslations } from 'next-intl'
 import ArrivalTimestamp from './arrivalTimestamp'
@@ -8,6 +8,7 @@ import useTimestampInterval from '@/lib/utils/timestampInterval'
 import { useParams, useRouter } from 'next/navigation'
 import { SiteLocale } from '@/lib/types'
 import LiveTrainGPS from './liveTrainGPS'
+import { SelectedTrainContext } from '@/lib/context/SelectedTrainContext'
 
 
 type SidebarProps = {
@@ -18,11 +19,12 @@ type SidebarProps = {
 function Sidebar({ data, destinationType }: SidebarProps) {
     const router = useRouter();
     const params = useParams();
+    const { trainNumber } = useContext(SelectedTrainContext);
     const city = params.city as string
     const locale = useLocale() as SiteLocale;
     const translation = useTranslations('TimeTable');
     const timeStampNow = useTimestampInterval();
-    const nextStation = useSortedStationData(data, timeStampNow, router)
+    const nextStation = useSortedStationData(data, trainNumber, timeStampNow, router)
     const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;
 
     return (

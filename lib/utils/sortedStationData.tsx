@@ -26,7 +26,7 @@ export type NextStationDataProps = {
  * @param {AppRouterInstance} router - An instance of the Next.js App router used to refresh the page in the event of stale data.
  * @returns {NextStationDataProps}
  */
-export default function useSortedStationData(data: TimeTable[], timeStampNow: number, router: AppRouterInstance): NextStationDataProps {
+export default function useSortedStationData(data: TimeTable[], trainNumber: number | undefined, timeStampNow: number, router: AppRouterInstance): NextStationDataProps {
     // Sorting data based on available liveEstimateTime or scheduledTime
     const initialSortedData = [...data].sort((a, b) => {
         const timeA = a.liveEstimateTime ? new Date(a.liveEstimateTime).getTime() : new Date(a.scheduledTime).getTime();
@@ -46,6 +46,26 @@ export default function useSortedStationData(data: TimeTable[], timeStampNow: nu
     });
 
     useEffect(() => {
+        // Opt-in to set station based on a train selected by user via clicking on a train button
+        if (trainNumber) {
+            // Find the data with the matching trainNumber
+            const selectedTrainData = data.find(item => item.trainNumber === trainNumber);
+            if (selectedTrainData) {
+                // Set the next station data based on the found train data
+                setNextStationData({
+                    stationNextName: selectedTrainData.stationName,
+                    departureLatitude: selectedTrainData.departureLatitude,
+                    departureLongitude: selectedTrainData.departureLongitude,
+                    stationNextTimestamp: selectedTrainData.liveEstimateTime || selectedTrainData.scheduledTime,
+                    stationNextTrainType: selectedTrainData.trainType,
+                    stationNextTrainNumber: selectedTrainData.trainNumber,
+                    stationNextTrainTrack: selectedTrainData.commercialTrack,
+                });
+                // Exit early
+                return;
+            }
+        }
+
         const sortedData = [...data].sort((a, b) => {
             const timeA = a.liveEstimateTime ? new Date(a.liveEstimateTime).getTime() : new Date(a.scheduledTime).getTime();
             const timeB = b.liveEstimateTime ? new Date(b.liveEstimateTime).getTime() : new Date(b.scheduledTime).getTime();
@@ -53,6 +73,8 @@ export default function useSortedStationData(data: TimeTable[], timeStampNow: nu
         });
 
         let isStaleData = true;
+
+        // By default, pick a train that is going to arrive or depart earliest
         for (let i = 0; i < sortedData.length; i++) {
             const currentTimestamp = sortedData[i].liveEstimateTime
                 ? new Date(sortedData[i].liveEstimateTime ?? 0).getTime()  // Provide a default value of 0
@@ -72,10 +94,11 @@ export default function useSortedStationData(data: TimeTable[], timeStampNow: nu
                 break;
             }
         }
+        // If all trains have passed, refresh the page
         if (isStaleData && sortedData.length > 0) {
             router.refresh();
         }
-    }, [timeStampNow, data, router]);
+    }, [timeStampNow, data, router, trainNumber]);
 
     return nextStationData;
 }

@@ -36,6 +36,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Skeleton } from "../ui/skeleton";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
 import { TimeTableRow } from "@/lib/types";
+import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
 export type Locale = 'en | se | fi'
@@ -66,6 +67,7 @@ type CreateColumnsProps = {
     tableType: TrainDestination
     locale: Locale
     translation: any
+    setTrainNumber: React.Dispatch<React.SetStateAction<number | undefined>>
 }
 
 // Workaround for useLocale not returning a full time format and causing issues with the swedish format.
@@ -282,7 +284,7 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
 
 
 
-export const createColumns = ({ tableType, locale, translation }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
+export const createColumns = ({ tableType, locale, translation, setTrainNumber }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
     return [
         {
             accessorKey: "trainType",
@@ -297,7 +299,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             cell: ({ row }) => {
                 const { trainType, trainNumber } = row.original;
                 return <div className="flex flex-col items-center justify-center">
-                    <Button variant={'ghost'}>
+                    <Button variant={'ghost'} onClick={() => setTrainNumber(trainNumber)}>
                         <MapIcon style={{ fill: '#192e02' }}></MapIcon>
                     </Button>
                     <span>{`${trainType} ${trainNumber}`}</span>
@@ -417,6 +419,7 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
 
 
 export function TimeTable({ data, destinationType }: TimeTableProps) {
+    const { setTrainNumber } = React.useContext(SelectedTrainContext);
     const t = useTranslations();
     const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -427,7 +430,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
     const [rowSelection, setRowSelection] = React.useState({})
     const timetableTranslations = useTranslations('TimeTable');
     const locale = useLocale() as Locale;
-    const columns = createColumns({ tableType: destinationType, locale: locale, translation: timetableTranslations });
+    const columns = createColumns({ tableType: destinationType, locale: locale, translation: timetableTranslations, setTrainNumber: setTrainNumber });
     const table = useReactTable({
         data,
         columns,
