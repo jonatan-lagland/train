@@ -50,9 +50,9 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
 
   /* After cities have been verified to exist, filter and fetch data */
   const filteredStationMetadata = filterStationMetadata(stationMetadata)
-  const liveTrain = await useLiveTrainData(city, destinationType, filteredStationMetadata, isCommuter, cityDestination)
+  const liveTrain = await useLiveTrainData(city, destinationType, stationMetadata, isCommuter, cityDestination)
   const { liveTrainData, stationShortCode, finalStationShortCode } = liveTrain;
-  const data = useTransformTrainData(liveTrainData, finalStationShortCode, filteredStationMetadata, stationShortCode, destinationType)
+  const data = useTransformTrainData(liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destinationType)
 
   return (
     <div className="flex flex-col flex-grow h-screen gap-2 justify-start items-center">

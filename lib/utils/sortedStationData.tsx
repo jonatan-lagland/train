@@ -3,8 +3,10 @@ import { TimeTable } from '@/components/table/timetable';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useState, useEffect } from 'react';
 
-type NextStationDataProps = {
+export type NextStationDataProps = {
     stationNextName: string;
+    departureLatitude: number | undefined
+    departureLongitude: number | undefined
     stationNextTimestamp: string;
     stationNextTrainType: string;
     stationNextTrainNumber: number;
@@ -35,6 +37,8 @@ export default function useSortedStationData(data: TimeTable[], timeStampNow: nu
     // Initialize state with the first sorted station data
     const [nextStationData, setNextStationData] = useState({
         stationNextName: initialSortedData[0]?.stationName,
+        departureLatitude: initialSortedData[0]?.departureLatitude,
+        departureLongitude: initialSortedData[0]?.departureLongitude,
         stationNextTimestamp: initialSortedData[0]?.liveEstimateTime || initialSortedData[0]?.scheduledTime,
         stationNextTrainType: initialSortedData[0]?.trainType,
         stationNextTrainNumber: initialSortedData[0]?.trainNumber,
@@ -57,6 +61,8 @@ export default function useSortedStationData(data: TimeTable[], timeStampNow: nu
             if (currentTimestamp > timeStampNow) {
                 setNextStationData({
                     stationNextName: sortedData[i]?.stationName,
+                    departureLatitude: sortedData[i]?.departureLatitude,
+                    departureLongitude: sortedData[i]?.departureLongitude,
                     stationNextTimestamp: sortedData[i]?.liveEstimateTime || sortedData[i]?.scheduledTime,
                     stationNextTrainType: sortedData[i]?.trainType,
                     stationNextTrainNumber: sortedData[i]?.trainNumber,

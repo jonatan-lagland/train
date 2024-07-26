@@ -18,7 +18,7 @@ type SidebarProps = {
 function Sidebar({ data, destinationType }: SidebarProps) {
     const router = useRouter();
     const params = useParams();
-    const city = params.city
+    const city = params.city as string
     const locale = useLocale() as SiteLocale;
     const translation = useTranslations('TimeTable');
     const timeStampNow = useTimestampInterval();
@@ -58,7 +58,7 @@ function Sidebar({ data, destinationType }: SidebarProps) {
 
             </div>
             <div className='flex flex-col gap-2'>
-                <LiveTrainGPS stationNextTrainNumber={stationNextTrainNumber}></LiveTrainGPS>
+                <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
                 <div className='text-sm text-slate-600'>
                     <span className='font-medium'>{translation('disclaimerTitle')}: </span><span>{translation('disclaimer')}</span>
                 </div>

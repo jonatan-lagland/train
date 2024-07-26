@@ -15,38 +15,38 @@ export default function useLiveTrainData(
 ) {
     const [liveTrainData, setLiveTrainData] = useState({ liveTrainData: data, stationShortCode: stationShortCode, finalStationShortCode: finalStationShortCode });
 
-    const fetchData = useCallback(async () => {
-        let liveTrainData: Train[] | TrainError;
+    useEffect(() => {
+        const fetchData = async () => {
+            let liveTrainData: Train[] | TrainError;
 
-        /* If no destination has been defined, fetch and return a station with no pre-defined destination */
-        if (!cityDestination) {
-            liveTrainData = await fetchLiveTrain({ stationShortCode: stationShortCode, type: destinationType });
+            /* If no destination has been defined, fetch and return a station with no pre-defined destination */
+            if (!cityDestination) {
+                liveTrainData = await fetchLiveTrain({ stationShortCode: stationShortCode, type: destinationType });
+                setLiveTrainData({
+                    liveTrainData,
+                    stationShortCode,
+                    finalStationShortCode
+                });
+                return;
+            }
+            if (!finalStationShortCode) {
+                throw new Error(`Destination station not found for city: ${cityDestination}`);
+            }
+
+            liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode });
             setLiveTrainData({
                 liveTrainData,
                 stationShortCode,
                 finalStationShortCode
             });
             return;
-        }
-        if (!finalStationShortCode) {
-            throw new Error(`Destination station not found for city: ${cityDestination}`);
-        }
+        };
 
-        liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode });
-        setLiveTrainData({
-            liveTrainData,
-            stationShortCode,
-            finalStationShortCode
-        });
-        return;
-    }, [cityDestination, destinationType, finalStationShortCode, stationShortCode]);
-
-    useEffect(() => {
         fetchData(); // Fetch data immediately
         const intervalId = setInterval(fetchData, 30000); // Fetch data every 30 seconds
 
         return () => clearInterval(intervalId); // Clear interval on component unmount
-    }, [cityDestination, destinationType, fetchData]);
+    }, [cityDestination, destinationType, finalStationShortCode, stationShortCode]);
 
     return { liveTrainData };
 }

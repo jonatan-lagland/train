@@ -13,7 +13,6 @@ import fetchLiveDestinationTrain from '@/app/api/fetchLiveDestinationTrain';
  * @param {string} cityDestination 
  * @param {TrainDestination} destinationType
  * @param {StationMetaData[]} stationMetadata
- * @returns {unknown}
  */
 export default async function useLiveTrainData(city: string, destinationType: TrainDestination, stationMetadata: StationMetaData[], isCommuter: string, cityDestination?: string) {
     const decodedStation = decodeURIComponent(city.toLowerCase());
@@ -111,8 +110,14 @@ export function useTransformTrainData(
                 stationMetadata.find(code => code.stationShortCode === finalStationShortCode) :
                 stationMetadata.find(code => code.stationShortCode === lastRow.stationShortCode);
 
+            const stationData = stationMetadata.find(station => station.stationShortCode === stationShortCode);
+            const latitude = stationData ? stationData.latitude : undefined;
+            const longitude = stationData ? stationData.longitude : undefined;
+
             return {
                 stationName: finalDestinationData ? sanitizeStationName(finalDestinationData.stationName) : "", // Use the last station name or default
+                departureLatitude: latitude,
+                departureLongitude: longitude,
                 type: row.type,
                 scheduledTime: row.scheduledTime,
                 liveEstimateTime: row.liveEstimateTime,
@@ -126,7 +131,6 @@ export function useTransformTrainData(
                 trainJourney: trainJourney
             };
         });
-
         stationStopData = stationStopData.concat(transformedRows);
     });
 

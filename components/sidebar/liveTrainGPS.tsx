@@ -4,32 +4,30 @@ import fetchLiveTrainGPS from "@/app/api/fetchLiveTrainGPS";
 import { TrainGPS } from "@/lib/types";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { SpinnerMd, SpinnerSm } from "../ui/spinner";
+import { SpinnerMd } from "../ui/spinner";
 import { useTranslations } from "next-intl";
+import { NextStationDataProps } from "@/lib/utils/sortedStationData";
 export const MapView = dynamic(
     () => import("./mapView")
-        // this part is needed if your use a named export
-        // you can replace by ".default" when using a default export
         .then((mod) => mod.default),
     {
-        // This prevents server-side rendering of BrowserComponent
         ssr: false
     }
 );
 
 type LiveTrainGPSProps = {
-    stationNextTrainNumber: number
+    nextStation: NextStationDataProps
 };
 
-const LiveTrainGPS = ({ stationNextTrainNumber }: LiveTrainGPSProps) => {
+const LiveTrainGPS = ({ nextStation }: LiveTrainGPSProps) => {
+    const { departureLatitude, departureLongitude, stationNextTrainNumber } = nextStation;
     const [data, setData] = useState<TrainGPS[] | []>([]);
     const [isLoading, setIsLoading] = useState(true);
     const width = "100%";
     const height = "30vh";
     const translation = useTranslations('TimeTable');
-    const trainNumber = translation('trainNumber');
-    const trainSpeed = translation('trainSpeed');
-    const trainAccuracy = translation('trainAccuracy');
+    const trainNumberLabel = translation('trainNumber');
+    const trainSpeedLabel = translation('trainSpeed');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,7 +54,15 @@ const LiveTrainGPS = ({ stationNextTrainNumber }: LiveTrainGPSProps) => {
                     <SpinnerMd></SpinnerMd>
                 </div>
             ) : (
-                <MapView trainNumber={trainNumber} trainSpeed={trainSpeed} trainAccuracy={trainAccuracy} data={data} width={width} height={height}></MapView>
+                <MapView
+                    trainNumberLabel={trainNumberLabel}
+                    trainSpeedLabel={trainSpeedLabel}
+                    departureLatitude={departureLatitude}
+                    departureLongitude={departureLongitude}
+                    data={data}
+                    width={width}
+                    height={height}>
+                </MapView>
             )}
         </div>
     );

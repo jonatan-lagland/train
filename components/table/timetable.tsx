@@ -19,7 +19,7 @@ import {
 } from "@tanstack/react-table"
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import LaunchRounded from '@mui/icons-material/LaunchRounded';
-
+import MapIcon from '@mui/icons-material/Map';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -42,7 +42,9 @@ export type Locale = 'en | se | fi'
 
 export type TimeTable = {
     stationName: string
-    type: TrainDestination;
+    departureLatitude: number,
+    departureLongitude: number,
+    type: TrainDestination
     scheduledTime: string
     scheduledFinalDestination: string
     liveEstimateTime?: string
@@ -238,12 +240,9 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
                         <ColorIcon currentScheduledTime={liveEstimateTime ?? dateTime} nextScheduledTime={nextScheduledTime} />
                     </li>
                     <li key={`station-${index}`} className="flex flex-col items-start justify-center">
-                        <ExternalLink className="hover:underline text-blue-600 font-medium" href={`/${locale}/${journey.stationName}`}>
-                            <div className="flex flex-row items-center justify-center gap-1">
-                                {journey.stationName}
-                                <LaunchRounded sx={{ fontSize: 14 }} />
-                            </div>
-                        </ExternalLink>
+                        <div className="flex flex-row items-center justify-center gap-1">
+                            <span className="text-blue-600 font-medium">{journey.stationName}</span>
+                        </div>
                         {liveEstimateTimeStamp ?
                             <div className="flex flex-row gap-1 ">
                                 <span className="line-through text-red-700">{getJourneyTimeStamp(dateTime, locale)}</span>
@@ -263,12 +262,9 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
             {index % 2 !== 0 && (
                 <>
                     <li key={`station-${index}`} className="flex flex-col items-start justify-center">
-                        <ExternalLink className="hover:underline text-blue-600 font-medium" href={`/${locale}/${journey.stationName}`}>
-                            <div className="flex flex-row items-center justify-center gap-1">
-                                {journey.stationName}
-                                <LaunchRounded sx={{ fontSize: 14 }} />
-                            </div>
-                        </ExternalLink>
+                        <div className="flex flex-row items-center justify-center gap-1">
+                            <span className="text-blue-600 font-medium">{journey.stationName}</span>
+                        </div>
                         {liveEstimateTimeStamp ?
                             <div className="flex flex-row gap-1 ">
                                 <span className="line-through text-red-700">{getJourneyTimeStamp(dateTime, locale)}</span>
@@ -278,7 +274,6 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
                             <span className="">{getJourneyTimeStamp(dateTime, locale)}</span>
                         }
                     </li>
-                    <div className="col-start-1 col-end-5"></div>
                 </>
             )}
         </React.Fragment>
@@ -301,7 +296,12 @@ export const createColumns = ({ tableType, locale, translation }: CreateColumnsP
             },
             cell: ({ row }) => {
                 const { trainType, trainNumber } = row.original;
-                return <div className="text-start">{`${trainType} ${trainNumber}`}</div>
+                return <div className="flex flex-col items-center justify-center">
+                    <Button variant={'ghost'}>
+                        <MapIcon style={{ fill: '#192e02' }}></MapIcon>
+                    </Button>
+                    <span>{`${trainType} ${trainNumber}`}</span>
+                </div>
             },
         },
         {
@@ -500,7 +500,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                                         <TableCell className="p-0" colSpan={row.getVisibleCells().length}>
                                             <Accordion type="single" collapsible>
                                                 <AccordionItem className="border-none" value="item-1">
-                                                    <AccordionTrigger className="flex-row justify-start items-center p-3 hover:bg-muted/50"></AccordionTrigger>
+                                                    <AccordionTrigger className="flex-row justify-end text-gray-500 items-center p-3 hover:bg-muted/50"></AccordionTrigger>
                                                     <AccordionContent>
                                                         <div className="pt-12 pb-0 px-4">
                                                             <ul className="grid grid-cols-[1fr_min-content_1fr_5fr] w-full items-center gap-2">
