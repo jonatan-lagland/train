@@ -75,6 +75,18 @@ export function useTransformTrainData(
     let stationStopData: TimeTable[] = [];
 
     liveTrainData.forEach(train => {
+        const lastRow = destinationType === 'ARRIVAL' ? train.timeTableRows[0] : train.timeTableRows[train.timeTableRows.length - 1];
+        const destinationRow = train.timeTableRows.find(row =>
+            row.stationShortCode === finalStationShortCode && row.type === 'ARRIVAL'
+        );
+        const finalDestinationData = finalStationShortCode ?
+            stationMetadata.find(code => code.stationShortCode === finalStationShortCode) :
+            stationMetadata.find(code => code.stationShortCode === lastRow.stationShortCode);
+
+        const stationData = stationMetadata.find(station => station.stationShortCode === stationShortCode);
+        const latitude = stationData ? stationData.latitude : undefined;
+        const longitude = stationData ? stationData.longitude : undefined;
+
         // Filter trains so that only trains where station and journey type match (e.g. arrival or destination) AND the train stops at the location
         const filteredRows = train.timeTableRows.filter(row => {
             const matchesStationAndDestination =
@@ -84,10 +96,14 @@ export function useTransformTrainData(
             return matchesStationAndDestination;
         });
 
+        // The entire journey a train goes through and all stations the train stops at
         const trainJourney = train.timeTableRows
             .filter((row) => {
-                const isNonStopping = row.trainStopping === true && row.commercialStop === true;
-                return isNonStopping;
+                // Check for a predetermined destination and exclude stations past that point
+                if (destinationRow) {
+                    return row.trainStopping === true && row.commercialStop === true && row.scheduledTime <= destinationRow?.scheduledTime;
+                }
+                return row.trainStopping === true && row.commercialStop === true;
             })
             .map((row) => {
                 const station = stationMetadata.find(metadata => metadata.stationShortCode === row.stationShortCode);
@@ -97,19 +113,10 @@ export function useTransformTrainData(
                 };
             });
 
-        // Map to TimeTable structure
-        const transformedRows = filteredRows.map(row => {
-            // Get the last timetable row to find the final destination stationName
-            const lastRow = destinationType === 'ARRIVAL' ? train.timeTableRows[0] : train.timeTableRows[train.timeTableRows.length - 1];
-            const finalDestinationData = finalStationShortCode ?
-                stationMetadata.find(code => code.stationShortCode === finalStationShortCode) :
-                stationMetadata.find(code => code.stationShortCode === lastRow.stationShortCode);
+        const transformedRows = [];
 
-            const stationData = stationMetadata.find(station => station.stationShortCode === stationShortCode);
-            const latitude = stationData ? stationData.latitude : undefined;
-            const longitude = stationData ? stationData.longitude : undefined;
-
-            return {
+        for (const row of filteredRows) {
+            transformedRows.push({
                 stationName: finalDestinationData ? sanitizeStationName(finalDestinationData.stationName) : "", // Use the last station name or default
                 departureLatitude: latitude,
                 departureLongitude: longitude,
@@ -117,15 +124,15 @@ export function useTransformTrainData(
                 scheduledTime: row.scheduledTime,
                 liveEstimateTime: row.liveEstimateTime,
                 unknownDelay: row.unknownDelay,
-                scheduledFinalDestination: finalDestinationData ? lastRow.scheduledTime : "",
+                scheduledFinalDestination: destinationRow ? destinationRow.scheduledTime : lastRow.scheduledTime,
                 trainType: train.trainType,
                 trainNumber: train.trainNumber,
                 differenceInMinutes: row.differenceInMinutes,
                 commercialTrack: row.commercialTrack,
                 cancelled: row.cancelled,
                 trainJourney: trainJourney
-            };
-        });
+            });
+        }
         stationStopData = stationStopData.concat(transformedRows);
     });
 

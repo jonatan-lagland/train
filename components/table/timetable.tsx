@@ -105,7 +105,6 @@ function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefine
         * using the scheduled time in when the delay is at least one minute
     */
 
-
     const timeDifference = dateTimeFinalDestination - dateTime;
     const totalMinutes = Math.floor(timeDifference / 60000);
     const hours = Math.floor(totalMinutes / 60);

@@ -18,7 +18,6 @@ type fetchLiveDestinationTrainProps = {
 
 async function fetchLiveDestinationTrain({ departure_station, arrival_station }: fetchLiveDestinationTrainProps): Promise<Train[] | TrainError | []> {
     const URL = `https://rata.digitraffic.fi/api/v1/live-trains/station/${departure_station}/${arrival_station}`;
-    console.log(URL)
 
     try {
         const response = await fetch(
