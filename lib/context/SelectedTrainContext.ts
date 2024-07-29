@@ -1,13 +1,15 @@
-import { createContext, Dispatch, SetStateAction } from 'react';
+import { createContext, Dispatch, RefObject, SetStateAction } from 'react';
 
 type SelectedTrainContextType = {
-    trainNumber: number | undefined;
+    selectedTrainNumber: number | undefined;
     setTrainNumber: Dispatch<SetStateAction<number | undefined>>;
+    sidebarRef: RefObject<HTMLDivElement>;
 };
 
 const defaultContextValue: SelectedTrainContextType = {
-    trainNumber: undefined,
+    selectedTrainNumber: undefined,
     setTrainNumber: () => { },
+    sidebarRef: { current: null },
 };
 
 export const SelectedTrainContext = createContext<SelectedTrainContextType>(defaultContextValue);

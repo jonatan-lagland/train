@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { SelectedTrainContext } from "../context/SelectedTrainContext";
 
 type StaticDataProviderProps = {
@@ -8,10 +8,11 @@ type StaticDataProviderProps = {
 }
 
 export const SelectedTrainProvider = ({ children }: StaticDataProviderProps) => {
-    const [trainNumber, setTrainNumber] = useState<number | undefined>(undefined);
+    const [selectedTrainNumber, setTrainNumber] = useState<number | undefined>(undefined);
+    const sidebarRef = useRef<HTMLDivElement>(null);
 
     return (
-        <SelectedTrainContext.Provider value={{ trainNumber, setTrainNumber }}>
+        <SelectedTrainContext.Provider value={{ selectedTrainNumber, setTrainNumber, sidebarRef }}>
             {children}
         </SelectedTrainContext.Provider>
     );

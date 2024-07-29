@@ -26,7 +26,7 @@ export type NextStationDataProps = {
  * @param {AppRouterInstance} router - An instance of the Next.js App router used to refresh the page in the event of stale data.
  * @returns {NextStationDataProps}
  */
-export default function useSortedStationData(data: TimeTable[], trainNumber: number | undefined, timeStampNow: number, router: AppRouterInstance): NextStationDataProps {
+export default function useSortedStationData(data: TimeTable[], selectedTrainNumber: number | undefined, setTrainNumber: any, timeStampNow: number, router: AppRouterInstance): NextStationDataProps {
     // Sorting data based on available liveEstimateTime or scheduledTime
     const initialSortedData = [...data].sort((a, b) => {
         const timeA = a.liveEstimateTime ? new Date(a.liveEstimateTime).getTime() : new Date(a.scheduledTime).getTime();
@@ -47,20 +47,26 @@ export default function useSortedStationData(data: TimeTable[], trainNumber: num
 
     useEffect(() => {
         // Opt-in to set station based on a train selected by user via clicking on a train button
-        if (trainNumber) {
+        if (selectedTrainNumber) {
             // Find the data with the matching trainNumber
-            const selectedTrainData = data.find(item => item.trainNumber === trainNumber);
-            if (selectedTrainData) {
+            const selectedTrainData = data.find(item => item.trainNumber === selectedTrainNumber);
+            const currentTime = selectedTrainData?.liveEstimateTime || selectedTrainData?.scheduledTime;
+            const isCancelled = selectedTrainData?.cancelled;
+
+            if (selectedTrainData && currentTime && !isCancelled) {
+                const currentTimeStamp = new Date(currentTime).getTime();
                 // Set the next station data based on the found train data
-                setNextStationData({
-                    stationNextName: selectedTrainData.stationName,
-                    departureLatitude: selectedTrainData.departureLatitude,
-                    departureLongitude: selectedTrainData.departureLongitude,
-                    stationNextTimestamp: selectedTrainData.liveEstimateTime || selectedTrainData.scheduledTime,
-                    stationNextTrainType: selectedTrainData.trainType,
-                    stationNextTrainNumber: selectedTrainData.trainNumber,
-                    stationNextTrainTrack: selectedTrainData.commercialTrack,
-                });
+                if (timeStampNow < currentTimeStamp) {
+                    setNextStationData({
+                        stationNextName: selectedTrainData.stationName,
+                        departureLatitude: selectedTrainData.departureLatitude,
+                        departureLongitude: selectedTrainData.departureLongitude,
+                        stationNextTimestamp: selectedTrainData.liveEstimateTime || selectedTrainData.scheduledTime,
+                        stationNextTrainType: selectedTrainData.trainType,
+                        stationNextTrainNumber: selectedTrainData.trainNumber,
+                        stationNextTrainTrack: selectedTrainData.commercialTrack,
+                    });
+                }
                 // Exit early
                 return;
             }
@@ -90,6 +96,7 @@ export default function useSortedStationData(data: TimeTable[], trainNumber: num
                     stationNextTrainNumber: sortedData[i]?.trainNumber,
                     stationNextTrainTrack: sortedData[i]?.commercialTrack,
                 });
+                setTrainNumber(sortedData[i]?.trainNumber)
                 isStaleData = false;
                 break;
             }
@@ -98,7 +105,7 @@ export default function useSortedStationData(data: TimeTable[], trainNumber: num
         if (isStaleData && sortedData.length > 0) {
             router.refresh();
         }
-    }, [timeStampNow, data, router, trainNumber]);
+    }, [timeStampNow, data, router, selectedTrainNumber, setTrainNumber]);
 
     return nextStationData;
 }

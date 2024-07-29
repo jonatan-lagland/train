@@ -7,7 +7,6 @@ import {
 import {
     ColumnDef,
     ColumnFiltersState,
-    Row,
     SortingState,
     VisibilityState,
     flexRender,
@@ -18,8 +17,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import LaunchRounded from '@mui/icons-material/LaunchRounded';
-import MapIcon from '@mui/icons-material/Map';
+import PlaceIcon from '@mui/icons-material/Place';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -67,7 +65,9 @@ type CreateColumnsProps = {
     tableType: TrainDestination
     locale: Locale
     translation: any
+    selectedTrainNumber: number | undefined
     setTrainNumber: React.Dispatch<React.SetStateAction<number | undefined>>
+    sidebarRef: React.RefObject<HTMLDivElement>
 }
 
 // Workaround for useLocale not returning a full time format and causing issues with the swedish format.
@@ -187,6 +187,7 @@ const ExternalLink = ({ href, className, children }: ExternalLinkProps) => {
 type ColorIconProps = {
     currentScheduledTime: number
     nextScheduledTime: number | null
+    cancelled: boolean
 }
 
 /**
@@ -195,10 +196,14 @@ type ColorIconProps = {
  * @param {number} param.currentScheduledTime The scheduled time of the current journey in milliseconds.
  * @param {number} param.nextScheduledTime The scheduled time of the journey after the current journey in milliseconds.
  */
-const ColorIcon = ({ currentScheduledTime, nextScheduledTime }: ColorIconProps) => {
+const ColorIcon = ({ currentScheduledTime, nextScheduledTime, cancelled }: ColorIconProps) => {
     const currentTime = useTimestampInterval();
     const isOnGoingTrain = nextScheduledTime && currentTime >= currentScheduledTime && currentTime < nextScheduledTime;
     const isPassedTrain = currentTime > currentScheduledTime;
+
+    if (cancelled) {
+        return <div className="rounded-full w-3 h-3 bg-red-800"></div>;
+    }
 
     if (isOnGoingTrain) {
         return <Skeleton className="rounded-full w-3 h-3 bg-yellow-500" />;
@@ -230,6 +235,7 @@ type JourneyItemProps = {
 const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps) => {
     const nextJourney: any = timeTableRow[index + 1];
     const dateTime = new Date(journey.scheduledTime).getTime();
+    const cancelled = journey.cancelled;
     const liveEstimateTime = journey.liveEstimateTime ? new Date(journey.liveEstimateTime).getTime() : undefined;
     const liveEstimateTimeStamp = getLiveEstimateTimestamp(liveEstimateTime, dateTime, locale)
     const nextScheduledTime = nextJourney ? new Date(nextJourney.liveEstimateTime ?? nextJourney.scheduledTime).getTime() : null;
@@ -239,7 +245,7 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
             {index % 2 === 0 && (
                 <>
                     <li key={`icon-${index}`} className="flex items-center justify-start">
-                        <ColorIcon currentScheduledTime={liveEstimateTime ?? dateTime} nextScheduledTime={nextScheduledTime} />
+                        <ColorIcon currentScheduledTime={liveEstimateTime ?? dateTime} nextScheduledTime={nextScheduledTime} cancelled={cancelled} />
                     </li>
                     <li key={`station-${index}`} className="flex flex-col items-start justify-center">
                         <div className="flex flex-row items-center justify-center gap-1">
@@ -284,7 +290,14 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
 
 
 
-export const createColumns = ({ tableType, locale, translation, setTrainNumber }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
+export const createColumns = ({ tableType, locale, translation, selectedTrainNumber, setTrainNumber, sidebarRef }: CreateColumnsProps): ColumnDef<TimeTable>[] => {
+    const handleButtonClick = (trainNumber: number) => {
+        setTrainNumber(trainNumber);
+        if (sidebarRef.current) {
+            sidebarRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
+
     return [
         {
             accessorKey: "trainType",
@@ -297,10 +310,14 @@ export const createColumns = ({ tableType, locale, translation, setTrainNumber }
 
             },
             cell: ({ row }) => {
-                const { trainType, trainNumber } = row.original;
+                const { trainType, trainNumber, liveEstimateTime, scheduledTime, cancelled } = row.original;
+                const iconColor = selectedTrainNumber === trainNumber ? '#3e64ed' : '#646770'
+                const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
+                const isButtonDisabled = selectedTrainNumber === undefined || liveDateTime < Date.now() || cancelled;
+
                 return <div className="flex flex-col items-center justify-center">
-                    <Button variant={'ghost'} onClick={() => setTrainNumber(trainNumber)}>
-                        <MapIcon style={{ fill: '#192e02' }}></MapIcon>
+                    <Button disabled={isButtonDisabled} variant={'ghost'} onClick={() => handleButtonClick(trainNumber)}>
+                        <PlaceIcon style={{ fill: iconColor }}></PlaceIcon>
                     </Button>
                     <span>{`${trainType} ${trainNumber}`}</span>
                 </div>
@@ -419,7 +436,7 @@ export const createColumns = ({ tableType, locale, translation, setTrainNumber }
 
 
 export function TimeTable({ data, destinationType }: TimeTableProps) {
-    const { setTrainNumber } = React.useContext(SelectedTrainContext);
+    const { selectedTrainNumber, setTrainNumber, sidebarRef } = React.useContext(SelectedTrainContext);
     const t = useTranslations();
     const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -430,7 +447,14 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
     const [rowSelection, setRowSelection] = React.useState({})
     const timetableTranslations = useTranslations('TimeTable');
     const locale = useLocale() as Locale;
-    const columns = createColumns({ tableType: destinationType, locale: locale, translation: timetableTranslations, setTrainNumber: setTrainNumber });
+    const columns = createColumns({
+        tableType: destinationType,
+        locale: locale,
+        translation: timetableTranslations,
+        selectedTrainNumber: selectedTrainNumber,
+        setTrainNumber: setTrainNumber,
+        sidebarRef: sidebarRef
+    });
     const table = useReactTable({
         data,
         columns,

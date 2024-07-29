@@ -44,7 +44,6 @@ const SettingsDialog = () => {
                 </div>
             </DialogContent>
         </Dialog>
-
     );
 };
 

@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import { TimeTable, TrainDestination } from '../table/timetable'
 import { useLocale, useTranslations } from 'next-intl'
 import ArrivalTimestamp from './arrivalTimestamp'
@@ -19,12 +19,12 @@ type SidebarProps = {
 function Sidebar({ data, destinationType }: SidebarProps) {
     const router = useRouter();
     const params = useParams();
-    const { trainNumber } = useContext(SelectedTrainContext);
+    const { selectedTrainNumber, setTrainNumber, sidebarRef } = useContext(SelectedTrainContext);
     const city = params.city as string
     const locale = useLocale() as SiteLocale;
     const translation = useTranslations('TimeTable');
     const timeStampNow = useTimestampInterval();
-    const nextStation = useSortedStationData(data, trainNumber, timeStampNow, router)
+    const nextStation = useSortedStationData(data, selectedTrainNumber, setTrainNumber, timeStampNow, router)
     const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;
 
     return (
@@ -59,7 +59,7 @@ function Sidebar({ data, destinationType }: SidebarProps) {
                 </ArrivalTimestamp>
 
             </div>
-            <div className='flex flex-col gap-2'>
+            <div ref={sidebarRef} className='flex flex-col gap-2'>
                 <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
                 <div className='text-sm text-slate-600'>
                     <span className='font-medium'>{translation('disclaimerTitle')}: </span><span>{translation('disclaimer')}</span>
