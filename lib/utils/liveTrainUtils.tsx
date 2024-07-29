@@ -45,7 +45,7 @@ export default async function useLiveTrainData(city: string, destinationType: Tr
         throw new Error(`Destination station not found for city: ${cityDestination}`);
     }
 
-    liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode });
+    liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode, isCommuter: isCommuter });
     return {
         liveTrainData,
         stationShortCode,
@@ -124,7 +124,7 @@ export function useTransformTrainData(
                 scheduledTime: row.scheduledTime,
                 liveEstimateTime: row.liveEstimateTime,
                 unknownDelay: row.unknownDelay,
-                scheduledFinalDestination: destinationRow ? destinationRow.scheduledTime : lastRow.scheduledTime,
+                scheduledFinalDestination: destinationRow ? destinationRow.liveEstimateTime ? destinationRow.liveEstimateTime : destinationRow.scheduledTime : lastRow.liveEstimateTime ? lastRow.liveEstimateTime : lastRow.scheduledTime,
                 trainType: train.trainType,
                 trainNumber: train.trainNumber,
                 differenceInMinutes: row.differenceInMinutes,

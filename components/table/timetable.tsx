@@ -17,6 +17,10 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import PlaceIcon from '@mui/icons-material/Place';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -444,12 +448,13 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-    const timetableTranslations = useTranslations('TimeTable');
+    const tTimeTable = useTranslations('TimeTable');
+    const tNav = useTranslations('Navigation');
     const locale = useLocale() as Locale;
     const columns = createColumns({
         tableType: destinationType,
         locale: locale,
-        translation: timetableTranslations,
+        translation: tTimeTable,
         selectedTrainNumber: selectedTrainNumber,
         setTrainNumber: setTrainNumber,
         sidebarRef: sidebarRef
@@ -516,7 +521,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell
                                                 key={cell.id}
-                                                className="pt-8"
+                                                className="pt-8 h-28"
                                             >
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                             </TableCell>
@@ -558,8 +563,46 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                             </TableRow>
                         )}
                     </TableBody>
-
                 </Table>
+                <div className="flex items-start justify-end space-x-2 py-4 ">
+                    <div className="flex flex-wrap items-center space-x-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => table.setPageIndex(0)}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            <FirstPageIcon fontSize="small"></FirstPageIcon>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            <KeyboardArrowLeftIcon fontSize="small"></KeyboardArrowLeftIcon>
+                        </Button>
+                        <div className="flex-1 text-sm text-muted-foreground">
+                            <span>{table.getState().pagination.pageIndex + 1} / {table.getPageCount()}</span>
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            <KeyboardArrowRightIcon fontSize="small"></KeyboardArrowRightIcon>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            <LastPageIcon fontSize="small"></LastPageIcon>
+                        </Button>
+                    </div>
+                </div>
             </div>
         </div>
     )

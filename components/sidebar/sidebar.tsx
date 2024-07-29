@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useRef } from 'react'
+import React, { useContext } from 'react'
 import { TimeTable, TrainDestination } from '../table/timetable'
 import { useLocale, useTranslations } from 'next-intl'
 import ArrivalTimestamp from './arrivalTimestamp'

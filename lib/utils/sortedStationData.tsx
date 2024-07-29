@@ -85,8 +85,9 @@ export default function useSortedStationData(data: TimeTable[], selectedTrainNum
             const currentTimestamp = sortedData[i].liveEstimateTime
                 ? new Date(sortedData[i].liveEstimateTime ?? 0).getTime()  // Provide a default value of 0
                 : new Date(sortedData[i].scheduledTime ?? 0).getTime();    // Provide a default value of 0
+            const isCancelled = sortedData[i].cancelled;
 
-            if (currentTimestamp > timeStampNow) {
+            if (currentTimestamp > timeStampNow && !isCancelled) {
                 setNextStationData({
                     stationNextName: sortedData[i]?.stationName,
                     departureLatitude: sortedData[i]?.departureLatitude,
