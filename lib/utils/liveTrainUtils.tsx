@@ -45,7 +45,7 @@ export default async function useLiveTrainData(city: string, destinationType: Tr
         throw new Error(`Destination station not found for city: ${cityDestination}`);
     }
 
-    liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode, isCommuter: isCommuter });
+    liveTrainData = await fetchLiveDestinationTrain({ departure_station: stationShortCode, arrival_station: finalStationShortCode });
     return {
         liveTrainData,
         stationShortCode,
@@ -81,12 +81,7 @@ export function useTransformTrainData(
                 row.stationShortCode === stationShortCode &&
                 row.type === destinationType &&
                 row.trainStopping === true;
-
-            const matchesFinalStationShortCode = finalStationShortCode ?
-                train.timeTableRows.some(tr => tr.stationShortCode === finalStationShortCode) :
-                true;
-
-            return matchesStationAndDestination && matchesFinalStationShortCode;
+            return matchesStationAndDestination;
         });
 
         const trainJourney = train.timeTableRows
