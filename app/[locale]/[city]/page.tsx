@@ -55,7 +55,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
 
   return (
     <SelectedTrainProvider>
-      <div className="flex flex-col flex-grow h-screen gap-2 justify-start items-center">
+      <div className="flex flex-col flex-grow gap-2 justify-start items-center">
         <div className="grid grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full py-5">
           <div className="flex flex-row items-center justify-center h-full">
             <Banner destinationLabel={destinationLabel} city={city} cityDestination={cityDestination}></Banner>

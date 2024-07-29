@@ -449,7 +449,6 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const tTimeTable = useTranslations('TimeTable');
-    const tNav = useTranslations('Navigation');
     const locale = useLocale() as Locale;
     const columns = createColumns({
         tableType: destinationType,
@@ -491,7 +490,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                 />
             </div>
             <div>
-                <Table>
+                <Table className="relative">
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
