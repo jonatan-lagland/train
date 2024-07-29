@@ -6,7 +6,7 @@ import { TrainRounded } from "@mui/icons-material";
 import L from "leaflet";
 import ReactDOMServer from 'react-dom/server';
 import { TrainGPS } from "@/lib/types";
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import { MutableRefObject, RefObject, useEffect, useMemo, useRef, useState } from "react";
 
 type MapViewProps = {
     trainNumberLabel: string
@@ -26,87 +26,67 @@ type MarkerPositionProps = {
     trainNumberLabel: string
 }
 
+const animateMarker = (
+    markerRef: RefObject<L.Marker<any>>,
+    currentPosition: MutableRefObject<[number, number]>,
+    position: [number, number],
+    animationRef: MutableRefObject<null | number>
+) => {
+    const start = currentPosition.current;
+    const end = position;
+    const duration = 3000; // duration of animation in ms
+    const startTime = performance.now();
+
+    const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+    const animate = () => {
+        const now = performance.now();
+        const elapsed = (now - startTime) / duration;
+        const progress = easeInOutQuad(Math.min(elapsed, 1));
+
+        const lat = start[0] + (end[0] - start[0]) * progress;
+        const lng = start[1] + (end[1] - start[1]) * progress;
+
+        markerRef.current?.setLatLng([lat, lng]);
+
+        if (elapsed < 1) {
+            animationRef.current = requestAnimationFrame(animate);
+        } else {
+            currentPosition.current = end;
+            animationRef.current = null;
+        }
+    };
+    animationRef.current = requestAnimationFrame(animate);
+};
+
 const MarkerPosition = ({ position, trainIcon, data, trainSpeedLabel, trainNumberLabel }: MarkerPositionProps) => {
     const map = useMap();
     const markerRef = useRef<L.Marker<any>>(null);
     const currentPosition = useRef(position);
     const previousTrainNumber: MutableRefObject<null | number> = useRef(null);
-
-    // Used to track how many seconds until train should be focused on map
-    const [countdown, setCountdown] = useState(0);
-
-    // Interacting with the map grants a 15 second grace period where train won't be focused
-    useMapEvents({
-        dragstart() {
-            setCountdown(15);
-        },
-        dragend() {
-            setCountdown(15);
-        }
-    });
-
-    // Focus map on train
-    useEffect(() => {
-        if (countdown > 0) {
-            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-            return () => clearTimeout(timer);
-        }
-        if (countdown === 0 && map) {
-            map.setView(position, map.getZoom(), { animate: true });
-        }
-    }, [map, position, countdown]);
+    const trainNumber = data[0]?.trainNumber;
+    const animationRef = useRef(null); // Reference to control animation
 
     useEffect(() => {
-        const animateMarker = () => {
-            if (!markerRef.current) return;
-
-            const start = currentPosition.current;
-            const end = position;
-            const duration = 3000; // duration of animation in ms
-            const startTime = performance.now();
-
-            const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-            const animate = () => {
-                const now = performance.now();
-                const elapsed = (now - startTime) / duration;
-                const progress = easeInOutQuad(Math.min(elapsed, 1));
-
-                const lat = start[0] + (end[0] - start[0]) * progress;
-                const lng = start[1] + (end[1] - start[1]) * progress;
-
-                markerRef.current?.setLatLng([lat, lng]);
-
-                if (elapsed < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    currentPosition.current = end;
-                }
-            };
-
-            animate();
-        };
-
-        if (data.length === 0) return // Exit early in the event of no data
-
-        const currentTrain = data[0];
-        const currentTrainNumber = currentTrain.trainNumber;
-
-        // Animate marker if the same train is still in focus
-        if (previousTrainNumber.current === currentTrainNumber) {
-            animateMarker();
+        // Animate marker is the same train is still in question
+        if (previousTrainNumber.current === trainNumber) {
+            animateMarker(markerRef, currentPosition, position, animationRef);
+            currentPosition.current = position;
+            previousTrainNumber.current = trainNumber;
             return;
         }
-
-        // Train number has changed, set marker position immediately
+        // If train number changes, stop ongoing animation
+        if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+        }
+        // Instantly snap map and marker to new position
         if (markerRef.current) {
             markerRef.current.setLatLng(position);
-            setCountdown(0); // Immediately focus train
+            map.setView(position, 7, { animate: true });
         }
-        currentPosition.current = position; // Update current position
-        previousTrainNumber.current = currentTrainNumber; // Update the previous train number
-
-    }, [position, data]);
+        currentPosition.current = position;
+        previousTrainNumber.current = trainNumber;
+    }, [map, position, trainNumber]);
 
 
     return (
@@ -115,18 +95,11 @@ const MarkerPosition = ({ position, trainIcon, data, trainSpeedLabel, trainNumbe
                 <Marker
                     ref={markerRef}
                     key={train.trainNumber}
-                    position={[train.location.coordinates[1], train.location.coordinates[0]]}
+                    position={position}
                     icon={trainIcon}
                     eventHandlers={{
                         click: () => {
-                            map.setView(
-                                [
-                                    train.location.coordinates[1],
-                                    train.location.coordinates[0]
-                                ],
-                                13
-                            ),
-                                setCountdown(0);
+                            map.setView(position, 10, { animate: true })
                         }
                     }}
                 >
@@ -141,6 +114,7 @@ const MarkerPosition = ({ position, trainIcon, data, trainSpeedLabel, trainNumbe
 };
 
 export default function MapView({ trainNumberLabel, trainSpeedLabel, data, width, height, departureLatitude = 60.1699, departureLongitude = 24.9384 }: MapViewProps) {
+    /* Values are memoized as to not re-render the icon with every coordinate change and keep the pulsating effect constant */
     const defaultPosition: [number, number] = useMemo(() =>
         [departureLatitude, departureLongitude],
         [departureLatitude, departureLongitude]); // Has Helsinki station coordinates as a fallback
