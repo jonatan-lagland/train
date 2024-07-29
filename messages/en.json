@@ -56,5 +56,8 @@
         "title": "Page Not Found",
         "description": "Sorry, the page you are looking for does not exist.",
         "return": "Return"
+    },
+    "TermsOfService": {
+        "title": "Traffic data source Fintraffic license CC 4.0 BY"
     }
 }

@@ -56,5 +56,8 @@
         "title": "Sivua ei löytynyt",
         "description": "Emme valitettavasti löytäneet etsimääsi sivua.",
         "return": "Palaa takaisin"
+    },
+    "TermsOfService": {
+        "title": "Liikennetietojen lähde Fintraffic lisenssi CC 4.0 BY"
     }
 }

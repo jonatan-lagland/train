@@ -56,5 +56,8 @@
         "title": "Sidan hittades inte",
         "description": "Tyvärr, sidan du letar efter finns inte.",
         "return": "Återvänd"
+    },
+    "TermsOfService": {
+        "title": "Trafikdatakälla Fintraffic licens CC 4.0 BY"
     }
 }
