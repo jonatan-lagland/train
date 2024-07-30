@@ -22,7 +22,7 @@ function Footer() {
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <a href="mailto:jonatan.lagland@gmail.com" className="font-bold">
+                        <a href="mailto:suomilinja@gmail.com" className="font-bold">
                             suomilinja@gmail.com
                         </a>
                     </DialogFooter>
