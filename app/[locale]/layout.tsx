@@ -1,6 +1,6 @@
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import Nav from "@/components/nav/nav";
-import { Besley, Inter } from "next/font/google";
+import { Besley, Inter, Roboto_Slab } from "next/font/google";
 import Footer from '@/components/footer/footer';
 
 const besley = Besley({
@@ -11,6 +11,11 @@ const besley = Besley({
 const inter = Inter({
     subsets: ['latin'],
     variable: "--inter",
+});
+const robotoslab = Roboto_Slab({
+    subsets: ['latin'],
+    weight: ['400', '500', '600'],
+    variable: "--robotoslab",
 });
 
 export default function LocaleLayout({
@@ -26,7 +31,7 @@ export default function LocaleLayout({
     return (
         <html lang={locale}>
             <NextIntlClientProvider messages={messages}>
-                <body className={`${inter.variable} ${besley.variable} bg-[#F3F3F3]`}>
+                <body className={`${inter.variable} ${besley.variable} ${robotoslab.variable} bg-[#F3F3F3]`}>
                     {/* Header */}
                     <header className="flex-row w-full flex shadow-md px-2 justify-evenly bg-white">
                         <Nav />
@@ -35,7 +40,7 @@ export default function LocaleLayout({
                     <main>
                         {children}
                     </main>
-                    <footer className="w-full bg-inherit p-4 flex justify-start shadow-md border">
+                    <footer className="w-full h-full bg-inherit p-1 md:p-4 shadow-md border">
                         <Footer></Footer>
                     </footer>
                 </body>
