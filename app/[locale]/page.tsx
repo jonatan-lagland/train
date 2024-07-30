@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import NavigationContainer from '@/components/banner/navigationContainer';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 type ImageTileProps = {
     src: string
@@ -43,7 +43,7 @@ const ImageTile = ({ src, alt, title, delay, locale, href }: ImageTileProps) => 
                 animate={{ opacity: 1 }}
                 transition={{ delay: delay + 0.2 }}
             >
-                <h3 className="text-2xl font-semibold">{title}</h3>
+                <h3 className="text-2xl font-robotoslab font-semibold">{title}</h3>
             </motion.div>
         </motion.div>
     </Link>
@@ -51,6 +51,7 @@ const ImageTile = ({ src, alt, title, delay, locale, href }: ImageTileProps) => 
 
 export default function Home() {
     const locale = useLocale();
+    const t = useTranslations("Landing")
     const imageTiles = [
         { src: 'https://images.unsplash.com/photo-1575810034144-1abb0a8796f2', href: "Helsinki?type=departure&commuter=false", locale: locale, alt: 'Helsinki', title: 'Helsinki', delay: 1.2 },
         { src: 'https://images.unsplash.com/photo-1567792213673-cdf2c27dbde2', href: "Espoo?type=departure&commuter=true", locale: locale, alt: 'Espoo', title: 'Espoo', delay: 1.8 },
@@ -73,15 +74,15 @@ export default function Home() {
                     className="drop-shadow-lg"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent"></div>
-                <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-around text-center px-4 md:px-0">
+                <div className="absolute inset-0 grid grid-row grid-rows-[1fr_3fr] md:grid-col md:grid-cols-[2fr_1fr] items-center text-center md:grid-rows-none p-4">
                     <div className='flex flex-col'>
                         <motion.div
                             initial={{ opacity: 0, y: -50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1 }}
                         >
-                            <h1 className="text-3xl md:text-6xl font-semibold text-white mb-4">
-                                Find Train Journeys
+                            <h1 className="text-3xl font-robotoslab md:text-6xl font-semibold text-white mb-4">
+                                {t("header")}
                             </h1>
                         </motion.div>
                         <motion.div
@@ -89,8 +90,8 @@ export default function Home() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, delay: 0.2 }}
                         >
-                            <h2 className="text-xl md:text-4xl font-semibold text-neutral-200 mb-8">
-                                Secondary title
+                            <h2 className="text-xl md:text-4xl font-normal font-robotoslab text-white mb-8">
+                                {t("subheader")}
                             </h2>
                         </motion.div>
                     </div>

@@ -58,6 +58,11 @@
         "return": "Palaa takaisin"
     },
     "TermsOfService": {
-        "title": "Liikennetietojen lähde Fintraffic lisenssi CC 4.0 BY"
+        "title": "Liikennetietojen lähde Fintraffic lisenssi CC 4.0 BY",
+        "titleShort": "Lisenssi"
+    },
+    "Landing": {
+        "header": "Suomilinja",
+        "subheader": "Ajan tasalla olevaa tietoa Suomen rataverkosta"
     }
 }

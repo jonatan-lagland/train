@@ -55,7 +55,8 @@ const config = {
       },
       fontFamily: {
         inter: "var(--inter)",
-        besley: "var(--besley)"
+        besley: "var(--besley)",
+        robotoslab: "var(--robotoslab)",
       },
       borderRadius: {
         lg: "var(--radius)",

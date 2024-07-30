@@ -5,7 +5,7 @@ function HomeIcon() {
     return (
         <Link href="/">
             <div className='flex flex-row items-center px-7 py-5 bg-orange-700 h-full'>
-                <span className='text-white font-bold'>Junataulut</span>
+                <span className='text-white font-bold font-besley'>Suomilinja</span>
             </div>
         </Link>
     )

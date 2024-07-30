@@ -58,6 +58,11 @@
         "return": "Return"
     },
     "TermsOfService": {
-        "title": "Traffic data source Fintraffic license CC 4.0 BY"
+        "title": "Traffic data source Fintraffic license CC 4.0 BY",
+        "titleShort": "License"
+    },
+    "Landing": {
+        "header": "Suomilinja",
+        "subheader": "Up-to-date information from the Finnish railway network"
     }
 }

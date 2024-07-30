@@ -20,10 +20,10 @@ export default async function Banner({ destinationLabel, city, cityDestination }
     return (
         <div className='flex flex-row gap-8 items-center font-inter px-1 py-6'>
             <div className='flex flex-col gap-1'>
-                <h1 className={`flex-auto font-semibold text-white capitalize break-words ${labelFontSize}`}>
+                <h1 className={`flex-auto font-semibold font-robotoslab text-white capitalize break-words ${labelFontSize}`}>
                     {cityDestinationLabel ? `${cityLabel} — ${cityDestinationLabel}` : cityLabel}
                 </h1>
-                <h2 className={`text-2xl md:text-4xl flex-grow font-semibold text-white`}>
+                <h2 className={`text-2xl md:text-4xl font-robotoslab flex-grow font-semibold text-white`}>
                     {t(`${destinationLabel}`)}
                 </h2>
             </div>
