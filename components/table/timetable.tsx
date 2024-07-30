@@ -477,6 +477,18 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
         },
     })
 
+    // Sets page number to where the currently selected train is
+    React.useEffect(() => {
+        // Use sorted rows to find the index
+        const sortedRows = table.getSortedRowModel().rows;
+        const rowIndex = sortedRows.findIndex(row => row.original.trainNumber === selectedTrainNumber);
+
+        if (rowIndex !== -1) {
+            const pageIndex = Math.floor(rowIndex / table.getState().pagination.pageSize);
+            table.setPageIndex(pageIndex);
+        }
+    }, [selectedTrainNumber, table]);
+
     return (
         <div className="flex flex-col gap-10">
             <div className="flex items-center">
@@ -496,7 +508,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} className="">
+                                        <TableHead key={header.id} className="py-2">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
