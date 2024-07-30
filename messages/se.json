@@ -44,7 +44,8 @@
         "searchCity": "Sök efter en stad...",
         "submitButton": "Hitta en rutt",
         "errorSelectLocation": "Vänligen välj en plats.",
-        "search": "Sök"
+        "search": "Sök",
+        "commuterRail": "Sök efter pendeltåg"
     },
     "MetaData": {
         "title": "Tågtidtabeller",

@@ -44,7 +44,8 @@
         "searchCity": "Search for a city...",
         "submitButton": "Find a route",
         "errorSelectLocation": "Please select a location.",
-        "search": "Search"
+        "search": "Search",
+        "commuterRail": "Search for commuter trains"
     },
     "MetaData": {
         "title": "Train timetables",

@@ -118,7 +118,7 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
         if (destinationParam) {
             form.setValue('destination', decodeURIComponent(destinationParam));
         }
-    }, []);
+    }, [defaultCity, destinationParam, form]);
 
 
 
@@ -131,7 +131,7 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
                             control={form.control}
                             name="location"
                             render={({ field }) => (
-                                <FormItem className='flex flex-col gap-1'>
+                                <FormItem className='flex flex-col gap-1 items-start'>
                                     <FormLabel className='pointer-events-none'>{t('TimeTable.origin')}</FormLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
@@ -294,7 +294,7 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
                         control={form.control}
                         name="commuter"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row justify-start items-center">
+                            <FormItem className="flex flex-row justify-start items-center space-y-0 gap-2">
                                 <FormControl>
                                     <Checkbox
                                         checked={field.value}
@@ -303,7 +303,7 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
                                 </FormControl>
                                 <div className="leading-none">
                                     <FormLabel>
-                                        Include commuter rail
+                                        {t("Navigation.commuterRail")}
                                     </FormLabel>
                                 </div>
                             </FormItem>

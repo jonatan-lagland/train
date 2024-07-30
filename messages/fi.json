@@ -44,7 +44,8 @@
         "searchCity": "Etsi kaupunki...",
         "submitButton": "Hae matkoja",
         "errorSelectLocation": "Ole hyvä ja valitse sijainti.",
-        "search": "Hae"
+        "search": "Hae",
+        "commuterRail": "Hae paikallisjunia"
     },
     "MetaData": {
         "title": "Juna-aikataulut",
