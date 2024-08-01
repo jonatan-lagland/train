@@ -14,7 +14,7 @@ function Footer() {
                 <DialogTrigger asChild>
                     <Button className='text-blue-500' variant="ghost">Looking to hire a UX/UI developer?</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px] z-[9999]">
                     <DialogHeader>
                         <DialogTitle>I&apos;m looking for employment! 🧑🏼‍💼</DialogTitle>
                         <DialogDescription>
