@@ -3,6 +3,8 @@ import { TimeTable, TrainDestination } from "../table/timetable"
 import { useTranslations } from "next-intl"
 import { SiteLocale } from "@/lib/types"
 import { useCallback, useEffect, useState } from "react"
+import Link from "next/link"
+import LinkIcon from '@mui/icons-material/Link';
 
 type ArrivalTimestampProps = {
     city: string
@@ -12,6 +14,7 @@ type ArrivalTimestampProps = {
     stationNextTrainTrack: number
     timeStampNow: number
     data: TimeTable[]
+    commuterLink: string | undefined
 }
 
 /**
@@ -24,12 +27,12 @@ type ArrivalTimestampProps = {
  * @param {number} props.stationNextTrainTrack - The train track of the next arriving train.
  * @param {TimeTable[]} props.data - Live train data, the length of which is evaluated.
  */
-export default function ArrivalTimestamp({ city, destinationType, locale, stationNextTimestamp, stationNextTrainTrack, timeStampNow, data }: ArrivalTimestampProps): React.ReactElement {
+export default function ArrivalTimestamp({ city, destinationType, locale, stationNextTimestamp, stationNextTrainTrack, timeStampNow, data, commuterLink }: ArrivalTimestampProps): React.ReactElement {
     const translation = useTranslations('TimeTable');
     const decodedCity = decodeURIComponent(city);
 
     const calculateLocalizedLabel = useCallback(() => {
-        const timeDifference = new Date(stationNextTimestamp).getTime() - Date.now();
+        const timeDifference = new Date(stationNextTimestamp).getTime() - timeStampNow;
         const totalMinutes = Math.max(Math.ceil(timeDifference / 60000), 0);
         const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
@@ -46,7 +49,7 @@ export default function ArrivalTimestamp({ city, destinationType, locale, statio
             default:
                 return <>{destinationType === 'ARRIVAL' ? 'Saapuu ' : 'Lähtee '} <span className="capitalize">{decodedCity}</span> {destinationType === 'ARRIVAL' ? 'asemalle ' : 'asemalta '} <span className='font-bold'>{travelTimeLabel}</span> kuluttua {destinationType === 'ARRIVAL' ? 'raiteelle ' : 'raiteelta '} <span>{stationNextTrainTrack}</span>.</>;
         }
-    }, [stationNextTimestamp, translation, locale, decodedCity, destinationType, stationNextTrainTrack]);
+    }, [stationNextTimestamp, timeStampNow, translation, locale, destinationType, decodedCity, stationNextTrainTrack]);
 
     const [localizedLabel, setLocalizedLabel] = useState<JSX.Element>(calculateLocalizedLabel);
 
@@ -56,9 +59,14 @@ export default function ArrivalTimestamp({ city, destinationType, locale, statio
 
     return (
         <span className='font-medium text-xl text-slate-600'>
-            {data.length === 0 ? <span>{translation('noJourneyFound')}</span> : (
-                <>{localizedLabel}</>
-            )}
+            {data.length === 0 ?
+                <div className="flex flex-col gap-2">
+                    <span>{translation('noJourneyFound')}</span>
+                    {commuterLink ? <Link className="flex flex-row items-end gap-1 underline text-blue-600" href={commuterLink}>{translation('commuteSuggestion')}</Link> : null}
+                </div>
+                : (
+                    <>{localizedLabel}</>
+                )}
         </span>
     );
 }

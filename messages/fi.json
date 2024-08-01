@@ -26,7 +26,9 @@
         "cancelled": "Peruutettu",
         "trainNumber": "Juna",
         "trainSpeed": "Nopeus",
-        "trainAccuracy": "Tarkkuus"
+        "trainAccuracy": "Tarkkuus",
+        "commuteSuggestion": "Hae sen sijaan paikallisjunia",
+        "commuterTrains": "Paikallisjunat"
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"
@@ -49,8 +51,9 @@
     },
     "MetaData": {
         "title": "Juna-aikataulut",
-        "titleDeparture": "Lähtevät junat",
-        "titleArrival": "Saapuvat junat",
+        "titleDeparture": "Lähtevät Junat",
+        "titleArrival": "Saapuvat Junat",
+        "commuterTrains": "Paikallisjunat",
         "description": "Seuraa VR:n juna-aikatauluja reaaliajassa. Pääset käsiksi ajantasaisiin aikatauluihin, reittitietoihin ja laituritietoihin varmistaaksesi sujuvan matkan Suomen rautatieverkossa."
     },
     "NotFoundPage": {

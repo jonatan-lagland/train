@@ -10,7 +10,7 @@ import { StationMetaData } from "../types";
 export default function filterStationMetadata(stationMetadata: StationMetaData[]): StationMetaData[] {
     const filteredStations = stationMetadata
         ? stationMetadata.filter(
-            (station) => station.passengerTraffic === true && station.type === "STATION"
+            (station) => station.passengerTraffic === true
         )
         : [];
     return filteredStations;

@@ -26,7 +26,9 @@
         "cancelled": "Cancelled",
         "trainNumber": "Train",
         "trainSpeed": "Speed",
-        "trainAccuracy": "Accuracy"
+        "trainAccuracy": "Accuracy",
+        "commuteSuggestion": "Search for commuter trains instead",
+        "commuterTrains": "Commuter Trains"
     },
     "AriaTimeTable": {
         "select": "Select all"
@@ -49,8 +51,9 @@
     },
     "MetaData": {
         "title": "Train timetables",
-        "titleDeparture": "Departing trains",
-        "titleArrival": "Arriving trains",
+        "titleDeparture": "Departing Trains",
+        "titleArrival": "Arriving Trains",
+        "commuterTrains": "Commuter Trains",
         "description": "Track real-time VR train timetables in Finland. Access up-to-date schedules, route information, and platform details to ensure a smooth journey across the Finnish rail network."
     },
     "NotFoundPage": {

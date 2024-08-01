@@ -26,7 +26,9 @@
         "cancelled": "Inställt",
         "trainNumber": "Tåg",
         "trainSpeed": "Hastighet",
-        "trainAccuracy": "Noggrannhet"
+        "trainAccuracy": "Noggrannhet",
+        "commuteSuggestion": "Sök efter pendeltåg istället",
+        "commuterTrains": "Pendeltåg"
     },
     "AriaTimeTable": {
         "select": "Välj alla"
@@ -51,6 +53,7 @@
         "title": "Tågtidtabeller",
         "titleDeparture": "Avgående tåg",
         "titleArrival": "Ankommande tåg",
+        "commuterTrains": "Pendeltåg",
         "description": "Följ VR:s tågtidtabeller i realtid i Finland. Få tillgång till aktuella tidtabeller, ruttinformation och plattformsdetaljer för att säkerställa en smidig resa genom det finska järnvägsnätet."
     },
     "NotFoundPage": {
