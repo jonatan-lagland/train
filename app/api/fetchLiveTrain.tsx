@@ -20,7 +20,7 @@ type fetchLiveTrainProps = {
 
 async function fetchLiveTrain({ stationShortCode, type, isCommuter }: fetchLiveTrainProps): Promise<Train[] | TrainError | []> {
     const trainCategory = isCommuter === 'true' ? "Commuter" : "Long-distance" // React props are treated as strings
-    if (isCommuter === 'true') amount = 100; // Fetch more for commuter
+    if (isCommuter === 'true') amount = 60; // Fetch more for commuter
     const arrivalTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=${amount}&departed_trains=0&departing_trains=0&include_nonstopping=false&train_categories=${trainCategory}`;
     const departingTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=0&departed_trains=0&departing_trains=${amount}&include_nonstopping=false&train_categories=${trainCategory}`;
     try {

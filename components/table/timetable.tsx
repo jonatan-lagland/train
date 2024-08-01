@@ -594,7 +594,7 @@ export function TimeTable({ data, destinationType }: TimeTableProps) {
                             <KeyboardArrowLeftIcon fontSize="small"></KeyboardArrowLeftIcon>
                         </Button>
                         <div className="flex-1 text-sm text-muted-foreground">
-                            <span>{table.getState().pagination.pageIndex + 1} / {table.getPageCount()}</span>
+                            <span>{table.getState().pagination.pageIndex + 1} / {table.getPageCount() === 0 ? 1 : table.getPageCount()}</span>
                         </div>
                         <Button
                             variant="outline"
