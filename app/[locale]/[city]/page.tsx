@@ -23,13 +23,28 @@ export type TimeTablePageProps = {
   }
 }
 
-export async function generateMetadata({ params }: { params: { city: string } }) {
+type GenerateMetadataProps = {
+  params: {
+    city: string
+  }
+  searchParams: {
+    type: string
+    destination?: string
+    commuter: boolean
+  }
+}
+
+export async function generateMetadata({ params, searchParams }: GenerateMetadataProps) {
   const { city } = params;
+  const { type, destination, commuter } = searchParams;
   const cityLabel = decodeURIComponent(city)
   const t = await getTranslations('MetaData')
+  const cityAndDestinationStr = destination ? `${capitalizeTitle(cityLabel)} — ${destination}` : capitalizeTitle(cityLabel)
+  const typeStr = type === 'departure' ? t('titleDeparture') : t('titleArrival')
+  const typeAndCommuterStr = commuter ? t('commuterTrains') : typeStr
 
   return {
-    title: `${capitalizeTitle(cityLabel)} | ${t('titleDeparture')}`,
+    title: `${cityAndDestinationStr} | ${typeAndCommuterStr}`,
     description: t('description'),
   };
 }
@@ -58,7 +73,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
       <div className="flex flex-col flex-grow gap-2 justify-start items-center">
         <div className="grid grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full py-5">
           <div className="flex flex-row items-center justify-center h-full">
-            <Banner destinationLabel={destinationLabel} city={city} cityDestination={cityDestination}></Banner>
+            <Banner destinationLabel={destinationLabel} city={city} cityDestination={cityDestination} isCommuter={isCommuter}></Banner>
           </div>
           <div className="flex flex-row items-center justify-center">
             <NavigationContainer></NavigationContainer>
