@@ -1,17 +1,16 @@
 'use client'
-import { TimeTable, TrainDestination } from "../table/timetable"
 import { useTranslations } from "next-intl"
-import { SiteLocale } from "@/lib/types"
+import { SiteLocale, TimeTable, TrainDestination } from "@/lib/types"
 import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
-import LinkIcon from '@mui/icons-material/Link';
+
 
 type ArrivalTimestampProps = {
     city: string
     destinationType: TrainDestination
     locale: SiteLocale
     stationNextTimestamp: string
-    stationNextTrainTrack: number
+    stationNextTrainTrack: string
     timeStampNow: number
     data: TimeTable[]
     commuterLink: string | undefined

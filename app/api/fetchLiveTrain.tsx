@@ -1,5 +1,5 @@
-import { TrainDestination } from "@/components/table/timetable";
-import { Train, TrainError } from "@/lib/types";
+
+import { Train, TrainDestination, TrainError } from "@/lib/types";
 
 let amount: number = 30;
 const revalidateDuration: number = 120;

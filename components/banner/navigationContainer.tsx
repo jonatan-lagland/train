@@ -43,7 +43,6 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
     const router = useRouter()
     const locale = useLocale()
     const locationRequired = t('Navigation.errorSelectLocation');
-    const placeholderLabel = t('TimeTable.placeholder');
     const defaultCity = isNotFoundPage ? undefined : params.city as string;
     const destinationParam = isNotFoundPage ? undefined : searchParams.get('destination') as string;
     const typeParam = searchParams.get('type') as DestinationType;

@@ -1,7 +1,8 @@
 'use client'
-import { TimeTable } from '@/components/table/timetable';
+
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useState, useEffect } from 'react';
+import { TimeTable } from '../types';
 
 export type NextStationDataProps = {
     stationNextName: string;
@@ -10,7 +11,7 @@ export type NextStationDataProps = {
     stationNextTimestamp: string;
     stationNextTrainType: string;
     stationNextTrainNumber: number;
-    stationNextTrainTrack: number;
+    stationNextTrainTrack: string;
 };
 
 /**

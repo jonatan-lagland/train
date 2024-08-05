@@ -1,7 +1,6 @@
 import sanitizeStationName from './sanitizeStationName';
 import fetchLiveTrain from '@/app/api/fetchLiveTrain';
-import { StationMetaData, TimeTableRow, Train, TrainError } from '../types';
-import { TimeTable, TrainDestination } from '@/components/table/timetable';
+import { StationMetaData, TimeTable, TimeTableRow, Train, TrainDestination, TrainError } from '../types';
 import fetchLiveDestinationTrain from '@/app/api/fetchLiveDestinationTrain';
 
 /**
@@ -113,13 +112,13 @@ export function useTransformTrainData(
                 };
             });
 
-        const transformedRows = [];
+        const transformedRows = [] as TimeTable[]
 
         for (const row of filteredRows) {
             transformedRows.push({
                 stationName: finalDestinationData ? sanitizeStationName(finalDestinationData.stationName) : "", // Use the last station name or default
-                departureLatitude: latitude,
-                departureLongitude: longitude,
+                departureLatitude: latitude as number,
+                departureLongitude: longitude as number,
                 type: row.type,
                 scheduledTime: row.scheduledTime,
                 liveEstimateTime: row.liveEstimateTime,
@@ -128,9 +127,9 @@ export function useTransformTrainData(
                 trainType: train.trainType,
                 trainNumber: train.trainNumber,
                 differenceInMinutes: row.differenceInMinutes,
-                commercialTrack: row.commercialTrack,
+                commercialTrack: row.commercialTrack as string,
                 cancelled: row.cancelled,
-                trainJourney: trainJourney
+                trainJourney: trainJourney as unknown as []
             });
         }
         stationStopData = stationStopData.concat(transformedRows);

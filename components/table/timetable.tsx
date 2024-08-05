@@ -37,28 +37,10 @@ import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Skeleton } from "../ui/skeleton";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
-import { TimeTableRow } from "@/lib/types";
+import { TimeTableRow, TrainDestination, TimeTable } from "@/lib/types";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 
-export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
 export type Locale = 'en | se | fi'
-
-export type TimeTable = {
-    stationName: string
-    departureLatitude: number,
-    departureLongitude: number,
-    type: TrainDestination
-    scheduledTime: string
-    scheduledFinalDestination: string
-    liveEstimateTime?: string
-    unknownDelay?: boolean
-    trainType: string
-    trainNumber: number
-    differenceInMinutes?: number
-    commercialTrack: number
-    cancelled: boolean
-    trainJourney: []
-}
 
 export type TimeTableProps = {
     data: TimeTable[]
@@ -438,7 +420,7 @@ export const createColumns = ({ tableType, locale, translation, selectedTrainNum
 
 
 
-export function TimeTable({ data, destinationType }: TimeTableProps) {
+export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     const { selectedTrainNumber, setTrainNumber, sidebarRef } = React.useContext(SelectedTrainContext);
     const t = useTranslations();
     const [sorting, setSorting] = React.useState<SortingState>([{ id: 'scheduledTime', desc: false }]);

@@ -1,10 +1,7 @@
 import NavigationContainer from '@/components/banner/navigationContainer';
 import Nav from '@/components/nav/nav';
-import { SelectLanguage } from '@/components/nav/selectLanguage';
-import { Button } from '@/components/ui/button';
+export const dynamic = 'force-dynamic'
 import RouterBackButton from '@/components/ui/router-back';
-import { languages } from '@/lib/languages';
-import { HomeIcon } from '@radix-ui/react-icons';
 import { NextIntlClientProvider, useLocale, useMessages, useTranslations } from 'next-intl';
 import Image from 'next/image';
 

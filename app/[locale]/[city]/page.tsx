@@ -1,4 +1,3 @@
-import { TimeTable, TrainDestination } from "@/components/table/timetable";
 import Banner from "../../../components/banner/banner";
 import { getTranslations } from "next-intl/server";
 import capitalizeTitle from "@/lib/utils/capitalizeTitle";
@@ -9,6 +8,8 @@ import useLiveTrainData, { useTransformTrainData } from "@/lib/utils/liveTrainUt
 import findStationDestination from "@/lib/utils/stationDestination";
 import Sidebar from "@/components/sidebar/sidebar";
 import { SelectedTrainProvider } from "@/lib/contextProvider/SelectedTrainProvider";
+import { TrainDestination } from "@/lib/types";
+import { TimeTableComponent } from "@/components/table/timetable";
 
 export type BannerLabel = 'arrivalTrains' | 'departureTrains';
 export type TimeTablePageProps = {
@@ -96,7 +97,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
         </div>
         <div className='grid grid-cols-1 grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-1 gap-14 md:gap-0 py-8 md:px-6 px-1'>
           <Sidebar data={data} destinationType={destinationType}></Sidebar>
-          <TimeTable data={data} destinationType={destinationType}></TimeTable>
+          <TimeTableComponent data={data} destinationType={destinationType}></TimeTableComponent>
         </div>
       </div>
     </SelectedTrainProvider>
