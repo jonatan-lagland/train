@@ -18,8 +18,7 @@ export type NextStationDataProps = {
  * Hook that takes in train data and sorts it by scheduledTime and returns the latest train by default.
  * If liveEstimateData exists, use that instead.
  * Has a side effect that compares the current time to timestamps in the timetable data. If a train has already arrived,
- * return the next train's data from the array. If all of the data is stale, meaning all trains have passsed,
- * cause a refresh of the page in an attempt to re-fetch data.
+ * return the next train's data from the array.
  *
  * @export
  * @param {TimeTable[]} data - An array of train data.
@@ -79,8 +78,6 @@ export default function useSortedStationData(data: TimeTable[], selectedTrainNum
             return timeA - timeB;
         });
 
-        let isStaleData = true;
-
         // By default, pick a train that is going to arrive or depart earliest
         for (let i = 0; i < sortedData.length; i++) {
             const currentTimestamp = sortedData[i].liveEstimateTime
@@ -99,13 +96,8 @@ export default function useSortedStationData(data: TimeTable[], selectedTrainNum
                     stationNextTrainTrack: sortedData[i]?.commercialTrack,
                 });
                 setTrainNumber(sortedData[i]?.trainNumber)
-                isStaleData = false;
                 break;
             }
-        }
-        // If all trains have passed, refresh the page
-        if (isStaleData && sortedData.length > 0) {
-            router.refresh();
         }
     }, [timeStampNow, data, router, selectedTrainNumber, setTrainNumber]);
 
