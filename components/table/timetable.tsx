@@ -298,7 +298,7 @@ export const createColumns = ({ tableType, locale, translation, selectedTrainNum
                 const { trainType, trainNumber, liveEstimateTime, scheduledTime, cancelled } = row.original;
                 const iconColor = selectedTrainNumber === trainNumber ? '#3e64ed' : '#646770'
                 const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
-                const isButtonDisabled = selectedTrainNumber === undefined || liveDateTime < Date.now() || cancelled;
+                const isButtonDisabled = liveDateTime < Date.now() || cancelled;
 
                 return <div className="flex flex-col items-center justify-center">
                     <Button disabled={isButtonDisabled} variant={'ghost'} onClick={() => handleButtonClick(trainNumber)}>

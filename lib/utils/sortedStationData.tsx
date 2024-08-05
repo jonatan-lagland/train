@@ -66,9 +66,9 @@ export default function useSortedStationData(data: TimeTable[], selectedTrainNum
                         stationNextTrainNumber: selectedTrainData.trainNumber,
                         stationNextTrainTrack: selectedTrainData.commercialTrack,
                     });
+                    // Exit early
+                    return;
                 }
-                // Exit early
-                return;
             }
         }
 
