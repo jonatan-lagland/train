@@ -31,7 +31,7 @@ type GenerateMetadataProps = {
   searchParams: {
     type: string
     destination?: string
-    commuter: boolean
+    commuter: string
   }
 }
 
@@ -42,7 +42,7 @@ export async function generateMetadata({ params, searchParams }: GenerateMetadat
   const t = await getTranslations('MetaData')
   const cityAndDestinationStr = destination ? `${capitalizeTitle(cityLabel)} — ${destination}` : capitalizeTitle(cityLabel)
   const typeStr = type === 'departure' ? t('titleDeparture') : t('titleArrival')
-  const typeAndCommuterStr = commuter ? t('commuterTrains') : typeStr
+  const typeAndCommuterStr = commuter === 'true' ? t('commuterTrains') : typeStr
 
   return {
     title: `${cityAndDestinationStr} | ${typeAndCommuterStr}`,
