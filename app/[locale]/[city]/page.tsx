@@ -81,12 +81,12 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
           </div>
           <div className="absolute -z-10 w-full h-full items-center">
             <Image
-              src="/tapio-haaja-XEjE_7wXAI8-unsplash.jpg"
+              src="https://images.unsplash.com/photo-1588362993297-0a0da36f268d"
               fill
               style={{ objectFit: 'cover' }}
               alt="Banner"
               priority={true}
-              quality={80}
+              quality={30}
               sizes="(max-width: 600px) 600px, 
            (max-width: 1200px) 1400px, 
            1800px"

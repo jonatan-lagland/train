@@ -25,7 +25,7 @@ const ImageTile = ({ src, alt, title, delay, locale, href }: ImageTileProps) => 
                 <Image
                     src={src}
                     fill
-                    quality={25}
+                    quality={10}
                     style={{ objectFit: 'cover' }}
                     alt={''}
                     sizes=",
