@@ -55,7 +55,7 @@
         "titleDeparture": "Lähtevät Junat",
         "titleArrival": "Saapuvat Junat",
         "commuterTrains": "Paikallisjunat",
-        "description": "Seuraa VR:n juna-aikatauluja reaaliajassa. Pääset käsiksi ajantasaisiin aikatauluihin, reittitietoihin ja laituritietoihin varmistaaksesi sujuvan matkan Suomen rautatieverkossa."
+        "description": "Seuraa Suomen juna-aikatauluja reaaliajassa. Pääset käsiksi ajantasaisiin aikatauluihin, reittitietoihin ja laituritietoihin varmistaaksesi sujuvan matkan Suomen rautatieverkossa."
     },
     "NotFoundPage": {
         "title": "Sivua ei löytynyt",

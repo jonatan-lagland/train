@@ -55,7 +55,7 @@
         "titleDeparture": "Avgående tåg",
         "titleArrival": "Ankommande tåg",
         "commuterTrains": "Pendeltåg",
-        "description": "Följ VR:s tågtidtabeller i realtid i Finland. Få tillgång till aktuella tidtabeller, ruttinformation och plattformsdetaljer för att säkerställa en smidig resa genom det finska järnvägsnätet."
+        "description": "Följ tågtidtabeller i realtid i Finland. Få tillgång till aktuella tidtabeller, ruttinformation och plattformsdetaljer för att säkerställa en smidig resa genom det finska järnvägsnätet."
     },
     "NotFoundPage": {
         "title": "Sidan hittades inte",

@@ -55,7 +55,7 @@
         "titleDeparture": "Departing Trains",
         "titleArrival": "Arriving Trains",
         "commuterTrains": "Commuter Trains",
-        "description": "Track real-time VR train timetables in Finland. Access up-to-date schedules, route information, and platform details to ensure a smooth journey across the Finnish rail network."
+        "description": "Track real-time train timetables in Finland. Access up-to-date schedules, route information, and platform details to ensure a smooth journey across the Finnish rail network."
     },
     "NotFoundPage": {
         "title": "Page Not Found",
