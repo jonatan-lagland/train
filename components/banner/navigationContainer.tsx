@@ -7,7 +7,7 @@ import { CaretSortIcon, CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
 import { cn } from '@/lib/utils';
 import { useTranslations, useLocale } from 'next-intl';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import sanitizeStationName from '@/lib/utils/sanitizeStationName';
 import { StationMetadataContext } from '@/lib/context/StationMetadataContext';
 import capitalizeTitle from '@/lib/utils/capitalizeTitle';
@@ -20,8 +20,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
-    useFormField,
+    FormMessage
 } from "@/components/ui/form"
 import { useForm } from 'react-hook-form';
 import { SpinnerSm } from '../ui/spinner';
@@ -126,7 +125,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
         <div className='flex flex-col items-center justify-center'>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8 shadow-md px-6 py-6 bg-white rounded-lg justify-between">
-                    {title ? <span className='py-6 text-4xl font-robotoslab text-start font-semibold w-48'>{title}</span> : null}
+                    {title ? <span className='text-4xl font-robotoslab text-start font-semibold w-48'>{title}</span> : null}
                     <div className='flex flex-row'>
                         <div className='flex flex-row items-center justify-between gap-1 order-last'>
                             <Button

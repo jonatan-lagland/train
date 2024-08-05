@@ -18,7 +18,7 @@ type fetchLiveDestinationTrainProps = {
  */
 
 async function fetchLiveDestinationTrain({ departure_station, arrival_station, isCommuter }: fetchLiveDestinationTrainProps): Promise<Train[] | TrainError | []> {
-    if (isCommuter === 'true') amount = 60; // Fetch more for commuter
+    if (isCommuter === 'true') amount = 50; // Fetch more for commuter
     const URL = `https://rata.digitraffic.fi/api/v1/live-trains/station/${departure_station}/${arrival_station}?limit=${amount}`;
     try {
         const response = await fetch(

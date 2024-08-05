@@ -65,29 +65,19 @@ const MarkerPosition = ({ position, trainIcon, data, trainSpeedLabel, trainNumbe
     const currentPosition = useRef(position);
     const previousTrainNumber: MutableRefObject<null | number> = useRef(null);
     const trainNumber = data[0]?.trainNumber;
-    const animationRef = useRef(null); // Reference to control animation
 
     useEffect(() => {
-        // Animate marker is the same train is still in question
-        if (previousTrainNumber.current === trainNumber) {
-            animateMarker(markerRef, currentPosition, position, animationRef);
-            currentPosition.current = position;
-            previousTrainNumber.current = trainNumber;
-            return;
-        }
-        // If train number changes, stop ongoing animation
-        if (animationRef.current) {
-            cancelAnimationFrame(animationRef.current);
-        }
         // Instantly snap map and marker to new position
         if (markerRef.current) {
             markerRef.current.setLatLng(position);
+        }
+        // Re-adjust map if train number changes
+        if (previousTrainNumber.current !== trainNumber) {
             map.setView(position, 7, { animate: true });
         }
         currentPosition.current = position;
         previousTrainNumber.current = trainNumber;
     }, [map, position, trainNumber]);
-
 
     return (
         <>
