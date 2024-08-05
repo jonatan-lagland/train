@@ -47,7 +47,8 @@
         "submitButton": "Hitta en rutt",
         "errorSelectLocation": "Vänligen välj en plats.",
         "search": "Sök",
-        "commuterRail": "Sök efter pendeltåg"
+        "commuterRail": "Sök efter pendeltåg",
+        "title": "Börja med att välja en resa."
     },
     "MetaData": {
         "title": "Tågtidtabeller",
@@ -67,6 +68,6 @@
     },
     "Landing": {
         "header": "Suomilinja",
-        "subheader": "Uppdaterad information från det finska järnvägsnätet"
+        "subheader": "...Eller utforska en av platserna nedan."
     }
 }

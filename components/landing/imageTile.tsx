@@ -16,10 +16,10 @@ type ImageTileProps = {
 const ImageTile = ({ src, alt, title, delay, locale, href }: ImageTileProps) => (
     <Link href={`/${locale}/${href}`} passHref>
         <motion.div
-            className="relative w-full h-48 md:h-64 cursor-pointer overflow-hidden group rounded-lg"
+            className={`relative h-44 md:h-64 w-full md:w-48 cursor-pointer overflow-hidden group rounded-lg`}
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay }}
+            transition={{ duration: 1.4, delay }}
         >
             <div className="absolute inset-0 transition-transform duration-300 transform group-hover:scale-105">
                 <Image

@@ -91,7 +91,7 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
            1800px"
               className="drop-shadow-lg"
             />
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/70 to-transparent"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/70 to-black/25"></div>
           </div>
         </div>
         <div className='grid grid-cols-1 grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-1 gap-14 md:gap-0 py-8 md:px-6 px-1'>

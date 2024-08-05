@@ -47,7 +47,8 @@
         "submitButton": "Hae matkoja",
         "errorSelectLocation": "Ole hyvä ja valitse sijainti.",
         "search": "Hae",
-        "commuterRail": "Hae paikallisjunia"
+        "commuterRail": "Hae paikallisjunia",
+        "title": "Aloita valitsemalla matka."
     },
     "MetaData": {
         "title": "Juna-aikataulut",
@@ -67,6 +68,6 @@
     },
     "Landing": {
         "header": "Suomilinja",
-        "subheader": "Ajan tasalla olevaa tietoa Suomen rataverkosta"
+        "subheader": "...Tai tutustu johonkin alla olevista sijainneista."
     }
 }

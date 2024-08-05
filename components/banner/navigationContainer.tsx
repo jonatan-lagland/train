@@ -21,6 +21,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
+    useFormField,
 } from "@/components/ui/form"
 import { useForm } from 'react-hook-form';
 import { SpinnerSm } from '../ui/spinner';
@@ -30,9 +31,10 @@ import { Checkbox } from '../ui/checkbox';
 type DestinationType = "departure" | "arrival" | undefined;
 type NavigationContainerProps = {
     isNotFoundPage?: boolean
+    title?: string
 }
 
-function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
+function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps) {
     const stationMetadata = useContext(StationMetadataContext)
     const [isDisableRadioButtons, setIsDisableRadioButtons] = useState(false)
     const t = useTranslations()
@@ -120,181 +122,184 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
         }
     }, [defaultCity, destinationParam, form]);
 
-
-
     return (
-        <div className='flex flex-row items-center justify-center h-96'>
+        <div className='flex flex-col items-center justify-center'>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col p-4 gap-6 shadow-md bg-white rounded-lg px-6 justify-between">
-                    <div className="flex flex-col gap-4">
-                        <FormField
-                            control={form.control}
-                            name="location"
-                            render={({ field }) => (
-                                <FormItem className='flex flex-col gap-1 items-start'>
-                                    <FormLabel className='pointer-events-none'>{t('TimeTable.origin')}</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    disabled={isPending}
-                                                    variant="outline"
-                                                    role="combobox"
-                                                    className={cn(
-                                                        "w-[200px] justify-between",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    <span className='truncate'>
-                                                        {field.value ? capitalizeTitle(field.value) : placeholderLabel}
-                                                    </span>
-                                                    <div className='flex flex-row justify-end'>
-                                                        {field.value && (
-                                                            <Cross2Icon
-                                                                className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    form.resetField("location")
-                                                                }}
-                                                            />
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8 shadow-md px-6 py-6 bg-white rounded-lg justify-between">
+                    {title ? <span className='py-6 text-4xl font-robotoslab text-start font-semibold w-48'>{title}</span> : null}
+                    <div className='flex flex-row'>
+                        <div className='flex flex-row items-center justify-between gap-1 order-last'>
+                            <Button
+                                disabled={!locationValue || !destinationValue}
+                                variant="ghost"
+                                role="swap"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    const currentLocation = form.getValues("location");
+                                    const currentDestination = form.getValues("destination") as string;
+                                    form.setValue("location", currentDestination);
+                                    form.setValue("destination", currentLocation);
+                                }}
+                            >
+                                <SwapVert color="action" />
+                            </Button>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <FormField
+                                control={form.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem className='flex flex-col gap-1 items-start'>
+                                        <div className=' h-4'>
+                                            <FormMessage></FormMessage>
+                                        </div>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        disabled={isPending}
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-[200px] justify-between",
+                                                            !field.value && "text-muted-foreground"
                                                         )}
-                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </div>
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-[200px] p-0">
-                                            <Command>
-                                                <CommandInput placeholder={t("Navigation.searchCity")} className="h-9" />
-                                                <CommandEmpty>{t("Navigation.searchnotfound")}</CommandEmpty>
-                                                <CommandList>
-                                                    <CommandGroup>
-                                                        {stationMetadata.map((station) => {
-                                                            const sanitizedStationName = sanitizeStationName(station.stationName)
-                                                            return (
-                                                                <CommandItem
-                                                                    key={station.stationShortCode}
-                                                                    value={sanitizedStationName}
-                                                                    onSelect={() => {
-                                                                        form.setValue("location", sanitizedStationName)
+                                                    >
+                                                        <span className='truncate'>
+                                                            {field.value ? capitalizeTitle(field.value) : t('TimeTable.origin')}
+                                                        </span>
+                                                        <div className='flex flex-row justify-end'>
+                                                            {field.value && (
+                                                                <Cross2Icon
+                                                                    className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        form.resetField("location")
                                                                     }}
-                                                                >
-                                                                    <Check
-                                                                        className={cn(
-                                                                            "mr-2 h-4 w-4",
-                                                                            station.stationShortCode === field.value
-                                                                                ? "opacity-100"
-                                                                                : "opacity-0"
-                                                                        )}
-                                                                    />
-                                                                    <span className="capitalize">{sanitizedStationName}</span>
+                                                                />
+                                                            )}
+
+                                                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </div>
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[200px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder={t("Navigation.searchCity")} className="h-9" />
+                                                    <CommandEmpty>{t("Navigation.searchnotfound")}</CommandEmpty>
+                                                    <CommandList>
+                                                        <CommandGroup>
+                                                            {stationMetadata.map((station) => {
+                                                                const sanitizedStationName = sanitizeStationName(station.stationName)
+                                                                return (
+                                                                    <CommandItem
+                                                                        key={station.stationShortCode}
+                                                                        value={sanitizedStationName}
+                                                                        onSelect={() => {
+                                                                            form.setValue("location", sanitizedStationName)
+                                                                        }}
+                                                                    >
+                                                                        <Check
+                                                                            className={cn(
+                                                                                "mr-2 h-4 w-4",
+                                                                                station.stationShortCode === field.value
+                                                                                    ? "opacity-100"
+                                                                                    : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                        <span className="capitalize">{sanitizedStationName}</span>
 
 
-                                                                </CommandItem>
-                                                            );
-                                                        })}
-                                                    </CommandGroup>
-                                                </CommandList>
-                                            </Command>
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="destination"
-                            render={({ field }) => (
-                                <FormItem className='flex flex-col gap-1'>
-                                    <div className='flex flex-row items-center justify-between gap-1'>
-                                        <FormLabel className='pointer-events-none'>{t('TimeTable.destination')}</FormLabel>
-                                        <Button
-                                            disabled={!locationValue || !destinationValue}
-                                            variant="ghost"
-                                            role="swap"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                const currentLocation = form.getValues("location");
-                                                const currentDestination = field.value as string;
-                                                form.setValue("location", currentDestination);
-                                                form.setValue("destination", currentLocation);
-                                            }}
-                                        >
-                                            <SwapVert color="action" />
-                                        </Button>
-                                    </div>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    disabled={isPending}
-                                                    variant="outline"
-                                                    role="combobox"
-                                                    className={cn(
-                                                        "w-[200px] justify-between",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    <span className='truncate'>
-                                                        {field.value ? capitalizeTitle(field.value) : placeholderLabel}
-                                                    </span>
-                                                    <div className='flex flex-row justify-end'>
-                                                        {field.value && (
-                                                            <Cross2Icon
-                                                                className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    form.resetField("destination")
-                                                                }}
-                                                            />
+                                                                    </CommandItem>
+                                                                );
+                                                            })}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="destination"
+                                render={({ field }) => (
+                                    <FormItem className='flex flex-col gap-1'>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        disabled={isPending}
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-[200px] justify-between",
+                                                            !field.value && "text-muted-foreground"
                                                         )}
-                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </div>
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-[200px] p-0">
-                                            <Command>
-                                                <CommandInput placeholder={t("Navigation.searchCity")} className="h-9" />
-                                                <CommandEmpty>{t("Navigation.searchnotfound")}</CommandEmpty>
-                                                <CommandList>
-                                                    <CommandGroup>
-                                                        {stationMetadata.map((station) => {
-                                                            const sanitizedStationName = sanitizeStationName(station.stationName)
-                                                            return (
-                                                                <CommandItem
-                                                                    key={station.stationShortCode}
-                                                                    value={sanitizedStationName}
-                                                                    onSelect={() => {
-                                                                        form.setValue("destination", sanitizedStationName)
+                                                    >
+                                                        <span className='truncate'>
+                                                            {field.value ? capitalizeTitle(field.value) : t('TimeTable.destination')}
+                                                        </span>
+                                                        <div className='flex flex-row justify-end'>
+                                                            {field.value && (
+                                                                <Cross2Icon
+                                                                    className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        form.resetField("destination")
                                                                     }}
-                                                                >
-                                                                    <span className="capitalize">{sanitizedStationName}</span>
+                                                                />
+                                                            )}
+                                                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </div>
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[200px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder={t("Navigation.searchCity")} className="h-9" />
+                                                    <CommandEmpty>{t("Navigation.searchnotfound")}</CommandEmpty>
+                                                    <CommandList>
+                                                        <CommandGroup>
+                                                            {stationMetadata.map((station) => {
+                                                                const sanitizedStationName = sanitizeStationName(station.stationName)
+                                                                return (
+                                                                    <CommandItem
+                                                                        key={station.stationShortCode}
+                                                                        value={sanitizedStationName}
+                                                                        onSelect={() => {
+                                                                            form.setValue("destination", sanitizedStationName)
+                                                                        }}
+                                                                    >
+                                                                        <span className="capitalize">{sanitizedStationName}</span>
 
-                                                                    <CheckIcon
-                                                                        className={cn(
-                                                                            "ml-auto h-4 w-4",
-                                                                            station.stationShortCode === field.value ? "opacity-100" : "opacity-0"
-                                                                        )}
-                                                                    />
-                                                                </CommandItem>
-                                                            );
-                                                        })}
-                                                    </CommandGroup>
-                                                </CommandList>
-                                            </Command>
-                                        </PopoverContent>
-                                    </Popover>
-                                </FormItem>
-                            )}
-                        />
+                                                                        <CheckIcon
+                                                                            className={cn(
+                                                                                "ml-auto h-4 w-4",
+                                                                                station.stationShortCode === field.value ? "opacity-100" : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                    </CommandItem>
+                                                                );
+                                                            })}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
+
                     <FormField
                         control={form.control}
                         name="commuter"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row justify-start items-center space-y-0 gap-2">
+                            <FormItem className="flex flex-row justify-start items-center space-y-0 gap-3">
                                 <FormControl>
                                     <Checkbox
                                         checked={field.value}
@@ -302,13 +307,14 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
                                     />
                                 </FormControl>
                                 <div className="leading-none">
-                                    <FormLabel>
+                                    <FormLabel className='font-normal'>
                                         {t("Navigation.commuterRail")}
                                     </FormLabel>
                                 </div>
                             </FormItem>
                         )}
                     />
+
                     <div className='flex flex-grow flex-col gap-3 justify-between'>
                         <FormField
                             control={form.control}
@@ -344,8 +350,9 @@ function NavigationContainer({ isNotFoundPage }: NavigationContainerProps) {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={isPending} type="submit">{isPending ? <SpinnerSm></SpinnerSm> : t("Navigation.search")}</Button>
                     </div>
+                    <Button disabled={isPending} type="submit">{isPending ? <SpinnerSm></SpinnerSm> : t("Navigation.search")}</Button>
+
                 </form>
             </Form>
         </div>

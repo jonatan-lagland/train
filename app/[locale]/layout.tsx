@@ -37,10 +37,10 @@ export default function LocaleLayout({
                         <Nav />
                     </header>
                     {/* Main */}
-                    <main>
+                    <main className=' min-h-lvh'>
                         {children}
                     </main>
-                    <footer className="w-full h-full bg-inherit p-1 md:p-4 shadow-md border">
+                    <footer className="w-full h-full bg-inherit p-4 shadow-md border-y">
                         <Footer></Footer>
                     </footer>
                 </body>

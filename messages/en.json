@@ -47,7 +47,8 @@
         "submitButton": "Find a route",
         "errorSelectLocation": "Please select a location.",
         "search": "Search",
-        "commuterRail": "Search for commuter trains"
+        "commuterRail": "Search for commuter trains",
+        "title": "Start off by choosing a journey."
     },
     "MetaData": {
         "title": "Train timetables",
@@ -67,6 +68,6 @@
     },
     "Landing": {
         "header": "Suomilinja",
-        "subheader": "Up-to-date information from the Finnish railway network"
+        "subheader": "...Or, explore one of the locations below."
     }
 }

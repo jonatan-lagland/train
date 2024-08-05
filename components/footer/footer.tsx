@@ -8,8 +8,7 @@ import { Button } from '../ui/button';
 function Footer() {
     const t = useTranslations('TermsOfService')
     return (
-        <div className='flex justify-evenly items-center'>
-
+        <div className='flex flex-wrap md:justify-evenly justify-start items-center'>
             <Dialog>
                 <DialogTrigger asChild>
                     <Button className='text-blue-500' variant="ghost">Looking to hire a UX/UI developer?</Button>
@@ -32,8 +31,7 @@ function Footer() {
             <a href="https://www.digitraffic.fi/kayttoehdot/" target="_blank" rel="noopener noreferrer" className="text-blue-500">
                 <div className='flex flex-row items-center gap-1 text-sm hover:underline'>
                     <LaunchIcon fontSize='small'></LaunchIcon>
-                    <span className='block md:hidden'>{t("titleShort")}</span>
-                    <span className='md:block hidden'>{t("title")}</span>
+                    <span>{t("title")}</span>
                 </div>
             </a>
         </div>
