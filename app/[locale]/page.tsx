@@ -30,7 +30,7 @@ export default function Home() {
     return (
         <div className="grid grid-rows-[min-content_1fr] gap-16">
             <Header></Header>
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 py-8'>
                 <div className='flex items-center justify-center px-2'>
                     <ImageTileTitle delay={startDelay}>{subheader}</ImageTileTitle>
                 </div>

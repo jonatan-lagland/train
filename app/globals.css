@@ -151,3 +151,13 @@
   animation: pulsate 3s infinite;
 }
 
+.body-404 {
+  background: 
+                radial-gradient(circle at 25% 25%, #556b2f, transparent 50%),
+                radial-gradient(circle at 30% 30%, #ffd700, transparent 5%),
+                radial-gradient(circle at 10% 70%, #556b2f, transparent 30%), 
+                radial-gradient(circle at 50% 60%, #ffd700, transparent 20%), 
+                radial-gradient(circle at 70% 60%, #556b2f, transparent 50%), 
+                radial-gradient(circle at 80% 50%, #ffd700, transparent 20%);
+    background-color: #333;
+}

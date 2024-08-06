@@ -1,4 +1,5 @@
 import NavigationContainer from '@/components/banner/navigationContainer';
+import Footer from '@/components/footer/footer';
 import Nav from '@/components/nav/nav';
 export const dynamic = 'force-dynamic'
 import RouterBackButton from '@/components/ui/router-back';
@@ -18,38 +19,20 @@ export default function NotFound() {
     return (
         <html lang={locale}>
             <NextIntlClientProvider messages={messages}>
-                <body className='bg-[#F3F3F3] h-screen flex flex-col'>
-                    <header className='flex-row w-full flex shadow-md px-2 justify-evenly bg-white'>
+                <body className='flex flex-col body-404 h-screen'>
+                    <header className='flex-row w-full flex shadow-md justify-evenly bg-white'>
                         <Nav></Nav>
                     </header>
-                    <main className="flex flex-col h-screen">
-                        <div className="grid grid-rows-[1fr_4fr] grid-cols-1 md:grid-rows-1 md:grid-cols-[2fr_3fr] h-full p-1">
-                            <div className="flex items-start justify-center order-2 md:order-1 md:items-center">
-                                <NavigationContainer isNotFoundPage={true} />
+                    <main className="grid grid-rows-2">
+                        <div className="flex flex-col justify-center items-center p-2 gap-8">
+                            <div className='flex flex-col gap-2'>
+                                <h1 className="text-8xl font-robotoslab font-semibold text-white">404</h1>
+                                <h2 className="text-4xl font-robotoslab text-white">{t('title')}</h2>
+                                <h3 className="font-robotoslab text-white">{t('description')}</h3>
                             </div>
-                            <div className="flex flex-col items-center justify-center gap-8">
-                                <div className='flex flex-col gap-2'>
-                                    <h1 className="text-4xl text-center font-semibold text-white">{t('title')}</h1>
-                                    <h2 className="text-2xl text-center font-semibold text-white">{t('description')}</h2>
-                                </div>
-                                <RouterBackButton label={returnLabel}></RouterBackButton>
-                            </div>
+                            <RouterBackButton label={returnLabel}></RouterBackButton>
                         </div>
-                        <div className="absolute -z-10 w-full h-full items-center">
-                            <Image
-                                src="/tapio-haaja-zEQBpRm9iJA-unsplash.jpg"
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                alt="Banner"
-                                priority={true}
-                                quality={80}
-                                sizes="(max-width: 600px) 600px, 
-                   (max-width: 1200px) 1400px, 
-                   1800px"
-                                className="drop-shadow-lg"
-                            />
-                            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 to-transparent"></div>
-                        </div>
+                        <NavigationContainer isNotFoundPage={true} />
                     </main>
                 </body>
             </NextIntlClientProvider>
