@@ -46,8 +46,8 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
     const defaultCity = isNotFoundPage ? undefined : params.city as string;
     const destinationParam = isNotFoundPage ? undefined : searchParams.get('destination') as string;
     const typeParam = searchParams.get('type') as DestinationType;
-    const commuterParam = searchParams.get('commuter') as string;
-    const isCommuter = commuterParam === 'true' ? true : false; // search params are treated as a string
+    const commuterParam = searchParams.get('commuter');
+    const isCommuter = commuterParam?.toLowerCase() === 'true' ? true : false; // search params are treated as a string
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
@@ -57,7 +57,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
             required_error: locationRequired,
         }),
         destination: z.string().optional(),
-        commuter: z.boolean(),
+        commuter: z.boolean()
     })
 
     const initialDefaultValues = {
@@ -300,6 +300,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                             <FormItem className="flex flex-row justify-start items-center space-y-0 gap-3">
                                 <FormControl>
                                     <Checkbox
+                                        defaultChecked={field.value}
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
                                     />
