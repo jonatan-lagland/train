@@ -2,6 +2,7 @@ import { NextIntlClientProvider, useMessages } from 'next-intl';
 import Nav from "@/components/nav/nav";
 import { Besley, Inter, Roboto_Slab } from "next/font/google";
 import Footer from '@/components/footer/footer';
+import { Analytics } from '@vercel/analytics/react';
 
 const besley = Besley({
     subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function LocaleLayout({
                     {/* Main */}
                     <main className=' min-h-lvh'>
                         {children}
+                        <Analytics />
                     </main>
                     <footer className="w-full h-full bg-inherit p-4 shadow-md border-y">
                         <Footer></Footer>
