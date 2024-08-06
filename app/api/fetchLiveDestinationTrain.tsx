@@ -1,7 +1,6 @@
 import { Train, TrainError } from "@/lib/types";
 
 let amount = 30;
-const revalidateDuration: number = 120;
 
 type fetchLiveDestinationTrainProps = {
     departure_station: string
@@ -22,8 +21,7 @@ async function fetchLiveDestinationTrain({ departure_station, arrival_station, i
     const URL = `https://rata.digitraffic.fi/api/v1/live-trains/station/${departure_station}/${arrival_station}?limit=${amount}`;
     try {
         const response = await fetch(
-            URL,
-            { next: { revalidate: revalidateDuration } }
+            URL
         );
         const data: Train[] = await response.json();
         return data;

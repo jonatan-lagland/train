@@ -2,7 +2,6 @@
 import { Train, TrainDestination, TrainError } from "@/lib/types";
 
 let amount: number = 30;
-const revalidateDuration: number = 120;
 
 type fetchLiveTrainProps = {
     stationShortCode: string | undefined
@@ -26,16 +25,14 @@ async function fetchLiveTrain({ stationShortCode, type, isCommuter }: fetchLiveT
     try {
         if (type === 'ARRIVAL') {
             const response = await fetch(
-                arrivalTrains,
-                { next: { revalidate: revalidateDuration } }
+                arrivalTrains
             );
             const data: Train[] = await response.json();
             return data;
         }
         if (type === 'DEPARTURE') {
             const response = await fetch(
-                departingTrains,
-                { next: { revalidate: revalidateDuration } }
+                departingTrains
             );
             const data: Train[] = await response.json();
             return data;
