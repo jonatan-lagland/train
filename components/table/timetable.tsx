@@ -39,7 +39,6 @@ import { Skeleton } from "../ui/skeleton";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
 import { TimeTableRow, TrainDestination, TimeTable } from "@/lib/types";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
-
 export type Locale = 'en | se | fi'
 
 export type TimeTableProps = {
@@ -187,17 +186,29 @@ const ColorIcon = ({ currentScheduledTime, nextScheduledTime, cancelled }: Color
     const isPassedTrain = currentTime > currentScheduledTime;
 
     if (cancelled) {
-        return <div className="rounded-full w-3 h-3 bg-red-800"></div>;
+        return <div className="rounded-full absolute w-3 h-3 bg-red-800"></div>;
     }
 
     if (isOnGoingTrain) {
-        return <Skeleton className="rounded-full w-3 h-3 bg-yellow-500" />;
+        return (
+            <Skeleton className="rounded-full absolute w-3 h-3 bg-yellow-500" />
+        )
     }
     if (isPassedTrain) {
-        return <div className="rounded-full w-3 h-3 bg-green-800"></div>;
+        return (
+            <>
+                <div className="rounded-full absolute w-3 h-3 bg-green-800" />
+                <div className="w-1 bg-green-800 h-full"></div>
+            </>
+        )
     }
     // Return gray icon by default to signal a journey has not been started or completed
-    return <div className="rounded-full w-3 h-3 bg-neutral-400"></div>;
+    return (
+        <>
+            <div className="rounded-full absolute w-3 h-3 bg-neutral-400" />
+            <div className="w-1 bg-neutral-400 h-full"></div>
+        </>
+    )
 };
 
 type JourneyItemProps = {
@@ -229,7 +240,7 @@ const JourneyItem = ({ index, timeTableRow, journey, locale }: JourneyItemProps)
         <React.Fragment key={`fragment-${index}`}>
             {index % 2 === 0 && (
                 <>
-                    <li key={`icon-${index}`} className="flex items-center justify-start">
+                    <li key={`icon-${index}`} className="flex items-center relative justify-center px-4">
                         <ColorIcon currentScheduledTime={liveEstimateTime ?? dateTime} nextScheduledTime={nextScheduledTime} cancelled={cancelled} />
                     </li>
                     <li key={`station-${index}`} className="flex flex-col items-start justify-center">
@@ -483,7 +494,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                     className=""
                 />
             </div>
-            <div>
+            <Accordion type="single" collapsible>
                 <Table className="relative">
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -520,30 +531,26 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                                             </TableCell>
                                         ))}
                                     </TableRow>
-                                    <TableRow className="transition duration-300 ease-in-out hover:bg-inherit">
+                                    <TableRow className="hover:bg-inherit">
                                         <TableCell className="p-0" colSpan={row.getVisibleCells().length}>
-                                            <Accordion type="single" collapsible>
-                                                <AccordionItem className="border-none" value="item-1">
-                                                    <AccordionTrigger className="flex-row justify-end text-gray-500 items-center p-3 hover:bg-muted/50"></AccordionTrigger>
-                                                    <AccordionContent>
-                                                        <div className="pt-12 pb-0 px-4">
-                                                            <ul className="grid grid-cols-[1fr_min-content_1fr_5fr] w-full items-center gap-2">
-                                                                {row.original.trainJourney.map((journey, index) => {
-                                                                    return (
-                                                                        <JourneyItem
-                                                                            key={index}
-                                                                            index={index}
-                                                                            timeTableRow={(row.original.trainJourney) as TimeTableRow[]}
-                                                                            journey={journey}
-                                                                            locale={locale}
-                                                                        />
-                                                                    );
-                                                                })}
-                                                            </ul>
-                                                        </div>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            </Accordion>
+                                            <AccordionItem className="border-none" value={row.id}>
+                                                <AccordionTrigger className="flex-row justify-center gap-2 items-center p-3"></AccordionTrigger>
+                                                <AccordionContent className="flex flex-col items-center justify-center">
+                                                    <ol className="grid grid-cols-[min-content_min-content_1fr_min-content]">
+                                                        {row.original.trainJourney.map((journey, index) => {
+                                                            return (
+                                                                <JourneyItem
+                                                                    key={index}
+                                                                    index={index}
+                                                                    timeTableRow={(row.original.trainJourney) as TimeTableRow[]}
+                                                                    journey={journey}
+                                                                    locale={locale}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </ol>
+                                                </AccordionContent>
+                                            </AccordionItem>
                                         </TableCell>
                                     </TableRow>
                                 </React.Fragment>
@@ -596,7 +603,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </Accordion>
         </div>
     )
 }
