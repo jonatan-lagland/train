@@ -312,7 +312,11 @@ export const createColumns = ({ tableType, locale, translation, selectedTrainNum
                 const isButtonDisabled = liveDateTime < Date.now() || cancelled;
 
                 return <div className="flex flex-col items-center justify-center">
-                    <Button disabled={isButtonDisabled} variant={'ghost'} onClick={() => handleButtonClick(trainNumber)}>
+                    <Button
+                        aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
+                        disabled={isButtonDisabled}
+                        variant={'ghost'}
+                        onClick={() => handleButtonClick(trainNumber)}>
                         <PlaceIcon style={{ fill: iconColor }}></PlaceIcon>
                     </Button>
                     <span>{`${trainType} ${trainNumber}`}</span>
@@ -534,7 +538,9 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                                     <TableRow className="hover:bg-inherit">
                                         <TableCell className="p-0" colSpan={row.getVisibleCells().length}>
                                             <AccordionItem className="border-none" value={row.id}>
-                                                <AccordionTrigger className="flex-row justify-center gap-2 items-center p-3"></AccordionTrigger>
+                                                <AccordionTrigger
+                                                    aria-label={`${tTimeTable("ariaExpandButton")} ${row.original.trainType} ${row.original.trainNumber}`}
+                                                    className="flex-row justify-center gap-2 items-center p-3"></AccordionTrigger>
                                                 <AccordionContent className="flex flex-col items-center justify-center">
                                                     <ol className="grid grid-cols-[min-content_min-content_1fr_min-content]">
                                                         {row.original.trainJourney.map((journey, index) => {
@@ -567,6 +573,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                 <div className="flex items-start justify-end space-x-2 py-4 ">
                     <div className="flex flex-wrap items-center space-x-2">
                         <Button
+                            aria-label={t("Navigation.firstPage")}
                             variant="outline"
                             size="sm"
                             onClick={() => table.setPageIndex(0)}
@@ -575,6 +582,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                             <FirstPageIcon fontSize="small"></FirstPageIcon>
                         </Button>
                         <Button
+                            aria-label={t("Navigation.previousPage")}
                             variant="outline"
                             size="sm"
                             onClick={() => table.previousPage()}
@@ -586,6 +594,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                             <span>{table.getState().pagination.pageIndex + 1} / {table.getPageCount() === 0 ? 1 : table.getPageCount()}</span>
                         </div>
                         <Button
+                            aria-label={t("Navigation.nextPage")}
                             variant="outline"
                             size="sm"
                             onClick={() => table.nextPage()}
@@ -594,6 +603,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                             <KeyboardArrowRightIcon fontSize="small"></KeyboardArrowRightIcon>
                         </Button>
                         <Button
+                            aria-label={t("Navigation.lastPage")}
                             variant="outline"
                             size="sm"
                             onClick={() => table.setPageIndex(table.getPageCount() - 1)}

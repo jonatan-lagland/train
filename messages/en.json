@@ -28,14 +28,18 @@
         "trainSpeed": "Speed",
         "trainAccuracy": "Accuracy",
         "commuteSuggestion": "Search for commuter trains instead",
-        "commuterTrains": "Commuter Trains"
+        "commuterTrains": "Commuter Trains",
+        "ariaMapViewButton": "Select train to be shown in map view: ",
+        "ariaExpandButton": "Expand more information about train journey "
     },
     "AriaTimeTable": {
         "select": "Select all"
     },
     "Navigation": {
-        "next": "Next",
-        "previous": "Previous",
+        "nextPage": "Next page",
+        "previousPage": "Previous page",
+        "firstPage": "First page",
+        "lastPage": "Last page",
         "columns": "Columns",
         "searchnotfound": "No results.",
         "settingsTitle": "Settings",
@@ -48,7 +52,9 @@
         "errorSelectLocation": "Please select a location.",
         "search": "Search",
         "commuterRail": "Search for commuter trains",
-        "title": "Start off by choosing a journey."
+        "title": "Start off by choosing a journey.",
+        "selectLanguage": "Select a language",
+        "ariaSwapStation": "Swap train starting station and destination station"
     },
     "MetaData": {
         "title": "Train timetables",

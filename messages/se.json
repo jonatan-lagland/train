@@ -28,14 +28,18 @@
         "trainSpeed": "Hastighet",
         "trainAccuracy": "Noggrannhet",
         "commuteSuggestion": "Sök efter pendeltåg istället",
-        "commuterTrains": "Pendeltåg"
+        "commuterTrains": "Pendeltåg",
+        "ariaMapViewButton": "Välj tåg att visa i kartvy: ",
+        "ariaExpandButton": "Visa mer information om tågresan "
     },
     "AriaTimeTable": {
         "select": "Välj alla"
     },
     "Navigation": {
-        "next": "Nästa",
-        "previous": "Föregående",
+        "nextPage": "Nästa sidan",
+        "previousPage": "Föregående sidan",
+        "firstPage": "Första sidan",
+        "lastPage": "Sista sidan",
         "columns": "Kolumner",
         "searchnotfound": "Inga resultat.",
         "settingsTitle": "Inställningar",
@@ -48,7 +52,9 @@
         "errorSelectLocation": "Vänligen välj en plats.",
         "search": "Sök",
         "commuterRail": "Sök efter pendeltåg",
-        "title": "Börja med att välja en resa."
+        "title": "Börja med att välja en resa.",
+        "selectLanguage": "Välj ett språk",
+        "ariaSwapStation": "Byt startstation och destinationsstation för tåget"
     },
     "MetaData": {
         "title": "Tågtidtabeller",

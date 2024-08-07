@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select"
 import Image from "next/image"
 import { useRouter, usePathname } from "@/navigation"
+import { useTranslations } from "next-intl"
 
 export type Languages = {
     id: string
@@ -60,6 +61,7 @@ export function SelectLanguage({ languages, currentLanguageId, size = 24 }: Lang
     const label = currentLanguage?.label || 'Select a language';
     const router = useRouter();
     const pathname = usePathname();
+    const t = useTranslations("Navigation")
 
     const useChangeLocale = (selectedLanguage: string) => {
         router.replace(pathname, { locale: `${selectedLanguage}` });
@@ -68,11 +70,11 @@ export function SelectLanguage({ languages, currentLanguageId, size = 24 }: Lang
 
     return (
         <Select onValueChange={useChangeLocale}>
-            <SelectTrigger className="w-max">
+            <SelectTrigger className="w-max" aria-label={t("selectLanguage")}>
                 <SelectValue placeholder={
                     currentLanguage ?
                         <SelectItemLanguage lang={currentLanguage} size={size} displayLabel={true} /> :
-                        "Select a language" // Fallback placeholder text
+                        t("selectLanguage") // Fallback placeholder text
                 } />
             </SelectTrigger>
             <SelectContent>

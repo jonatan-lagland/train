@@ -130,7 +130,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                             <Button
                                 disabled={!locationValue || !destinationValue}
                                 variant="ghost"
-                                role="swap"
+                                aria-label={t("Navigation.ariaSwapStation")}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     const currentLocation = form.getValues("location");
@@ -157,6 +157,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                                     <Button
                                                         disabled={isPending}
                                                         variant="outline"
+                                                        aria-label={t("TimeTable.nextDeparture")}
                                                         role="combobox"
                                                         className={cn(
                                                             "w-[200px] justify-between",
@@ -231,6 +232,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                                     <Button
                                                         disabled={isPending}
                                                         variant="outline"
+                                                        aria-label={t("TimeTable.nextDestination")}
                                                         role="combobox"
                                                         className={cn(
                                                             "w-[200px] justify-between",
@@ -300,16 +302,15 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                             <FormItem className="flex flex-row justify-start items-center space-y-0 gap-3">
                                 <FormControl>
                                     <Checkbox
+                                        aria-labelledby='form-label-commuter'
                                         defaultChecked={field.value}
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
-                                <div className="leading-none">
-                                    <FormLabel className='font-normal'>
-                                        {t("Navigation.commuterRail")}
-                                    </FormLabel>
-                                </div>
+                                <FormLabel id='form-label-commuter' className='font-normal'>
+                                    {t("Navigation.commuterRail")}
+                                </FormLabel>
                             </FormItem>
                         )}
                     />
@@ -329,17 +330,17 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                         >
                                             <FormItem className="flex items-center space-x-3 space-y-0">
                                                 <FormControl>
-                                                    <RadioGroupItem value="departure" />
+                                                    <RadioGroupItem aria-labelledby='form-label-outgoing' value="departure" />
                                                 </FormControl>
-                                                <FormLabel className="font-normal">
+                                                <FormLabel id='form-label-outgoing' className="font-normal">
                                                     {t("TimeTable.outgoing")}
                                                 </FormLabel>
                                             </FormItem>
                                             <FormItem className="flex items-center space-x-3 space-y-0">
                                                 <FormControl>
-                                                    <RadioGroupItem value="arrival" />
+                                                    <RadioGroupItem aria-labelledby='form-label-incoming' value="arrival" />
                                                 </FormControl>
-                                                <FormLabel className="font-normal">
+                                                <FormLabel id='form-label-incoming' className="font-normal">
                                                     {t("TimeTable.incoming")}
                                                 </FormLabel>
                                             </FormItem>

@@ -28,14 +28,18 @@
         "trainSpeed": "Nopeus",
         "trainAccuracy": "Tarkkuus",
         "commuteSuggestion": "Hae sen sijaan paikallisjunia",
-        "commuterTrains": "Paikallisjunat"
+        "commuterTrains": "Paikallisjunat",
+        "ariaMapViewButton": "Valitse karttanäkymässä näytettävä juna: ",
+        "ariaExpandButton": "Laajenna lisätietoja junamatkasta "
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"
     },
     "Navigation": {
-        "next": "Seuraava",
-        "previous": "Edellinen",
+        "nextPage": "Seuraava sivu",
+        "previousPage": "Edellinen sivu",
+        "firstPage": "Ensimmäinen sivu",
+        "lastPage": "Viimeinen sivu",
         "columns": "Sarake",
         "searchnotfound": "Haulle ei löytynyt tuloksia.",
         "settingsTitle": "Asetukset",
@@ -48,7 +52,9 @@
         "errorSelectLocation": "Ole hyvä ja valitse sijainti.",
         "search": "Hae",
         "commuterRail": "Hae paikallisjunia",
-        "title": "Aloita valitsemalla matka."
+        "title": "Aloita valitsemalla matka.",
+        "selectLanguage": "Valitse kieli",
+        "ariaSwapStation": "Vaihda junan lähtöasema ja määränpääasema"
     },
     "MetaData": {
         "title": "Juna-aikataulut",
