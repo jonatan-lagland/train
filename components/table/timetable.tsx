@@ -505,7 +505,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} className="py-2">
+                                        <TableHead key={header.id} className="py-2  text-secondary-foreground">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -590,7 +590,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                         >
                             <KeyboardArrowLeftIcon fontSize="small"></KeyboardArrowLeftIcon>
                         </Button>
-                        <div className="flex-1 text-sm text-muted-foreground">
+                        <div className="flex-1 text-sm text-secondary-foreground">
                             <span>{table.getState().pagination.pageIndex + 1} / {table.getPageCount() === 0 ? 1 : table.getPageCount()}</span>
                         </div>
                         <Button

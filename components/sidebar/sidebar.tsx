@@ -48,7 +48,7 @@ function Sidebar({ data, destinationType }: SidebarProps) {
                                 </span>
 
                                 <div className='flex flex-wrap'>
-                                    <span className='font-bold text-4xl text-blue-400'>
+                                    <span className='font-bold text-4xl text-blue-500'>
                                         {stationNextName}
                                     </span>
                                     <div className='flex flex-grow items-center justify-center'>

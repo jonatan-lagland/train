@@ -11,7 +11,7 @@ function Footer() {
         <div className='flex flex-wrap md:justify-evenly justify-start items-center'>
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button className='text-blue-500' variant="ghost">Looking to hire a UX/UI developer?</Button>
+                    <Button className='text-blue-600' variant="ghost">Looking to hire a UX/UI developer?</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px] z-[9999]">
                     <DialogHeader>
@@ -28,7 +28,7 @@ function Footer() {
                 </DialogContent>
             </Dialog>
 
-            <a href="https://www.digitraffic.fi/kayttoehdot/" target="_blank" rel="noopener noreferrer" className="text-blue-500">
+            <a href="https://www.digitraffic.fi/kayttoehdot/" target="_blank" rel="noopener noreferrer" className="text-blue-600">
                 <div className='flex flex-row items-center gap-1 text-sm hover:underline'>
                     <LaunchIcon fontSize='small'></LaunchIcon>
                     <span>{t("title")}</span>
