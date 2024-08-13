@@ -8,7 +8,6 @@ export const SpinnerSm = () => {
     );
 };
 
-
 export const SpinnerMd = () => {
     return (
         <div className="flex items-center justify-center h-screen">
@@ -17,3 +16,12 @@ export const SpinnerMd = () => {
     );
 };
 
+export const AnimatedEllipses = () => {
+    return (
+        <div className="flex space-x-2">
+            <div className="ellipsis bg-gray-500 w-2 h-2 rounded-full animate-bounce delay-300"></div>
+            <div className="ellipsis bg-gray-500 w-2 h-2 rounded-full animate-bounce delay-100"></div>
+            <div className="ellipsis bg-gray-500 w-2 h-2 rounded-full animate-bounce"></div>
+        </div>
+    )
+}

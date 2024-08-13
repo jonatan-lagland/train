@@ -3,6 +3,8 @@ import { useTranslations } from "next-intl"
 import { SiteLocale, TimeTable, TrainDestination } from "@/lib/types"
 import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
+import { AnimatedEllipses, SpinnerMd, SpinnerSm } from "../ui/spinner"
+import { Skeleton } from "../ui/skeleton"
 
 
 type ArrivalTimestampProps = {
@@ -50,10 +52,13 @@ export default function ArrivalTimestamp({ city, destinationType, locale, statio
         }
     }, [stationNextTimestamp, timeStampNow, translation, locale, destinationType, decodedCity, stationNextTrainTrack]);
 
-    const [localizedLabel, setLocalizedLabel] = useState<JSX.Element>(calculateLocalizedLabel);
+    const [localizedLabel, setLocalizedLabel] = useState<JSX.Element>(
+        <AnimatedEllipses></AnimatedEllipses>
+    );
 
     useEffect(() => {
-        setLocalizedLabel(calculateLocalizedLabel());
+        const localizedLabel = calculateLocalizedLabel();
+        setLocalizedLabel(localizedLabel);
     }, [calculateLocalizedLabel]);
 
     return (

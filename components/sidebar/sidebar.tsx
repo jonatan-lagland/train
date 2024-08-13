@@ -37,7 +37,7 @@ function Sidebar({ data, destinationType }: SidebarProps) {
 
     return (
         <div className='flex flex-col gap-5 px-4 max-w-lg'>
-            <div className='grid grid-rows-[min-content_1fr]'>
+            <div className='grid grid-rows-[min-content_min_content]'>
                 {data.length === 0 ? null :
                     <>
                         <div className='flex flex-wrap justify-between py-8'>
@@ -61,18 +61,19 @@ function Sidebar({ data, destinationType }: SidebarProps) {
                         </div>
                     </>
                 }
-                <ArrivalTimestamp
-                    city={city}
-                    destinationType={destinationType}
-                    locale={locale}
-                    stationNextTimestamp={stationNextTimestamp}
-                    stationNextTrainTrack={stationNextTrainTrack}
-                    timeStampNow={timeStampNow}
-                    data={data}
-                    commuterLink={commuterLink}
-                >
-                </ArrivalTimestamp>
-
+                <div className='flex items-center justify-center h-16'>
+                    <ArrivalTimestamp
+                        city={city}
+                        destinationType={destinationType}
+                        locale={locale}
+                        stationNextTimestamp={stationNextTimestamp}
+                        stationNextTrainTrack={stationNextTrainTrack}
+                        timeStampNow={timeStampNow}
+                        data={data}
+                        commuterLink={commuterLink}
+                    >
+                    </ArrivalTimestamp>
+                </div>
             </div>
             <div ref={sidebarRef} className='flex flex-col gap-2'>
                 <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
