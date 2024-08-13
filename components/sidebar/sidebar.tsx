@@ -61,7 +61,7 @@ function Sidebar({ data, destinationType }: SidebarProps) {
                         </div>
                     </>
                 }
-                <div className='flex items-center justify-center h-16'>
+                <div className='flex items-center justify-center min-h-16'>
                     <ArrivalTimestamp
                         city={city}
                         destinationType={destinationType}

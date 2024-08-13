@@ -53,7 +53,9 @@ export default function ArrivalTimestamp({ city, destinationType, locale, statio
     }, [stationNextTimestamp, timeStampNow, translation, locale, destinationType, decodedCity, stationNextTrainTrack]);
 
     const [localizedLabel, setLocalizedLabel] = useState<JSX.Element>(
-        <AnimatedEllipses></AnimatedEllipses>
+        <div className="flex items-center justify-center h-16">
+            <AnimatedEllipses></AnimatedEllipses>
+        </div>
     );
 
     useEffect(() => {
