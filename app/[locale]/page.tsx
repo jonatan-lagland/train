@@ -1,8 +1,9 @@
 import { useLocale, useTranslations } from 'next-intl';
-import ImageTile from '@/components/landing/imageTile';
 import Header from '@/components/landing/header';
 import { getTranslations } from 'next-intl/server';
-import ImageTileTitle from '@/components/landing/imageTileTitle';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Card, CardContent } from '@mui/material';
+import ImageTileContainer, { ImageTile, ImageTileContainerTitle, ImageTileTitle } from '@/components/landing/imageTile';
 
 export async function generateMetadata() {
     const t = await getTranslations('MetaData')
@@ -32,11 +33,33 @@ export default function Home() {
             <Header></Header>
             <div className='flex flex-col gap-4 py-8'>
                 <div className='flex items-center justify-center px-2'>
-                    <ImageTileTitle delay={startDelay}>{subheader}</ImageTileTitle>
+                    <ImageTileContainerTitle delay={startDelay}>{subheader}</ImageTileContainerTitle>
                 </div>
-                <div className="grid grid-cols-1 md:flex md:flex-row md:flex-wrap md:grid-cols-none gap-2 px-2 items-center justify-center w-full">
+                <div className='flex items-center justify-center md:hidden '>
+                    <Carousel className="w-full max-w-sm ">
+                        <CarouselContent>
+                            {imageTiles.map((item, index) => (
+                                <CarouselItem key={index}>
+                                    <div className="p-1">
+                                        <Card>
+                                            <CardContent className="flex relative aspect-square items-center justify-center cursor-pointer">
+                                                <ImageTile src={item.src}></ImageTile>
+                                                <div className='absolute bottom-8 left-6 text-white'>
+                                                    <ImageTileTitle title={item.title}></ImageTileTitle>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                </div>
+                <div className="hidden md:flex flex-row flex-wrap grid-cols-none gap-2 px-2 items-center justify-center w-full">
                     {imageTiles.map((tile, index) => (
-                        <ImageTile key={index} delay={startDelay + index * 0.4} {...tile} />
+                        <ImageTileContainer key={index} delay={startDelay + index * 0.4} {...tile} />
                     ))}
                 </div>
             </div>

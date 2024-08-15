@@ -8,7 +8,7 @@ import { Button } from '../ui/button';
 function Footer() {
     const t = useTranslations('TermsOfService')
     return (
-        <div className='flex flex-wrap md:justify-evenly justify-start items-center'>
+        <div className='flex flex-wrap md:justify-evenly justify-center items-center'>
             <Dialog>
                 <DialogTrigger asChild>
                     <Button className='text-blue-600' variant="ghost">Looking to hire a UX/UI developer?</Button>

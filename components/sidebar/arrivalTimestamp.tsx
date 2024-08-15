@@ -27,6 +27,7 @@ type ArrivalTimestampProps = {
  * @param {string} props.stationNextTimestamp - Unix Timestamp of the next train arrival.
  * @param {number} props.stationNextTrainTrack - The train track of the next arriving train.
  * @param {TimeTable[]} props.data - Live train data, the length of which is evaluated.
+  @param {TimeTable[]} props.commuterLink - Link to the station's commuter page, which is presented optionally if no journeys are found.
  */
 export default function ArrivalTimestamp({ city, destinationType, locale, stationNextTimestamp, stationNextTrainTrack, timeStampNow, data, commuterLink }: ArrivalTimestampProps): React.ReactElement {
     const translation = useTranslations('TimeTable');
@@ -52,7 +53,7 @@ export default function ArrivalTimestamp({ city, destinationType, locale, statio
         }
     }, [stationNextTimestamp, timeStampNow, translation, locale, destinationType, decodedCity, stationNextTrainTrack]);
 
-    const [localizedLabel, setLocalizedLabel] = useState<JSX.Element>(
+    const [localizedLabel, setLocalizedLabel] = useState<React.JSX.Element>(
         <div className="flex items-center justify-center h-16">
             <AnimatedEllipses></AnimatedEllipses>
         </div>
