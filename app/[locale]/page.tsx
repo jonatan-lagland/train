@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Card, CardContent } from '@mui/material';
 import ImageTileContainer, { ImageTile, ImageTileContainerTitle, ImageTileTitle } from '@/components/landing/imageTile';
+import Link from 'next/link';
 
 export async function generateMetadata() {
     const t = await getTranslations('MetaData')
@@ -42,11 +43,13 @@ export default function Home() {
                                 <CarouselItem key={index}>
                                     <div className="p-1">
                                         <Card>
-                                            <CardContent className="flex relative aspect-square items-center justify-center cursor-pointer">
-                                                <ImageTile src={item.src}></ImageTile>
-                                                <div className='absolute bottom-8 left-6 text-white'>
-                                                    <ImageTileTitle title={item.title}></ImageTileTitle>
-                                                </div>
+                                            <CardContent>
+                                                <Link className='flex relative aspect-square items-center justify-center cursor-pointer' href={`/${locale}/${item.href}`} passHref>
+                                                    <ImageTile src={item.src}></ImageTile>
+                                                    <div className='absolute bottom-8 left-6 text-white'>
+                                                        <ImageTileTitle title={item.title}></ImageTileTitle>
+                                                    </div>
+                                                </Link>
                                             </CardContent>
                                         </Card>
                                     </div>
