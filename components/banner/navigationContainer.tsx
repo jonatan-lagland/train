@@ -48,6 +48,8 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
     const typeParam = searchParams.get('type') as DestinationType;
     const commuterParam = searchParams.get('commuter');
     const isCommuter = commuterParam?.toLowerCase() === 'true' ? true : false; // search params are treated as a string
+    const [locationOpen, setLocationOpen] = useState(false);
+    const [destinationOpen, setDestinationOpen] = useState(false);
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
@@ -151,10 +153,11 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                         <div className=' h-4'>
                                             <FormMessage></FormMessage>
                                         </div>
-                                        <Popover>
+                                        <Popover open={locationOpen} onOpenChange={setLocationOpen}>
                                             <PopoverTrigger asChild>
                                                 <FormControl>
                                                     <Button
+
                                                         disabled={isPending}
                                                         variant="outline"
                                                         aria-label={t("TimeTable.nextDeparture")}
@@ -196,7 +199,8 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                                                         key={station.stationShortCode}
                                                                         value={sanitizedStationName}
                                                                         onSelect={() => {
-                                                                            form.setValue("location", sanitizedStationName)
+                                                                            form.setValue("location", sanitizedStationName);
+                                                                            setLocationOpen(false);
                                                                         }}
                                                                     >
                                                                         <Check
@@ -226,7 +230,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                 name="destination"
                                 render={({ field }) => (
                                     <FormItem className='flex flex-col gap-1'>
-                                        <Popover>
+                                        <Popover open={destinationOpen} onOpenChange={setDestinationOpen}>
                                             <PopoverTrigger asChild>
                                                 <FormControl>
                                                     <Button
@@ -270,7 +274,8 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
                                                                         key={station.stationShortCode}
                                                                         value={sanitizedStationName}
                                                                         onSelect={() => {
-                                                                            form.setValue("destination", sanitizedStationName)
+                                                                            form.setValue("destination", sanitizedStationName);
+                                                                            setDestinationOpen(false);
                                                                         }}
                                                                     >
                                                                         <span className="capitalize">{sanitizedStationName}</span>
