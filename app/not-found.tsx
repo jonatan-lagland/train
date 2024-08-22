@@ -1,14 +1,29 @@
 import NavigationContainer from '@/components/banner/navigationContainer';
-import Footer from '@/components/footer/footer';
 import Nav from '@/components/nav/nav';
 export const dynamic = 'force-dynamic'
 import RouterBackButton from '@/components/ui/router-back';
 import { NextIntlClientProvider, useLocale, useMessages, useTranslations } from 'next-intl';
-import Image from 'next/image';
+import { Besley, Inter, Roboto_Slab } from 'next/font/google';
 
 // Render the default Next.js 404 page when a route
 // is requested that doesn't match the middleware and
 // therefore doesn't have a locale associated with it.
+
+const besley = Besley({
+    subsets: ['latin'],
+    weight: ['400', '500', '600'],
+    variable: "--besley",
+});
+
+const inter = Inter({
+    subsets: ['latin'],
+    variable: "--inter",
+});
+const robotoslab = Roboto_Slab({
+    subsets: ['latin'],
+    weight: ['400', '500', '600'],
+    variable: "--robotoslab",
+});
 
 export default function NotFound() {
     const t = useTranslations('NotFoundPage');
@@ -19,7 +34,7 @@ export default function NotFound() {
     return (
         <html lang={locale}>
             <NextIntlClientProvider messages={messages}>
-                <body className='flex flex-col body-404 h-screen'>
+                <body className={`${inter.variable} ${besley.variable} ${robotoslab.variable} flex flex-col body-404 h-screen`}>
                     <header className='flex-row w-full flex shadow-md justify-evenly bg-white'>
                         <Nav></Nav>
                     </header>
