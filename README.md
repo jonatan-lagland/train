@@ -27,3 +27,22 @@ Suomilinja uses the lightweight, open-source JavaScript library [Leaflet](https:
 With the use of React's Server Components and optimizations like serving images in next-gen formats (webp), the website loads quickly for end-users, even with client side features such as the interactive map view. Fast load times are essential when end-users are travelling on a train, when internet speeds might fall short of what you'd expect from a populated area.
 
 ![Responsive design](public/lighthouse-score.png)
+
+### Unit Testing
+
+The website is built with Unit Tests, to ensure subsequent updates do not break existing features. Below is an example of a unit test for NavigationComponent:
+
+```javascript
+it('renders the swap button and expects it to be disabled by default', () => {
+    render(
+        <NextIntlClientProvider
+            locale="en"
+            messages={pick(messages, ['TimeTable', 'Navigation'])}
+        >
+            <NavigationComponent {...mockProps} />
+        </NextIntlClientProvider>
+    );
+    const swapButton = screen.getByTestId('swap-stations-button');
+    expect(swapButton).toBeInTheDocument();
+    expect(swapButton).toBeDisabled();
+});
