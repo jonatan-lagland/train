@@ -72,7 +72,7 @@ export type StationMetaData = {
     stationName: string,
     stationShortCode: string,
     stationUICCode: number,
-    countryCode: "FI" | "RU",
+    countryCode: string,
     longitude: number,
     latitude: number
 }

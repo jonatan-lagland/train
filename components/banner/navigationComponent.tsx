@@ -20,16 +20,13 @@ import { SpinnerSm } from '../ui/spinner';
 import { Check, SwapVert } from '@mui/icons-material';
 import { Checkbox } from '../ui/checkbox';
 import { StationMetaData, TrainDestinationParams } from '@/lib/types';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import NavigationUtils from './navigationUtils';
+import { useTranslations } from 'next-intl';
 
-type NavigationComponentProps = {
+export type NavigationComponentProps = {
     title?: string
-    stationMetadata: [] | StationMetaData[]
-    t: any
-    router: AppRouterInstance
     locale: string
-    locationRequired: string
+    stationMetadata: [] | StationMetaData[]
     defaultCity: string | undefined
     destinationParam: string | undefined
     typeParam: TrainDestinationParams
@@ -39,24 +36,23 @@ type NavigationComponentProps = {
 export default function NavigationComponent(props: NavigationComponentProps) {
     const {
         title,
-        stationMetadata,
-        t,
-        router,
         locale,
-        locationRequired,
+        stationMetadata,
         defaultCity,
         destinationParam,
         typeParam,
         isCommuter
     } = props;
 
+    const t = useTranslations()
+    const locationRequiredWarningText = t('Navigation.errorSelectLocation');
+
     const navigationUtilsParams = {
         typeParam,
         defaultCity,
         destinationParam,
         isCommuter,
-        locationRequired,
-        router,
+        locationRequiredWarningText,
         locale
     };
 
@@ -81,6 +77,7 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                     <div className='flex flex-row'>
                         <div className='flex flex-row items-center justify-between gap-1 order-last'>
                             <Button
+                                data-testid="swap-stations-button"
                                 disabled={!locationValue || !destinationValue}
                                 variant="ghost"
                                 aria-label={t("Navigation.ariaSwapStation")}
@@ -108,7 +105,7 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                                             <PopoverTrigger asChild>
                                                 <FormControl>
                                                     <Button
-
+                                                        data-testid="select-departure-station-button"
                                                         disabled={isPending}
                                                         variant="outline"
                                                         aria-label={t("TimeTable.nextDeparture")}
@@ -147,6 +144,7 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                                                                 const sanitizedStationName = sanitizeStationName(station.stationName)
                                                                 return (
                                                                     <CommandItem
+                                                                        role='option'
                                                                         key={station.stationShortCode}
                                                                         value={sanitizedStationName}
                                                                         onSelect={() => {
@@ -163,8 +161,6 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                                                                             )}
                                                                         />
                                                                         <span className="capitalize">{sanitizedStationName}</span>
-
-
                                                                     </CommandItem>
                                                                 );
                                                             })}
@@ -185,6 +181,7 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                                             <PopoverTrigger asChild>
                                                 <FormControl>
                                                     <Button
+                                                        data-testid="select-destination-station-button"
                                                         disabled={isPending}
                                                         variant="outline"
                                                         aria-label={t("TimeTable.nextDestination")}
@@ -308,7 +305,6 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                         />
                     </div>
                     <Button disabled={isPending} type="submit">{isPending ? <SpinnerSm></SpinnerSm> : t("Navigation.search")}</Button>
-
                 </form>
             </Form>
         </div>

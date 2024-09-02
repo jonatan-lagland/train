@@ -1,6 +1,7 @@
 import { TrainDestinationParams } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,23 +12,23 @@ export type NavigationUtilsProps = {
     defaultCity: string | undefined;
     destinationParam: string | undefined;
     isCommuter: boolean;
-    locationRequired: string;
-    router: AppRouterInstance;
+    locationRequiredWarningText: string;
     locale: string;
 }
 
-export default function NavigationUtils({ typeParam, defaultCity, destinationParam, isCommuter, locationRequired, router, locale }: NavigationUtilsProps) {
+export default function NavigationUtils({ typeParam, defaultCity, destinationParam, isCommuter, locationRequiredWarningText, locale }: NavigationUtilsProps) {
     const [isDisableRadioButtons, setIsDisableRadioButtons] = useState(false);
     const [locationOpen, setLocationOpen] = useState(false);
     const [destinationOpen, setDestinationOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
     const FormSchema = z.object({
         type: z.enum(["departure", "arrival"], {
             required_error: "Please select a destination type.",
         }),
         location: z.string({
-            required_error: locationRequired,
+            required_error: locationRequiredWarningText,
         }),
         destination: z.string().optional(),
         commuter: z.boolean()
