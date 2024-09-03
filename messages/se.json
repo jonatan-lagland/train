@@ -57,6 +57,7 @@
         "ariaSwapStation": "Byt startstation och destinationsstation för tåget"
     },
     "MetaData": {
+        "landingTitle": "Tidtabeller för det finska järnvägsnätet",
         "title": "Tågtidtabeller",
         "titleDeparture": "Avgående tåg",
         "titleArrival": "Ankommande tåg",

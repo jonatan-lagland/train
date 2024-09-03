@@ -57,6 +57,7 @@
         "ariaSwapStation": "Swap train starting station and destination station"
     },
     "MetaData": {
+        "landingTitle": "Finnish railway network timetables",
         "title": "Train timetables",
         "titleDeparture": "Departing Trains",
         "titleArrival": "Arriving Trains",

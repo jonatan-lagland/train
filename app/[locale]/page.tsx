@@ -10,7 +10,7 @@ export async function generateMetadata() {
     const t = await getTranslations('MetaData')
 
     return {
-        title: `Suomilinja`,
+        title: `${t('landingTitle')} | Suomilinja`,
         description: t('description'),
     };
 }

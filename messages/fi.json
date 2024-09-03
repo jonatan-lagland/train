@@ -57,6 +57,7 @@
         "ariaSwapStation": "Vaihda junan lähtöasema ja määränpääasema"
     },
     "MetaData": {
+        "landingTitle": "Suomen rataverkon aikataulut",
         "title": "Juna-aikataulut",
         "titleDeparture": "Lähtevät Junat",
         "titleArrival": "Saapuvat Junat",
