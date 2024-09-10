@@ -74,7 +74,8 @@
         "titleShort": "Lisenssi"
     },
     "Landing": {
-        "header": "Suomilinja",
-        "subheader": "...Tai tutustu johonkin alla olevista sijainneista."
+        "header": "Suomen Rataverkon Aikataulut",
+        "subheader": "Suomilinja tarjoaa helppokäyttöisen palvelun junien reaaliaikaiseen seurantaan.",
+        "imageTilesTitle": "...Tai tutustu johonkin alla olevista sijainneista."
     }
 }

@@ -74,7 +74,8 @@
         "titleShort": "Licens"
     },
     "Landing": {
-        "header": "Suomilinja",
-        "subheader": "...Eller utforska en av platserna nedan."
+        "header": "Tidtabeller för Finlands Järnvägsnät",
+        "subheader": "Suomilinja erbjuder en användarvänlig tjänst för realtidsövervakning av tåg.",
+        "imageTilesTitle": "...Eller utforska en av platserna nedan."
     }
 }

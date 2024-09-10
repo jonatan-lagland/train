@@ -73,7 +73,7 @@ export default function NavigationComponent(props: NavigationComponentProps) {
         <div className='flex flex-col items-center justify-center'>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8 shadow-md px-6 py-6 bg-white rounded-lg justify-between">
-                    {title ? <span className='text-4xl font-robotoslab text-start font-semibold w-48'>{title}</span> : null}
+                    {title ? <span className='text-4xl font-robotoslab text-start font-semibold'>{title}</span> : null}
                     <div className='flex flex-row'>
                         <div className='flex flex-row items-center justify-between gap-1 order-last'>
                             <Button

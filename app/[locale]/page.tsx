@@ -18,7 +18,7 @@ export async function generateMetadata() {
 export default function Home() {
     const locale = useLocale();
     const t = useTranslations("Landing")
-    const subheader = t("subheader")
+    const imageTilesTitle = t("imageTilesTitle")
     const startDelay = 0.0; // Define the starting delay
     const imageTiles = [
         { src: 'https://images.unsplash.com/photo-1575810034144-1abb0a8796f2', href: "Helsinki?type=departure&commuter=false", locale: locale, alt: 'Helsinki', title: 'Helsinki' },
@@ -34,7 +34,7 @@ export default function Home() {
             <Header></Header>
             <div className='flex flex-col gap-4 py-8'>
                 <div className='flex items-center justify-center px-2'>
-                    <ImageTileContainerTitle delay={startDelay}>{subheader}</ImageTileContainerTitle>
+                    <ImageTileContainerTitle delay={startDelay}>{imageTilesTitle}</ImageTileContainerTitle>
                 </div>
                 <div className='flex items-center justify-center md:hidden '>
                     <Carousel className="w-full max-w-sm ">

@@ -74,7 +74,8 @@
         "titleShort": "License"
     },
     "Landing": {
-        "header": "Suomilinja",
-        "subheader": "...Or, explore one of the locations below."
+        "header": "Timetables for Finland's Rail Network",
+        "subheader": "Suomilinja offers an easy-to-use service for real-time train tracking.",
+        "imageTilesTitle": "...Or, explore one of the locations below."
     }
 }
