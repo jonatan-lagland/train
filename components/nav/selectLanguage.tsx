@@ -34,6 +34,8 @@ type SelectItemLanguageProps = {
     displayLabel?: boolean
 }
 
+type Locale = 'en' | 'fi' | 'se' | undefined;
+
 const SelectItemLanguage = ({ lang, size, displayLabel = false }: SelectItemLanguageProps) => {
     return (
         <div className="flex flex-row items-center gap-4">
@@ -63,13 +65,15 @@ export function SelectLanguage({ languages, currentLanguageId, size = 24 }: Lang
     const pathname = usePathname();
     const t = useTranslations("Navigation")
 
-    const useChangeLocale = (selectedLanguage: string) => {
-        router.replace(pathname, { locale: `${selectedLanguage}` });
-        router.refresh()
-    }
+    const handleLocaleChange = (selectedLanguage: string) => {
+        router.replace(pathname, {
+            locale: selectedLanguage as Locale ?? undefined, // Ensure 'undefined' is not coerced into a string
+        });
+        router.refresh();
+    };
 
     return (
-        <Select onValueChange={useChangeLocale}>
+        <Select onValueChange={handleLocaleChange}>
             <SelectTrigger className="w-max" aria-label={t("selectLanguage")}>
                 <SelectValue placeholder={
                     currentLanguage ?
