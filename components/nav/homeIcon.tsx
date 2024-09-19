@@ -12,7 +12,9 @@ function HomeIcon() {
           height={64}
           src={"/icon-suomilinja-white-128x128.png"}
         ></Image>
-        <span className="text-white font-bold font-besley">Suomilinja</span>
+        <span className="text-white font-bold font-besley hidden md:block">
+          Suomilinja
+        </span>
       </div>
     </Link>
   );
