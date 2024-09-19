@@ -187,3 +187,8 @@
     width: 1.25em;    
   }
 }
+
+.home-summium-highlight {
+  
+background-image: radial-gradient(34% 46% at 24% 43%, #0D4124FF 6%, #073AFF00 100%),radial-gradient(26% 45% at 55% 41%, #276740FF 0%, #073AFF00 100%),radial-gradient(21% 37% at 72% 23%, #24643FFF 5%, #073AFF00 100%),radial-gradient(47% 71% at 73% 69%, #3A6650FF 0%, #073AFF00 100%),linear-gradient(183deg, #0D4124FF 1%, #203025FF 100%);
+}

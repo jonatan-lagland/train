@@ -16,7 +16,7 @@ export default function Header() {
                 </div>
                 <div className="flex justify-center">
                     <div className='w-min'>
-                        <NavigationContainer title={t("Navigation.title")} />
+                        <NavigationContainer />
                     </div>
                 </div>
             </div>

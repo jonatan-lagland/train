@@ -33,9 +33,7 @@ export default function Home() {
         <div className="grid grid-rows-[min-content_1fr] gap-16">
             <Header></Header>
             <div className='flex flex-col gap-4 py-8'>
-                <div className='flex items-center justify-center px-2'>
-                    <ImageTileContainerTitle delay={startDelay}>{imageTilesTitle}</ImageTileContainerTitle>
-                </div>
+                {/* Mobile devices */}
                 <div className='flex items-center justify-center md:hidden '>
                     <Carousel className="w-full max-w-sm ">
                         <CarouselContent>
@@ -60,6 +58,7 @@ export default function Home() {
                         <CarouselNext />
                     </Carousel>
                 </div>
+                {/* Desktop devices */}
                 <div className="hidden md:flex flex-row flex-wrap grid-cols-none gap-2 px-2 items-center justify-center w-full">
                     {imageTiles.map((tile, index) => (
                         <ImageTileContainer key={index} delay={startDelay + index * 0.4} {...tile} />
