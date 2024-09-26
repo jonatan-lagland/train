@@ -4,8 +4,8 @@ import capitalizeTitle from "@/lib/utils/capitalizeTitle";
 import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";
-import useLiveTrainData, {
-  useTransformTrainData,
+import getLiveTrainData, {
+  getTransformedTrainData,
 } from "@/lib/utils/liveTrainUtils";
 import findStationDestination from "@/lib/utils/stationDestination";
 import Sidebar from "@/components/sidebar/sidebar";
@@ -80,7 +80,7 @@ export default async function TimeTablePage({
   if (cityDestination) findStationDestination(cityDestination, stationMetadata);
 
   /* After cities have been verified to exist, filter and fetch data */
-  const liveTrain = await useLiveTrainData(
+  const liveTrain = await getLiveTrainData(
     city,
     destinationType,
     stationMetadata,
@@ -88,7 +88,7 @@ export default async function TimeTablePage({
     cityDestination
   );
   const { liveTrainData, stationShortCode, finalStationShortCode } = liveTrain;
-  const data = useTransformTrainData(
+  const data = getTransformedTrainData(
     liveTrainData,
     finalStationShortCode,
     stationMetadata,
