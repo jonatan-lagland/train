@@ -1,13 +1,8 @@
 import sanitizeStationName from "./sanitizeStationName";
 import fetchLiveTrain from "@/app/api/fetchLiveTrain";
-import {
-  StationMetaData,
-  TimeTable,
-  Train,
-  TrainDestination,
-  TrainError,
-} from "../types";
+import { StationMetaData, TimeTable, Train, TrainDestination, TrainError } from "../types";
 import fetchLiveDestinationTrain from "@/app/api/fetchLiveDestinationTrain";
+import fetchDepartureDateTrain from "@/app/api/fetchDepartureDateTrain";
 
 type LiveTrainDataResult = {
   liveTrainData: Train[] | TrainError;
@@ -34,13 +29,23 @@ export default async function getLiveTrainData(
   destinationType: TrainDestination,
   stationMetadata: StationMetaData[],
   isCommuter: string,
-  cityDestination?: string
+  cityDestination?: string,
+  date?: string
 ): Promise<LiveTrainDataResult> {
+  /*
+    There are currently 3 ways to fetch and return data.
+    For each case, the return value is in the same format.
+    Each value is returned early.
+
+    In order:
+    
+    1: Date has been determined => Fetch from TRAIN API for that date
+    2: No destination has been determined => Fetch from LIVE TRAIN API with a departure station but no arrival station
+    3: Destination has been determined => Fetch from LIVE TRAIN API with both departure station AND arrival station
+  */
+
   const decodedStation = decodeURIComponent(city.toLowerCase());
-  const station = stationMetadata.find(
-    (code) =>
-      decodedStation === sanitizeStationName(code.stationName.toLowerCase())
-  );
+  const station = stationMetadata.find((code) => decodedStation === sanitizeStationName(code.stationName.toLowerCase()));
   const stationShortCode = station?.stationShortCode;
 
   if (!stationShortCode) {
@@ -49,6 +54,19 @@ export default async function getLiveTrainData(
 
   let liveTrainData: Train[] | TrainError;
   let finalStationShortCode: string | undefined = undefined;
+
+  /* If date has been determined, fetch journeys for that date only */
+  if (date) {
+    liveTrainData = await fetchDepartureDateTrain({
+      date: date,
+    });
+    /* RETURN EARLY WITH DATA WHERE DATE IS SET */
+    return {
+      liveTrainData,
+      stationShortCode,
+      finalStationShortCode,
+    };
+  }
 
   /* If no destination has been defined, fetch and return a station with no pre-defined destination */
   if (!cityDestination) {
@@ -67,16 +85,11 @@ export default async function getLiveTrainData(
 
   /* If city destination is defined, proceed to fetch a journey with a pre-defined destination */
   const destDecodedStation = decodeURIComponent(cityDestination.toLowerCase());
-  const destStation = stationMetadata.find(
-    (code) =>
-      destDecodedStation === sanitizeStationName(code.stationName.toLowerCase())
-  );
+  const destStation = stationMetadata.find((code) => destDecodedStation === sanitizeStationName(code.stationName.toLowerCase()));
   finalStationShortCode = destStation?.stationShortCode;
 
   if (!finalStationShortCode) {
-    throw new Error(
-      `Destination station not found for city: ${cityDestination}`
-    );
+    throw new Error(`Destination station not found for city: ${cityDestination}`);
   }
 
   liveTrainData = await fetchLiveDestinationTrain({
@@ -120,28 +133,18 @@ export function getTransformedTrainData(
      * the "lastTrainStop" will be considered the first index in the data.
      * Otherwise it will default to the last index.
      */
-    const lastTrainStop =
-      destinationType === "ARRIVAL"
-        ? train.timeTableRows[0]
-        : train.timeTableRows[train.timeTableRows.length - 1];
+    const lastTrainStop = destinationType === "ARRIVAL" ? train.timeTableRows[0] : train.timeTableRows[train.timeTableRows.length - 1];
     /* If a destination has been determined, set a destinationRow. Takes presedence over "lastTrainStop"  */
     const lastTrainStopAsDestination = train.timeTableRows.find(
-      (row) =>
-        row.stationShortCode === finalStationShortCode && row.type === "ARRIVAL"
+      (row) => row.stationShortCode === finalStationShortCode && row.type === "ARRIVAL"
     );
     /* Find the metadata for the final destination, e.g. the name of the station */
     const lastTrainStopMetadata = finalStationShortCode
-      ? stationMetadata.find(
-          (code) => code.stationShortCode === finalStationShortCode
-        )
-      : stationMetadata.find(
-          (code) => code.stationShortCode === lastTrainStop.stationShortCode
-        );
+      ? stationMetadata.find((code) => code.stationShortCode === finalStationShortCode)
+      : stationMetadata.find((code) => code.stationShortCode === lastTrainStop.stationShortCode);
 
     /* Metadata for a specific station, e.g. Tampere */
-    const locationMetadata = stationMetadata.find(
-      (station) => station.stationShortCode === stationShortCode
-    );
+    const locationMetadata = stationMetadata.find((station) => station.stationShortCode === stationShortCode);
 
     /* Station coordinates for a specific station, e.g. Tampere */
     const latitude = locationMetadata ? locationMetadata.latitude : undefined;
@@ -153,9 +156,7 @@ export function getTransformedTrainData(
      */
     const filteredTrainStops = train.timeTableRows.filter((row) => {
       const matchesStationAndDestination =
-        row.stationShortCode === stationShortCode &&
-        row.type === destinationType &&
-        row.trainStopping === true;
+        row.stationShortCode === stationShortCode && row.type === destinationType && row.trainStopping === true;
       return matchesStationAndDestination;
     });
 
@@ -165,22 +166,16 @@ export function getTransformedTrainData(
         /* Check for a predetermined destination and exclude stations past that point */
         if (lastTrainStopAsDestination) {
           return (
-            row.trainStopping === true &&
-            row.commercialStop === true &&
-            row.scheduledTime <= lastTrainStopAsDestination?.scheduledTime
+            row.trainStopping === true && row.commercialStop === true && row.scheduledTime <= lastTrainStopAsDestination?.scheduledTime
           );
         }
         return row.trainStopping === true && row.commercialStop === true;
       })
       .map((row) => {
-        const station = stationMetadata.find(
-          (metadata) => metadata.stationShortCode === row.stationShortCode
-        );
+        const station = stationMetadata.find((metadata) => metadata.stationShortCode === row.stationShortCode);
         return {
           ...row,
-          stationName: station
-            ? sanitizeStationName(station.stationName)
-            : row.stationShortCode,
+          stationName: station ? sanitizeStationName(station.stationName) : row.stationShortCode,
         };
       });
 
@@ -188,9 +183,7 @@ export function getTransformedTrainData(
 
     for (const row of filteredTrainStops) {
       transformedRows.push({
-        stationName: lastTrainStopMetadata
-          ? sanitizeStationName(lastTrainStopMetadata.stationName)
-          : "", // Use the last station name or default
+        stationName: lastTrainStopMetadata ? sanitizeStationName(lastTrainStopMetadata.stationName) : "", // Use the last station name or default
         departureLatitude: latitude as number,
         departureLongitude: longitude as number,
         type: row.type,

@@ -4,9 +4,7 @@ import capitalizeTitle from "@/lib/utils/capitalizeTitle";
 import NavigationContainer from "@/components/banner/navigationContainer";
 import Image from "next/image";
 import fetchStationMetadata from "@/app/api/fetchStationMetadata";
-import getLiveTrainData, {
-  getTransformedTrainData,
-} from "@/lib/utils/liveTrainUtils";
+import getLiveTrainData, { getTransformedTrainData } from "@/lib/utils/liveTrainUtils";
 import findStationDestination from "@/lib/utils/stationDestination";
 import Sidebar from "@/components/sidebar/sidebar";
 import { SelectedTrainProvider } from "@/lib/contextProvider/SelectedTrainProvider";
@@ -23,6 +21,7 @@ export type TimeTablePageProps = {
     type: string;
     destination: string;
     commuter: string;
+    date?: string;
   };
 };
 
@@ -34,24 +33,18 @@ type GenerateMetadataProps = {
     type: string;
     destination?: string;
     commuter: string;
+    date?: string;
   };
 };
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: GenerateMetadataProps) {
+export async function generateMetadata({ params, searchParams }: GenerateMetadataProps) {
   const { city } = params;
   const { type, destination, commuter } = searchParams;
   const cityLabel = decodeURIComponent(city);
   const t = await getTranslations("MetaData");
-  const cityAndDestinationStr = destination
-    ? `${capitalizeTitle(cityLabel)} — ${destination}`
-    : capitalizeTitle(cityLabel);
-  const typeStr =
-    type === "departure" ? t("titleDeparture") : t("titleArrival");
-  const typeAndCommuterStr =
-    commuter === "true" ? t("commuterTrains") : typeStr;
+  const cityAndDestinationStr = destination ? `${capitalizeTitle(cityLabel)} — ${destination}` : capitalizeTitle(cityLabel);
+  const typeStr = type === "departure" ? t("titleDeparture") : t("titleArrival");
+  const typeAndCommuterStr = commuter === "true" ? t("commuterTrains") : typeStr;
 
   return {
     title: `${cityAndDestinationStr} | ${typeAndCommuterStr}`,
@@ -59,18 +52,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function TimeTablePage({
-  params,
-  searchParams,
-}: TimeTablePageProps) {
-  const destinationType: TrainDestination =
-    (searchParams?.type?.toUpperCase() as TrainDestination) ||
-    ("DEPARTURE" as TrainDestination);
-  const destinationLabel: BannerLabel =
-    destinationType === "DEPARTURE" ? "departureTrains" : "arrivalTrains"; // For localization
+export default async function TimeTablePage({ params, searchParams }: TimeTablePageProps) {
+  const destinationType: TrainDestination = (searchParams?.type?.toUpperCase() as TrainDestination) || ("DEPARTURE" as TrainDestination);
+  const destinationLabel: BannerLabel = destinationType === "DEPARTURE" ? "departureTrains" : "arrivalTrains"; // For localization
   const city: string = params.city ? (params.city as string) : "";
   const cityDestination: string = searchParams?.destination as string;
   const isCommuter: string = searchParams?.commuter as string;
+  const date: string = searchParams?.date as string;
 
   /* Fetch all known stations */
   const stationMetadata = await fetchStationMetadata();
@@ -80,33 +68,16 @@ export default async function TimeTablePage({
   if (cityDestination) findStationDestination(cityDestination, stationMetadata);
 
   /* After cities have been verified to exist, filter and fetch data */
-  const liveTrain = await getLiveTrainData(
-    city,
-    destinationType,
-    stationMetadata,
-    isCommuter,
-    cityDestination
-  );
+  const liveTrain = await getLiveTrainData(city, destinationType, stationMetadata, isCommuter, cityDestination, date);
   const { liveTrainData, stationShortCode, finalStationShortCode } = liveTrain;
-  const data = getTransformedTrainData(
-    liveTrainData,
-    finalStationShortCode,
-    stationMetadata,
-    stationShortCode,
-    destinationType
-  );
+  const data = getTransformedTrainData(liveTrainData, finalStationShortCode, stationMetadata, stationShortCode, destinationType);
 
   return (
     <SelectedTrainProvider>
       <div className="flex flex-col flex-grow gap-2 justify-start items-center">
         <div className="grid grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-none items-center justify-center relative w-full py-5">
           <div className="flex flex-row items-center justify-center h-full">
-            <Banner
-              destinationLabel={destinationLabel}
-              city={city}
-              cityDestination={cityDestination}
-              isCommuter={isCommuter}
-            ></Banner>
+            <Banner destinationLabel={destinationLabel} city={city} cityDestination={cityDestination} isCommuter={isCommuter}></Banner>
           </div>
           <div className="flex flex-row items-center justify-center">
             <NavigationContainer></NavigationContainer>
@@ -129,10 +100,7 @@ export default async function TimeTablePage({
         </div>
         <div className="grid grid-cols-1 grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-1 gap-14 md:gap-0 py-8 md:px-6 px-1">
           <Sidebar data={data} destinationType={destinationType}></Sidebar>
-          <TimeTableComponent
-            data={data}
-            destinationType={destinationType}
-          ></TimeTableComponent>
+          <TimeTableComponent data={data} destinationType={destinationType}></TimeTableComponent>
         </div>
       </div>
     </SelectedTrainProvider>
