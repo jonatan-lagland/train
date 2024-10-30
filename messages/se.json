@@ -13,6 +13,7 @@
         "outgoing": "Avgående",
         "shortHour": "t",
         "shortMin": "m",
+        "longDay": "dagar",
         "longHour": "timmar",
         "longMin": "minuter",
         "disclaimerTitle": "Ansvarsfriskrivning",

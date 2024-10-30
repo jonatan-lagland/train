@@ -13,6 +13,7 @@
         "outgoing": "Outgoing",
         "shortHour": "h",
         "shortMin": "m",
+        "longDay": "days",
         "longHour": "hours",
         "longMin": "minutes",
         "disclaimerTitle": "Disclaimer",

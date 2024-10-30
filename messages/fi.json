@@ -13,6 +13,7 @@
         "outgoing": "Lähtevät",
         "shortHour": "t",
         "shortMin": "m",
+        "longDay": "päivän",
         "longHour": "tunnin",
         "longMin": "minuutin",
         "disclaimerTitle": "Huomatus",
