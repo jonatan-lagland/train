@@ -62,7 +62,7 @@ export default function ArrivalTimestamp({
           <>
             {destinationType === "ARRIVAL" ? "Anländer till" : "Avgår från"} <span className="capitalize">{decodedCity}</span> station om{" "}
             <span className="font-bold">{travelTimeLabel}</span>
-            {destinationType === "ARRIVAL" ? "på spår " : "från spår "}
+            {destinationType === "ARRIVAL" ? "på spår " : " från spår "}
             <span>{stationNextTrainTrack}</span>.
           </>
         );
@@ -73,7 +73,7 @@ export default function ArrivalTimestamp({
             <span className="font-bold">{travelTimeLabel}</span>
             {stationNextTrainTrack ? (
               <>
-                {destinationType === "ARRIVAL" ? "on track " : "from track "}
+                {destinationType === "ARRIVAL" ? "on track " : " from track "}
                 <span>{stationNextTrainTrack}</span>
               </>
             ) : null}
