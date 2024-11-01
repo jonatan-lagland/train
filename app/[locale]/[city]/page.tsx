@@ -100,7 +100,9 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
         </div>
         <div className="grid grid-cols-1 grid-rows-[min-content_1fr] md:grid-cols-2 md:grid-rows-1 gap-14 md:gap-0 py-8 md:px-6 px-1">
           <Sidebar data={data} destinationType={destinationType}></Sidebar>
-          <TimeTableComponent data={data} destinationType={destinationType}></TimeTableComponent>
+          <div className="flex flex-col gap-2">
+            <TimeTableComponent data={data} destinationType={destinationType}></TimeTableComponent>
+          </div>
         </div>
       </div>
     </SelectedTrainProvider>

@@ -39,9 +39,9 @@ export default async function getLiveTrainData(
 
     In order:
     
-    1: Date has been determined => Fetch from TRAIN API for that date
-    2: No destination has been determined => Fetch from LIVE TRAIN API with a departure station but no arrival station
-    3: Destination has been determined => Fetch from LIVE TRAIN API with both departure station AND arrival station
+    1. Destination has been determined => Fetch from LIVE TRAIN API with both departure station AND arrival station
+    2: Date has been determined => Fetch from TRAIN API for that date
+    3: No destination or date has been determined => Fetch from LIVE TRAIN API with a departure station but no arrival station, no date
   */
 
   const decodedStation = decodeURIComponent(city.toLowerCase());
@@ -54,6 +54,29 @@ export default async function getLiveTrainData(
 
   let liveTrainData: Train[] | TrainError;
   let finalStationShortCode: string | undefined = undefined;
+
+  if (cityDestination) {
+    /* If city destination is defined, proceed to fetch a journey with a pre-defined destination */
+    const destDecodedStation = decodeURIComponent(cityDestination.toLowerCase());
+    const destStation = stationMetadata.find((code) => destDecodedStation === sanitizeStationName(code.stationName.toLowerCase()));
+    finalStationShortCode = destStation?.stationShortCode;
+
+    if (!finalStationShortCode) {
+      throw new Error(`Destination station not found for city: ${cityDestination}`);
+    }
+
+    liveTrainData = await fetchLiveDestinationTrain({
+      departure_station: stationShortCode,
+      arrival_station: finalStationShortCode,
+      isCommuter: isCommuter,
+      date: date,
+    });
+    return {
+      liveTrainData,
+      stationShortCode,
+      finalStationShortCode,
+    };
+  }
 
   /* If date has been determined, fetch journeys for that date only */
   if (date) {
@@ -69,34 +92,13 @@ export default async function getLiveTrainData(
   }
 
   /* If no destination has been defined, fetch and return a station with no pre-defined destination */
-  if (!cityDestination) {
-    liveTrainData = await fetchLiveTrain({
-      stationShortCode: stationShortCode,
-      type: destinationType,
-      isCommuter: isCommuter,
-    });
-    /* RETURN EARLY WITH DATA WHERE NO DESTINATION IS SET */
-    return {
-      liveTrainData,
-      stationShortCode,
-      finalStationShortCode,
-    };
-  }
 
-  /* If city destination is defined, proceed to fetch a journey with a pre-defined destination */
-  const destDecodedStation = decodeURIComponent(cityDestination.toLowerCase());
-  const destStation = stationMetadata.find((code) => destDecodedStation === sanitizeStationName(code.stationName.toLowerCase()));
-  finalStationShortCode = destStation?.stationShortCode;
-
-  if (!finalStationShortCode) {
-    throw new Error(`Destination station not found for city: ${cityDestination}`);
-  }
-
-  liveTrainData = await fetchLiveDestinationTrain({
-    departure_station: stationShortCode,
-    arrival_station: finalStationShortCode,
+  liveTrainData = await fetchLiveTrain({
+    stationShortCode: stationShortCode,
+    type: destinationType,
     isCommuter: isCommuter,
   });
+  /* RETURN EARLY WITH DATA WHERE NO DESTINATION IS SET */
   return {
     liveTrainData,
     stationShortCode,

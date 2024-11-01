@@ -1,6 +1,5 @@
 import { TrainDestinationParams } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -31,6 +30,7 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
             required_error: locationRequiredWarningText,
         }),
         destination: z.string().optional(),
+        date: z.date().optional(),
         commuter: z.boolean()
     })
 
@@ -38,6 +38,7 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
         type: typeParam ? typeParam : "departure" as TrainDestinationParams,
         location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
         destination: destinationParam ? decodeURIComponent(destinationParam) : undefined,
+        date: new Date(),
         commuter: isCommuter
     };
 
@@ -47,31 +48,53 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
             type: initialDefaultValues.type,
             location: undefined,
             destination: undefined,
+            date: initialDefaultValues.date,
             commuter: initialDefaultValues.commuter,
         }
     })
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { location, destination, commuter, type } = data;
+        const { type, location, destination, date, commuter } = data;
         const sanitizedLocation = encodeURIComponent(location)
-        const navigationPath = setNavigationPath(sanitizedLocation, type, commuter, destination)
-
+        const navigationPath = setNavigationPath(sanitizedLocation, type, commuter, date, destination)
         startTransition(() => {
             router.push(navigationPath);
         });
     }
 
-    function setNavigationPath(sanitizedLocation: string, type: TrainDestinationParams, commuter: boolean, destination?: string) {
-        let navigationPath = '';
+    function setNavigationPath(
+        sanitizedLocation: string,
+        type: TrainDestinationParams,
+        commuter: boolean,
+        date?: Date,
+        destination?: string
+      ) {
+        const params = new URLSearchParams();
+      
+        // Determine if the provided date is today
+        const isToday = date
+          ? date.toDateString() === new Date().toDateString()
+          : true;
+      
+        // Set the 'type' parameter
+        params.append('type', destination ? 'departure' : 'arrival');
+        params.append('commuter', commuter.toString());
+      
+        // Add 'destination' if provided
         if (destination) {
-            navigationPath = `/${locale}/${sanitizedLocation}?type=departure&destination=${destination}&commuter=${commuter}`;
-        } else {
-            navigationPath = `/${locale}/${sanitizedLocation}?type=${type}&commuter=${commuter}`;
+          params.append('destination', destination);
         }
-        return navigationPath;
-    }
-
-
+      
+        // Add 'date' if provided and it's not today
+        if (date && !isToday) {
+          const formattedDate = new Intl.DateTimeFormat('en-CA').format(date);
+          params.append('date', formattedDate);
+        }
+      
+        // Construct and return the URL
+        return `/${locale}/${sanitizedLocation}?${params.toString()}`;
+      }
+      
     // Watch changes in value for destination
     const destinationValue = form.watch("destination");
     const locationValue = form.watch('location');

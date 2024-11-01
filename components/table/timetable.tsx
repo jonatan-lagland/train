@@ -30,7 +30,7 @@ import { Skeleton } from "../ui/skeleton";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
 import { TimeTableRow, TrainDestination, TimeTable } from "@/lib/types";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
-import { getJourneyTimeStamp, getLiveEstimateTimestamp, getTimeStamp, Locale } from "@/lib/utils/timeStampUtils";
+import { getJourneyTimeStamp, getLiveEstimateTimestamp, getTimeStamp, LocaleNextIntl } from "@/lib/utils/timeStampUtils";
 
 export type TimeTableProps = {
   data: TimeTable[];
@@ -39,7 +39,7 @@ export type TimeTableProps = {
 
 type CreateColumnsProps = {
   tableType: TrainDestination;
-  locale: Locale;
+  locale: LocaleNextIntl;
   translation: any;
   selectedTrainNumber: number | undefined;
   setTrainNumber: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -110,7 +110,7 @@ type JourneyItemProps = {
   index: number;
   timeTableRow: TimeTableRow[];
   journey: TimeTable;
-  locale: Locale;
+  locale: LocaleNextIntl;
 };
 
 /**
@@ -317,7 +317,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const tTimeTable = useTranslations("TimeTable");
-  const locale = useLocale() as Locale;
+  const locale = useLocale() as LocaleNextIntl;
   const columns = createColumns({
     tableType: destinationType,
     locale: locale,

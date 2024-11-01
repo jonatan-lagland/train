@@ -1,10 +1,22 @@
-export type Locale = 'en | se | fi'
+import { fi, enGB, sv, Locale } from "date-fns/locale";
+export type LocaleNextIntl = 'en | se | fi'
 
 /* Workaround for useLocale not returning a full time format and causing issues with the swedish format. */
-const localeMap: Record<string, string> = {
-    en: 'en-US',
+export const localeMap: Record<string, string> = {
+    en: 'en-GB',
     se: 'sv-SE',
     fi: 'fi-FI',
+};
+
+/**
+ * Map the locale used in next-intl library to a format readable by date-fns library
+ *
+ * @type {Record<string, Locale>}
+ */
+ export const localeMapDateFns: Record<string, Locale> = {
+    fi: fi,
+    se: sv,
+    en: enGB,
 };
 
 /**
@@ -16,10 +28,10 @@ const localeMap: Record<string, string> = {
  * @param {string} scheduledTime Epoch timestamp of the scheduled train arrival or departure time.
  * @param {(string | undefined)} liveEstimateTime Epoch timestamp of the estimated train arrival of departure time. Used to indicate delay.
  * @param {string} scheduledFinalDestination Epoch timestamp for the final scheduled arrival station in a train's journey.
- * @param {Locale} locale Locale in se | fi | en format.
+ * @param {LocaleNextIntl} locale Locale in se | fi | en format.
  * @param {*} translation useTranslations() hook
  */
-export function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefined, scheduledFinalDestination: string, locale: Locale, translation: any) {
+export function getTimeStamp(scheduledTime: string, liveEstimateTime: string | undefined, scheduledFinalDestination: string, locale: LocaleNextIntl, translation: any) {
     const dateTime = new Date(scheduledTime).getTime();
     const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : undefined;
     const liveTimeStamp = getLiveEstimateTimestamp(liveDateTime, dateTime, locale);
@@ -61,10 +73,10 @@ export function getTimeStamp(scheduledTime: string, liveEstimateTime: string | u
  *
  * @param {(number | undefined)} liveDateTime Timestamp in milliseconds for a live estimated train arrival time
  * @param {number} dateTime Timestamp in milliseconds for a scheduled train arrival time
- * @param {Locale} locale Locale in en | se | fi format
+ * @param {LocaleNextIntl} locale Locale in en | se | fi format
  * @returns {string | undefined} A localized timestamp or undefined
  */
-export const getLiveEstimateTimestamp = (liveDateTime: number | undefined, dateTime: number, locale: Locale): string | undefined => {
+export const getLiveEstimateTimestamp = (liveDateTime: number | undefined, dateTime: number, locale: LocaleNextIntl): string | undefined => {
     let liveTimeStamp: string | undefined = undefined;
 
     const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
@@ -87,10 +99,10 @@ export const getLiveEstimateTimestamp = (liveDateTime: number | undefined, dateT
  * Provides a localized timestamp with the use of Intl date and time formatting.
  *
  * @param {number} dateTime Timestamp in milliseconds for a scheduled train arrival time
- * @param {Locale} locale Locale in en | se | fi format
+ * @param {LocaleNextIntl} locale Locale in en | se | fi format
  * @returns {string} Localized timestamp
  */
-export const getJourneyTimeStamp = (dateTime: number, locale: Locale): string => {
+export const getJourneyTimeStamp = (dateTime: number, locale: LocaleNextIntl): string => {
     const currentLocaleFull = localeMap[locale] || 'fi-FI'; // Convert to full timestamp
 
     // Covert date object into a localized timestamp
