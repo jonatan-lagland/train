@@ -1,6 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
-import { SiteLocale, TimeTable, TrainDestination } from "@/lib/types";
+import { SiteLocale, TransformedTimeTableRow, TrainDestination } from "@/lib/types";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatedEllipses } from "../ui/spinner";
@@ -12,7 +12,7 @@ type ArrivalTimestampProps = {
   stationNextTimestamp: string;
   stationNextTrainTrack?: string;
   timeStampNow: number;
-  data: TimeTable[];
+  data: TransformedTimeTableRow[];
   commuterLink: string | undefined;
 };
 
@@ -24,8 +24,8 @@ type ArrivalTimestampProps = {
  * @param {TrainDestination} props.destinationType - Whether the train is an arrival or destination train.
  * @param {string} props.stationNextTimestamp - Unix Timestamp of the next train arrival.
  * @param {number} props.stationNextTrainTrack - The train track of the next arriving train.
- * @param {TimeTable[]} props.data - Live train data, the length of which is evaluated.
-  @param {TimeTable[]} props.commuterLink - Link to the station's commuter page, which is presented optionally if no journeys are found.
+ * @param {TransformedTimeTableRow[]} props.data - Live train data, the length of which is evaluated.
+  @param {TransformedTimeTableRow[]} props.commuterLink - Link to the station's commuter page, which is presented optionally if no journeys are found.
  */
 export default function ArrivalTimestamp({
   city,

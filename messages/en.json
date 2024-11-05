@@ -55,7 +55,9 @@
         "commuterRail": "Search for commuter trains",
         "title": "Start off by choosing a journey.",
         "selectLanguage": "Select a language",
-        "ariaSwapStation": "Swap train starting station and destination station"
+        "ariaSwapStation": "Swap train starting station and destination station",
+        "today": "Today",
+        "selectDate": "Pick a date" 
     },
     "MetaData": {
         "landingTitle": "Finnish railway network timetables",

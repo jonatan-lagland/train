@@ -15,7 +15,7 @@ import { Checkbox } from "../ui/checkbox";
 import { StationMetaData, TrainDestinationParams } from "@/lib/types";
 import NavigationUtils from "./navigationUtils";
 import { useTranslations } from "next-intl";
-import { addMonths, format } from "date-fns";
+import { addMonths, format, isSameDay } from "date-fns";
 import { Calendar } from "../ui/calendar";
 import { localeMapDateFns } from "@/lib/utils/timeStampUtils";
 
@@ -229,8 +229,26 @@ export default function NavigationComponent(props: NavigationComponentProps) {
                       <Button
                         disabled={isPending}
                         variant={"outline"}
-                        className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
-                        {field.value ? format(field.value, "PPP", { locale: localeMapDateFns[locale] }) : <span>Pick a date</span>}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          (!field.value || isSameDay(field.value, new Date())) && "text-muted-foreground"
+                        )}>
+                        {field.value
+                          ? isSameDay(field.value, new Date())
+                            ? t("Navigation.today")
+                            : format(field.value, "PPP", { locale: localeMapDateFns[locale] })
+                          : t("Navigation.selectDate")}
+                        <div className="flex flex-row justify-end">
+                          {field.value && !isSameDay(field.value, new Date()) && (
+                            <Cross2Icon
+                              className="ml-2 h-4 w-4 shrink-0 opacity-50 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                form.resetField("date");
+                              }}
+                            />
+                          )}
+                        </div>
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>

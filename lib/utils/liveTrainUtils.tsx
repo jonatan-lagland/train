@@ -1,6 +1,6 @@
 import sanitizeStationName from "./sanitizeStationName";
 import fetchLiveTrain from "@/app/api/fetchLiveTrain";
-import { StationMetaData, TimeTable, Train, TrainDestination, TrainError } from "../types";
+import { StationMetaData, TransformedTimeTableRow, Train, TrainDestination, TrainError } from "../types";
 import fetchLiveDestinationTrain from "@/app/api/fetchLiveDestinationTrain";
 import fetchDepartureDateTrain from "@/app/api/fetchDepartureDateTrain";
 
@@ -116,7 +116,7 @@ export default async function getLiveTrainData(
  * @param {StationMetaData[]} stationMetadata Metadata for all available stations.
  * @param {(string | undefined)} stationShortCode A station short code for the starting station.
  * @param {TrainDestination} destinationType Destination type of either 'ARRIVAL' or 'DEPARTURE'
- * @returns {TimeTable[] | [] } An array of TimeTable objects that represent the station stops of a given train journey, or an empty array in the case of an error.
+ * @returns {TransformedTimeTableRow[] | [] } An array of TimeTable objects that represent the station stops of a given train journey, or an empty array in the case of an error.
  */
 export function getTransformedTrainData(
   liveTrainData: Train[] | TrainError,
@@ -124,10 +124,10 @@ export function getTransformedTrainData(
   stationMetadata: StationMetaData[],
   stationShortCode: string | undefined,
   destinationType: TrainDestination
-): TimeTable[] | [] {
+): TransformedTimeTableRow[] | [] {
   /* In case of a TrainError, exit early and return an empty array */
   if (isTrainError(liveTrainData)) return [];
-  let stationStopData: TimeTable[] = [];
+  let stationStopData: TransformedTimeTableRow[] = [];
 
   liveTrainData.forEach((train) => {
     /*
@@ -181,7 +181,7 @@ export function getTransformedTrainData(
         };
       });
 
-    const transformedRows = [] as TimeTable[];
+    const transformedRows = [] as TransformedTimeTableRow[];
 
     for (const row of filteredTrainStops) {
       transformedRows.push({

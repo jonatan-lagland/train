@@ -1,14 +1,15 @@
 "use client";
 
+import * as React from "react";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TimeTable, TimeTableRow, TrainDestination } from "../types";
+import { TransformedTimeTableRow, TimeTableRow, TrainDestination } from "../types";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
 import PlaceIcon from "@mui/icons-material/Place";
 import { getJourneyTimeStamp, getLiveEstimateTimestamp, getTimeStamp, LocaleNextIntl } from "@/lib/utils/timeStampUtils";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ColumnDef, Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +28,7 @@ type ExternalLinkProps = {
 type JourneyItemProps = {
   index: number;
   timeTableRow: TimeTableRow[];
-  journey: TimeTable;
+  journey: TransformedTimeTableRow;
   locale: LocaleNextIntl;
 };
 
@@ -93,8 +94,8 @@ export const ExternalLink = ({ href, className, children }: ExternalLinkProps) =
  * depending on the index of the list of station arrival and departure items.
  *
  * @param {number} param.index Current index of the list of items
- * @param {Row<TimeTable>} param.timeTableRow An array of all possible journeys, used to compare the current timestamp with the next scheduled timestamp.
- * @param {TimeTable} param.journey TimeTable object of the current index's journey.
+ * @param {Row<TransformedTimeTableRow>} param.timeTableRow An array of all possible journeys, used to compare the current timestamp with the next scheduled timestamp.
+ * @param {TransformedTimeTableRow} param.journey TimeTable object of the current index's journey.
  * @param {("en | se | fi")} param.locale Locale used to set timestamp localization.
  */
 
@@ -161,7 +162,7 @@ export const createColumns = ({
   selectedTrainNumber,
   setTrainNumber,
   sidebarRef,
-}: CreateColumnsProps): ColumnDef<TimeTable>[] => {
+}: CreateColumnsProps): ColumnDef<TransformedTimeTableRow>[] => {
   const handleButtonClick = (trainNumber: number) => {
     setTrainNumber(trainNumber);
     if (sidebarRef.current) {
@@ -289,9 +290,9 @@ export const createColumns = ({
  * Used when there's stale data that occupies the first page to redirect the user to a desired page.
  *
  * @param {(number | undefined)} selectedTrainNumber
- * @param {Table<TimeTable>} table
+ * @param {Table<TransformedTimeTableRow>} table
  */
-export const useTrainPageIndex = (selectedTrainNumber: number | undefined, table: Table<TimeTable>) => {
+export const useTrainPageIndex = (selectedTrainNumber: number | undefined, table: Table<TransformedTimeTableRow>) => {
   useEffect(() => {
     // Use sorted rows to find the index
     const sortedRows = table.getSortedRowModel().rows;

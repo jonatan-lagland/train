@@ -55,7 +55,9 @@
         "commuterRail": "Sök efter pendeltåg",
         "title": "Börja med att välja en resa.",
         "selectLanguage": "Välj ett språk",
-        "ariaSwapStation": "Byt startstation och destinationsstation för tåget"
+        "ariaSwapStation": "Byt startstation och destinationsstation för tåget",
+        "today": "I dag",
+        "selectDate": "Välj ett datum"
     },
     "MetaData": {
         "landingTitle": "Tidtabeller för det finska järnvägsnätet",

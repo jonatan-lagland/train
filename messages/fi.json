@@ -55,7 +55,9 @@
         "commuterRail": "Hae paikallisjunia",
         "title": "Aloita valitsemalla matka.",
         "selectLanguage": "Valitse kieli",
-        "ariaSwapStation": "Vaihda junan lähtöasema ja määränpääasema"
+        "ariaSwapStation": "Vaihda junan lähtöasema ja määränpääasema",
+        "today": "Tänään",
+        "selectDate": "Valitse päivä"
     },
     "MetaData": {
         "landingTitle": "Suomen rataverkon aikataulut",

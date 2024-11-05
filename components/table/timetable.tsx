@@ -21,13 +21,13 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
-import { TimeTableRow, TrainDestination, TimeTable } from "@/lib/types";
+import { TimeTableRow, TrainDestination, TransformedTimeTableRow } from "@/lib/types";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 import { LocaleNextIntl } from "@/lib/utils/timeStampUtils";
 import { createColumns, JourneyItem, useTrainPageIndex } from "@/lib/utils/tableUtils";
 
 export type TimeTableProps = {
-  data: TimeTable[];
+  data: TransformedTimeTableRow[];
   destinationType: TrainDestination;
 };
 
@@ -119,7 +119,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                                   key={index}
                                   index={index}
                                   timeTableRow={row.original.trainJourney as TimeTableRow[]}
-                                  journey={journey}
+                                  journey={journey as TransformedTimeTableRow}
                                   locale={locale}
                                 />
                               );
