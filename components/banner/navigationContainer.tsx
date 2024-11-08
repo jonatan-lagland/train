@@ -20,6 +20,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
   const destinationParam = isNotFoundPage ? undefined : (searchParams.get("destination") as string);
   const typeParam = searchParams.get("type") as TrainDestinationParams;
   const commuterParam = searchParams.get("commuter");
+  const dateParam = searchParams.get("date");
   const isCommuter = commuterParam?.toLowerCase() === "true" ? true : false; // search params are treated as a string
 
   const componentProps = {
@@ -30,6 +31,7 @@ function NavigationContainer({ isNotFoundPage, title }: NavigationContainerProps
     destinationParam,
     typeParam,
     isCommuter,
+    dateParam,
   };
 
   return <NavigationComponent {...componentProps} />;

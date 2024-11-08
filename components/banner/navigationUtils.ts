@@ -13,9 +13,10 @@ export type NavigationUtilsProps = {
     isCommuter: boolean;
     locationRequiredWarningText: string;
     locale: string;
+    dateParam: string | null;
 }
 
-export default function NavigationUtils({ typeParam, defaultCity, destinationParam, isCommuter, locationRequiredWarningText, locale }: NavigationUtilsProps) {
+export default function NavigationUtils({ typeParam, defaultCity, destinationParam, isCommuter, locationRequiredWarningText, locale, dateParam }: NavigationUtilsProps) {
     const [isDisableRadioButtons, setIsDisableRadioButtons] = useState(false);
     const [locationOpen, setLocationOpen] = useState(false);
     const [destinationOpen, setDestinationOpen] = useState(false);
@@ -38,7 +39,7 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
         type: typeParam ? typeParam : "departure" as TrainDestinationParams,
         location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
         destination: destinationParam ? decodeURIComponent(destinationParam) : undefined,
-        date: new Date(),
+        date: dateParam ? new Date(dateParam) : new Date(),
         commuter: isCommuter
     };
 

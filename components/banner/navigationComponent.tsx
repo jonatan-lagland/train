@@ -27,10 +27,11 @@ export type NavigationComponentProps = {
   destinationParam: string | undefined;
   typeParam: TrainDestinationParams;
   isCommuter: boolean;
+  dateParam: string | null;
 };
 
 export default function NavigationComponent(props: NavigationComponentProps) {
-  const { title, locale, stationMetadata, defaultCity, destinationParam, typeParam, isCommuter } = props;
+  const { title, locale, stationMetadata, defaultCity, destinationParam, typeParam, isCommuter, dateParam } = props;
 
   const t = useTranslations();
   const locationRequiredWarningText = t("Navigation.errorSelectLocation");
@@ -39,6 +40,7 @@ export default function NavigationComponent(props: NavigationComponentProps) {
     typeParam,
     defaultCity,
     destinationParam,
+    dateParam,
     isCommuter,
     locationRequiredWarningText,
     locale,
