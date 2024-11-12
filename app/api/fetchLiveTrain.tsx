@@ -1,13 +1,12 @@
-
 import { Train, TrainDestination, TrainError } from "@/lib/types";
 
 let amount: number = 30;
 
 type fetchLiveTrainProps = {
-    stationShortCode: string | undefined
-    type: TrainDestination
-    isCommuter: string
-}
+  stationShortCode: string | undefined;
+  type: TrainDestination;
+  isCommuter: string;
+};
 
 /**
  * A function that takes in a station short code and destination type to fetch live train data using the Fintraffic API.
@@ -18,30 +17,26 @@ type fetchLiveTrainProps = {
  */
 
 async function fetchLiveTrain({ stationShortCode, type, isCommuter }: fetchLiveTrainProps): Promise<Train[] | TrainError | []> {
-    const trainCategory = isCommuter === 'true' ? "Commuter" : "Long-distance" // React props are treated as strings
-    if (isCommuter === 'true') amount = 50; // Fetch more for commuter
-    const arrivalTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=${amount}&departed_trains=0&departing_trains=0&include_nonstopping=false&train_categories=${trainCategory}`;
-    const departingTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=0&departed_trains=0&departing_trains=${amount}&include_nonstopping=false&train_categories=${trainCategory}`;
-    try {
-        if (type === 'ARRIVAL') {
-            const response = await fetch(
-                arrivalTrains
-            );
-            const data: Train[] = await response.json();
-            return data;
-        }
-        if (type === 'DEPARTURE') {
-            const response = await fetch(
-                departingTrains
-            );
-            const data: Train[] = await response.json();
-            return data;
-        }
-        return []; // If neither arrival or departure due to some error, avoid fetching incorrect data
-    } catch (error) {
-        console.error('Error fetching live train data:', error);
-        return [];
+  const trainCategory = isCommuter === "true" ? "Commuter" : "Long-distance"; // React props are treated as strings
+  if (isCommuter === "true") amount = 50; // Fetch more for commuter
+  const arrivalTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=${amount}&departed_trains=0&departing_trains=0&include_nonstopping=false&train_categories=${trainCategory}`;
+  const departingTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=0&departed_trains=0&departing_trains=${amount}&include_nonstopping=false&train_categories=${trainCategory}`;
+  try {
+    if (type === "ARRIVAL") {
+      const response = await fetch(arrivalTrains, { cache: "force-cache" });
+      const data: Train[] = await response.json();
+      return data;
     }
+    if (type === "DEPARTURE") {
+      const response = await fetch(departingTrains, { cache: "force-cache" });
+      const data: Train[] = await response.json();
+      return data;
+    }
+    return []; // If neither arrival or departure due to some error, avoid fetching incorrect data
+  } catch (error) {
+    console.error("Error fetching live train data:", error);
+    return [];
+  }
 }
 
 export default fetchLiveTrain;

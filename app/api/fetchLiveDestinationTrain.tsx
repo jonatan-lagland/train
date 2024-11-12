@@ -28,7 +28,7 @@ async function fetchLiveDestinationTrain({
   if (isCommuter === "true") amount = 50; // Fetch more for commuter
 
   try {
-    const response = await fetch(URL);
+    const response = await fetch(URL, { cache: "force-cache" });
     const data: Train[] = await response.json();
     return data;
   } catch (error) {

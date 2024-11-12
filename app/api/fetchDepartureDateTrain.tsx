@@ -14,7 +14,7 @@ type fetchDepartureDateTrainProps = {
 async function fetchDepartureDateTrain({ date }: fetchDepartureDateTrainProps): Promise<Train[] | TrainError | []> {
   const departureDateTrain = `https://rata.digitraffic.fi/api/v1/trains/${date}`;
   try {
-    const response = await fetch(departureDateTrain);
+    const response = await fetch(departureDateTrain, { cache: "force-cache" });
     const data: Train[] = await response.json();
     return data;
   } catch (error) {
