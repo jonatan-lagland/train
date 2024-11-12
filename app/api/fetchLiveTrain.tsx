@@ -23,12 +23,12 @@ async function fetchLiveTrain({ stationShortCode, type, isCommuter }: fetchLiveT
   const departingTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=0&departed_trains=0&departing_trains=${amount}&include_nonstopping=false&train_categories=${trainCategory}`;
   try {
     if (type === "ARRIVAL") {
-      const response = await fetch(arrivalTrains, { cache: "force-cache" });
+      const response = await fetch(arrivalTrains);
       const data: Train[] = await response.json();
       return data;
     }
     if (type === "DEPARTURE") {
-      const response = await fetch(departingTrains, { cache: "force-cache" });
+      const response = await fetch(departingTrains);
       const data: Train[] = await response.json();
       return data;
     }
