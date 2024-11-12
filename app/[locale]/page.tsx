@@ -77,13 +77,13 @@ export default function Home() {
               loop: false,
               dragFree: true,
             }}
-            className="w-full max-w-sm">
+            className="w-svw">
             <CarouselContent>
               {imageTiles.map((item, index) => (
-                <CarouselItem key={index} className="basis-auto relative">
+                <CarouselItem key={index} className="basis-auto relative overflow-hidden">
                   <div className="p-1">
                     <Card>
-                      <CardContent className=" h-64 w-48 p-0">
+                      <CardContent className="h-64 w-48 p-0 ">
                         <Link
                           className="flex aspect-[3/5] items-center justify-center cursor-pointer"
                           href={`/${locale}/${item.href}`}
