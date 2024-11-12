@@ -83,13 +83,13 @@ export default function Home() {
                 <CarouselItem key={index} className="basis-auto relative">
                   <div className="p-1">
                     <Card>
-                      <CardContent className="h-52  w-52">
+                      <CardContent className=" h-64 w-48 p-0">
                         <Link
-                          className="flex aspect-square items-center justify-center cursor-pointer"
+                          className="flex aspect-[3/5] items-center justify-center cursor-pointer"
                           href={`/${locale}/${item.href}`}
                           passHref>
                           <ImageTile src={item.src}></ImageTile>
-                          <div className="absolute text-white">
+                          <div className="absolute bottom-4 text-white">
                             <ImageTileTitle title={item.title}></ImageTileTitle>
                           </div>
                         </Link>
