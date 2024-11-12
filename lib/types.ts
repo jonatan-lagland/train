@@ -16,7 +16,7 @@ export type Train = {
 }
 
 export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
-export type TrainDestinationParams = "departure" | "arrival" | undefined;
+export type TrainDestinationParams = "departure" | "arrival";
 
 export type TransformedTimeTableRow = {
     stationName: string

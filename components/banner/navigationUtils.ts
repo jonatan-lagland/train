@@ -78,7 +78,7 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
           : true;
       
         // Set the 'type' parameter
-        params.append('type', destination ? 'departure' : 'arrival');
+        params.append('type', type);
         params.append('commuter', commuter.toString());
       
         // Add 'destination' if provided
