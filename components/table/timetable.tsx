@@ -382,27 +382,34 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="bg-white border">
+          <TableBody className="border">
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <React.Fragment key={row.id}>
-                  <TableRow className="border-none hover:bg-inherit" data-state={row.getIsSelected() && "selected"}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="pt-8 h-28">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  <TableRow className="hover:bg-inherit">
-                    <TableCell className="p-0" colSpan={row.getVisibleCells().length}>
-                      <AccordionItem className="border-none" value={row.id}>
-                        <AccordionTrigger
-                          aria-label={`${tTimeTable("ariaExpandButton")} ${row.original.trainType} ${row.original.trainNumber}`}
-                          className="flex-row justify-center gap-2 items-center p-3"></AccordionTrigger>
-                        <AccordionContent className="flex flex-col items-center justify-center">
-                          <ol className="grid grid-cols-[min-content_min-content_1fr_min-content]">
-                            {row.original.trainJourney.map((journey, index) => {
-                              return (
+              table.getRowModel().rows.map((row) => {
+                const { liveEstimateTime, cancelled, scheduledTime } = row.original;
+                const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
+                const isGreyBg = liveDateTime < Date.now() || cancelled;
+                const rowBgClass = isGreyBg ? "bg-gray-200 hover:bg-gray-200" : "hover:bg-white bg-white"; // Override hover state
+
+                return (
+                  <React.Fragment key={row.id}>
+                    <TableRow className={`border-none transition-all fade-in ${rowBgClass}`} data-state={row.getIsSelected() && "selected"}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="pt-8 h-28">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+
+                    {/* Accordion Row remains unchanged */}
+                    <TableRow className={`transition-all fade-in ${rowBgClass}`}>
+                      <TableCell className="p-0" colSpan={row.getVisibleCells().length}>
+                        <AccordionItem className="border-none" value={row.id}>
+                          <AccordionTrigger
+                            aria-label={`${tTimeTable("ariaExpandButton")} ${row.original.trainType} ${row.original.trainNumber}`}
+                            className="flex-row justify-center gap-2 items-center p-3"></AccordionTrigger>
+                          <AccordionContent className="flex flex-col items-center justify-center">
+                            <ol className="grid grid-cols-[min-content_min-content_1fr_min-content]">
+                              {row.original.trainJourney.map((journey, index) => (
                                 <JourneyItem
                                   key={index}
                                   index={index}
@@ -410,15 +417,15 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                                   journey={journey}
                                   locale={locale}
                                 />
-                              );
-                            })}
-                          </ol>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))
+                              ))}
+                            </ol>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center h-32 flex-1">
