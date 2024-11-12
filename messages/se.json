@@ -80,5 +80,8 @@
         "header": "Tidtabeller för Finlands Järnvägsnät",
         "subheader": "Suomilinja erbjuder en användarvänlig tjänst för realtidsövervakning av tåg.",
         "imageTilesTitle": "Utforska en av platserna nedan"
+    },
+    "Nav": {
+        "logo": "Tidtabeller"
     }
 }

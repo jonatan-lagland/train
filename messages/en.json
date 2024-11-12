@@ -80,5 +80,8 @@
         "header": "Timetables for Finland's Rail Network",
         "subheader": "Suomilinja offers an easy-to-use service for real-time train tracking.",
         "imageTilesTitle": "Explore one of the locations below"
+    },
+    "Nav": {
+        "logo": "Schedules"
     }
 }
