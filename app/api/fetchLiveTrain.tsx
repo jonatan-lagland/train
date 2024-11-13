@@ -1,10 +1,10 @@
-import { Train, TrainDestination, TrainError } from "@/lib/types";
+import { Train, TrainTypeParam, TrainError } from "@/lib/types";
 
 let amount: number = 30;
 
 type fetchLiveTrainProps = {
   stationShortCode: string | undefined;
-  type: TrainDestination;
+  type: TrainTypeParam;
   isCommuter: string;
 };
 
@@ -12,7 +12,7 @@ type fetchLiveTrainProps = {
  * A function that takes in a station short code and destination type to fetch live train data using the Fintraffic API.
 
  * @param {string} props.stationShortCode - A string containing a station's short code.
- * @param {TrainDestination} props.type - A string containing the destination type.
+ * @param {TrainTypeParam} props.type - A string containing the destination type.
  * @returns {Promise<Train[] | TrainError | []>} Returns either an array of live train data or an error object as a promise from the API, or an empty array in case of a server-side exception.
  */
 
@@ -22,12 +22,12 @@ async function fetchLiveTrain({ stationShortCode, type, isCommuter }: fetchLiveT
   const arrivalTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=${amount}&departed_trains=0&departing_trains=0&include_nonstopping=false&train_categories=${trainCategory}`;
   const departingTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=0&departed_trains=0&departing_trains=${amount}&include_nonstopping=false&train_categories=${trainCategory}`;
   try {
-    if (type === "ARRIVAL") {
+    if (type.toLowerCase() === "arrival") {
       const response = await fetch(arrivalTrains);
       const data: Train[] = await response.json();
       return data;
     }
-    if (type === "DEPARTURE") {
+    if (type.toLowerCase() === "departure") {
       const response = await fetch(departingTrains);
       const data: Train[] = await response.json();
       return data;

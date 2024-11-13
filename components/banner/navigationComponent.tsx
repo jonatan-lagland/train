@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { SpinnerSm } from "../ui/spinner";
 import { Check, SwapVert } from "@mui/icons-material";
 import { Checkbox } from "../ui/checkbox";
-import { StationMetaData, TrainDestinationParams } from "@/lib/types";
+import { StationMetaData, TrainTypeParam } from "@/lib/types";
 import NavigationUtils from "./navigationUtils";
 import { useTranslations } from "next-intl";
 import { addMonths, format, isSameDay } from "date-fns";
@@ -25,7 +25,7 @@ export type NavigationComponentProps = {
   stationMetadata: [] | StationMetaData[];
   defaultCity: string | undefined;
   destinationParam: string | undefined;
-  typeParam: TrainDestinationParams;
+  typeParam: TrainTypeParam;
   isCommuter: boolean;
   dateParam: string | null;
 };

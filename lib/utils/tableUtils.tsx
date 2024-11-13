@@ -3,7 +3,7 @@
 import * as React from "react";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TransformedTimeTableRow, TimeTableRow, TrainDestination } from "../types";
+import { TransformedTimeTableRow, TimeTableRow, TrainTypeParam } from "../types";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -33,7 +33,7 @@ type JourneyItemProps = {
 };
 
 type CreateColumnsProps = {
-  tableType: TrainDestination;
+  tableType: TrainTypeParam;
   locale: LocaleNextIntl;
   translation: any;
   selectedTrainNumber: number | undefined;

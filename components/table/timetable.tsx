@@ -28,17 +28,17 @@ import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Skeleton } from "../ui/skeleton";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
-import { TimeTableRow, TrainDestination, TransformedTimeTableRow } from "@/lib/types";
+import { TimeTableRow, TrainTypeParam, TransformedTimeTableRow } from "@/lib/types";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 import { getJourneyTimeStamp, getLiveEstimateTimestamp, getTimeStamp, LocaleNextIntl } from "@/lib/utils/timeStampUtils";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
-  destinationType: TrainDestination;
+  destinationType: TrainTypeParam;
 };
 
 type CreateColumnsProps = {
-  tableType: TrainDestination;
+  tableType: TrainTypeParam;
   locale: LocaleNextIntl;
   translation: any;
   selectedTrainNumber: number | undefined;

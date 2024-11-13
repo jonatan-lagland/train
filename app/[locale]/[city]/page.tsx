@@ -8,7 +8,7 @@ import getLiveTrainData, { getTransformedTrainData } from "@/lib/utils/liveTrain
 import findStationDestination from "@/lib/utils/stationDestination";
 import Sidebar from "@/components/sidebar/sidebar";
 import { SelectedTrainProvider } from "@/lib/contextProvider/SelectedTrainProvider";
-import { TrainDestination } from "@/lib/types";
+import { TrainTypeParam } from "@/lib/types";
 import { TimeTableComponent } from "@/components/table/timetable";
 
 export type BannerLabel = "arrivalTrains" | "departureTrains";
@@ -53,8 +53,8 @@ export async function generateMetadata({ params, searchParams }: GenerateMetadat
 }
 
 export default async function TimeTablePage({ params, searchParams }: TimeTablePageProps) {
-  const destinationType: TrainDestination = (searchParams?.type?.toUpperCase() as TrainDestination) || ("DEPARTURE" as TrainDestination);
-  const destinationLabel: BannerLabel = destinationType === "DEPARTURE" ? "departureTrains" : "arrivalTrains"; // For localization
+  const destinationType: TrainTypeParam = (searchParams?.type?.toUpperCase() as TrainTypeParam) || ("departure" as TrainTypeParam);
+  const destinationLabel: BannerLabel = destinationType.toLowerCase() === "departure" ? "departureTrains" : "arrivalTrains"; // For localization
   const city: string = params.city ? (params.city as string) : "";
   const cityDestination: string = searchParams?.destination as string;
   const isCommuter: string = searchParams?.commuter as string;

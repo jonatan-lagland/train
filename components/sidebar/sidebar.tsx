@@ -6,14 +6,14 @@ import ArrivalTimestamp from "./arrivalTimestamp";
 import useSortedStationData from "@/lib/utils/sortedStationData";
 import useTimestampInterval from "@/lib/utils/timestampInterval";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
-import { SiteLocale, TransformedTimeTableRow, TrainDestination } from "@/lib/types";
+import { SiteLocale, TrainTypeParam, TransformedTimeTableRow } from "@/lib/types";
 import LiveTrainGPS from "./liveTrainGPS";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 import useCommuterLink from "@/lib/utils/commuterLink";
 
 type SidebarProps = {
   data: TransformedTimeTableRow[];
-  destinationType: TrainDestination;
+  destinationType: TrainTypeParam;
 };
 
 function Sidebar({ data, destinationType }: SidebarProps) {
@@ -29,7 +29,7 @@ function Sidebar({ data, destinationType }: SidebarProps) {
   const city = params.city as string;
   const locale = useLocale() as SiteLocale;
   const translation = useTranslations("TimeTable");
-  const destinationText = destinationType === "ARRIVAL" ? translation("nextDeparture") : translation("nextDestination");
+  const destinationText = destinationType === "arrival" ? translation("nextDeparture") : translation("nextDestination");
   const timeStampNow = useTimestampInterval();
   const nextStation = useSortedStationData(data, selectedTrainNumber, setTrainNumber, timeStampNow, router);
   const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;

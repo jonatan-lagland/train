@@ -1,3 +1,6 @@
+export type TrainTypeParam = "departure" | "arrival";
+export type SiteLocale = 'fi' | 'se' | 'en'
+
 export type Train = {
     trainNumber: number
     departureDate: Date
@@ -15,32 +18,12 @@ export type Train = {
     timeTableRows: TimeTableRow[];
 }
 
-export type TrainDestination = "ARRIVAL" | "DEPARTURE" | undefined;
-export type TrainDestinationParams = "departure" | "arrival";
-
-export type TransformedTimeTableRow = {
-    stationName: string
-    departureLatitude: number,
-    departureLongitude: number,
-    type: TrainDestination
-    scheduledTime: string
-    scheduledFinalDestination: string
-    liveEstimateTime?: string
-    unknownDelay?: boolean
-    trainType: string
-    trainNumber: number
-    differenceInMinutes?: number
-    commercialTrack: string
-    cancelled: boolean
-    trainJourney: []
-}
-
 export type TimeTableRow = {
     trainStopping: boolean
     stationShortCode: string
     stationcUICCode: number
     countryCode: "FI" | "RU"
-    type: "ARRIVAL" | "DEPARTURE"
+    type: TrainTypeParam
     commercialStop?: boolean
     commercialTrack?: string
     cancelled: boolean
@@ -64,6 +47,23 @@ export type TimeTableRow = {
         accepted: string,
         timestamp: Date
     }
+}
+
+export type TransformedTimeTableRow = {
+    stationName: string
+    departureLatitude: number,
+    departureLongitude: number,
+    type: TrainTypeParam
+    scheduledTime: string
+    scheduledFinalDestination: string
+    liveEstimateTime?: string
+    unknownDelay?: boolean
+    trainType: string
+    trainNumber: number
+    differenceInMinutes?: number
+    commercialTrack: string
+    cancelled: boolean
+    trainJourney: []
 }
 
 export type StationMetaData = {
@@ -94,5 +94,3 @@ export type TrainGPS = {
     speed: number,
     accuracy?: number
 }
-
-export type SiteLocale = 'fi' | 'se' | 'en'

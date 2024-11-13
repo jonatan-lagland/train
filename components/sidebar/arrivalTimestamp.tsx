@@ -1,13 +1,13 @@
 "use client";
 import { useTranslations } from "next-intl";
-import { SiteLocale, TransformedTimeTableRow, TrainDestination } from "@/lib/types";
+import { SiteLocale, TransformedTimeTableRow, TrainTypeParam } from "@/lib/types";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatedEllipses } from "../ui/spinner";
 
 type ArrivalTimestampProps = {
   city: string;
-  destinationType: TrainDestination;
+  destinationType: TrainTypeParam;
   locale: SiteLocale;
   stationNextTimestamp: string;
   stationNextTrainTrack?: string;
@@ -21,7 +21,7 @@ type ArrivalTimestampProps = {
  *
  * @param {ArrivalTimestampProps} props - The props object.
  * @param {string} props.city - City label.
- * @param {TrainDestination} props.destinationType - Whether the train is an arrival or destination train.
+ * @param {TrainTypeParam} props.destinationType - Whether the train is an arrival or destination train.
  * @param {string} props.stationNextTimestamp - Unix Timestamp of the next train arrival.
  * @param {number} props.stationNextTrainTrack - The train track of the next arriving train.
  * @param {TransformedTimeTableRow[]} props.data - Live train data, the length of which is evaluated.
@@ -60,20 +60,20 @@ export default function ArrivalTimestamp({
       case "se":
         return (
           <>
-            {destinationType === "ARRIVAL" ? "Anländer till" : "Avgår från"} <span className="capitalize">{decodedCity}</span> station om{" "}
+            {destinationType === "arrival" ? "Anländer till" : "Avgår från"} <span className="capitalize">{decodedCity}</span> station om{" "}
             <span className="font-bold">{travelTimeLabel}</span>
-            {destinationType === "ARRIVAL" ? "på spår " : " från spår "}
+            {destinationType === "arrival" ? "på spår " : " från spår "}
             <span>{stationNextTrainTrack}</span>.
           </>
         );
       case "en":
         return (
           <>
-            {destinationType === "ARRIVAL" ? "Arrives at " : "Departs from "} <span className="capitalize">{decodedCity}</span> station in{" "}
+            {destinationType === "arrival" ? "Arrives at " : "Departs from "} <span className="capitalize">{decodedCity}</span> station in{" "}
             <span className="font-bold">{travelTimeLabel}</span>
             {stationNextTrainTrack ? (
               <>
-                {destinationType === "ARRIVAL" ? "on track " : " from track "}
+                {destinationType === "arrival" ? "on track " : " from track "}
                 <span>{stationNextTrainTrack}</span>
               </>
             ) : null}
@@ -83,11 +83,11 @@ export default function ArrivalTimestamp({
       default:
         return (
           <>
-            {destinationType === "ARRIVAL" ? "Saapuu " : "Lähtee "} <span className="capitalize">{decodedCity}</span>{" "}
-            {destinationType === "ARRIVAL" ? "asemalle " : "asemalta "} <span className="font-bold">{travelTimeLabel}</span> kuluttua
+            {destinationType === "arrival" ? "Saapuu " : "Lähtee "} <span className="capitalize">{decodedCity}</span>{" "}
+            {destinationType === "arrival" ? "asemalle " : "asemalta "} <span className="font-bold">{travelTimeLabel}</span> kuluttua
             {stationNextTrainTrack ? (
               <>
-                {destinationType === "ARRIVAL" ? " raiteelle " : " raiteelta "}
+                {destinationType === "arrival" ? " raiteelle " : " raiteelta "}
                 <span>{stationNextTrainTrack}</span>
               </>
             ) : null}

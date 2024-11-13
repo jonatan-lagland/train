@@ -1,6 +1,6 @@
 import sanitizeStationName from "./sanitizeStationName";
 import fetchLiveTrain from "@/app/api/fetchLiveTrain";
-import { StationMetaData, TransformedTimeTableRow, Train, TrainDestination, TrainError } from "../types";
+import { StationMetaData, TransformedTimeTableRow, Train, TrainError, TrainTypeParam } from "../types";
 import fetchLiveDestinationTrain from "@/app/api/fetchLiveDestinationTrain";
 import fetchDepartureDateTrain from "@/app/api/fetchDepartureDateTrain";
 
@@ -26,7 +26,7 @@ type LiveTrainDataResult = {
  */
 export default async function getLiveTrainData(
   city: string,
-  destinationType: TrainDestination,
+  destinationType: TrainTypeParam,
   stationMetadata: StationMetaData[],
   isCommuter: string,
   cityDestination?: string,
@@ -115,7 +115,7 @@ export default async function getLiveTrainData(
  * @param {(string | undefined)} finalStationShortCode A train journey's final stopping destination short code (optional)
  * @param {StationMetaData[]} stationMetadata Metadata for all available stations.
  * @param {(string | undefined)} stationShortCode A station short code for the starting station.
- * @param {TrainDestination} destinationType Destination type of either 'ARRIVAL' or 'DEPARTURE'
+ * @param {TrainDestination} destinationType Destination type of either 'arrival' or 'departure'
  * @returns {TransformedTimeTableRow[] | [] } An array of TimeTable objects that represent the station stops of a given train journey, or an empty array in the case of an error.
  */
 export function getTransformedTrainData(
@@ -123,7 +123,7 @@ export function getTransformedTrainData(
   finalStationShortCode: string | undefined,
   stationMetadata: StationMetaData[],
   stationShortCode: string | undefined,
-  destinationType: TrainDestination
+  destinationType: TrainTypeParam
 ): TransformedTimeTableRow[] | [] {
   /* In case of a TrainError, exit early and return an empty array */
   if (isTrainError(liveTrainData)) return [];
@@ -135,10 +135,10 @@ export function getTransformedTrainData(
      * the "lastTrainStop" will be considered the first index in the data.
      * Otherwise it will default to the last index.
      */
-    const lastTrainStop = destinationType === "ARRIVAL" ? train.timeTableRows[0] : train.timeTableRows[train.timeTableRows.length - 1];
+    const lastTrainStop = destinationType === "arrival" ? train.timeTableRows[0] : train.timeTableRows[train.timeTableRows.length - 1];
     /* If a destination has been determined, set a destinationRow. Takes presedence over "lastTrainStop"  */
     const lastTrainStopAsDestination = train.timeTableRows.find(
-      (row) => row.stationShortCode === finalStationShortCode && row.type === "ARRIVAL"
+      (row) => row.stationShortCode === finalStationShortCode && row.type === "arrival"
     );
     /* Find the metadata for the final destination, e.g. the name of the station */
     const lastTrainStopMetadata = finalStationShortCode

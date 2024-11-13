@@ -1,4 +1,4 @@
-import { TrainDestinationParams } from "@/lib/types";
+import { TrainTypeParam } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
@@ -7,7 +7,7 @@ import { z } from "zod";
 
 
 export type NavigationUtilsProps = {
-    typeParam: TrainDestinationParams;
+    typeParam: TrainTypeParam;
     defaultCity: string | undefined;
     destinationParam: string | undefined;
     isCommuter: boolean;
@@ -36,7 +36,7 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
     })
 
     const initialDefaultValues = {
-        type: typeParam ? typeParam : "departure" as TrainDestinationParams,
+        type: typeParam ? typeParam : "departure" as TrainTypeParam,
         location: defaultCity ? decodeURIComponent(defaultCity) : undefined,
         destination: destinationParam ? decodeURIComponent(destinationParam) : undefined,
         date: dateParam ? new Date(dateParam) : new Date(),
@@ -65,7 +65,7 @@ export default function NavigationUtils({ typeParam, defaultCity, destinationPar
 
     function setNavigationPath(
         sanitizedLocation: string,
-        type: TrainDestinationParams,
+        type: TrainTypeParam,
         commuter: boolean,
         date?: Date,
         destination?: string
