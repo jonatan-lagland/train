@@ -31,7 +31,14 @@
         "commuteSuggestion": "Sök efter pendeltåg istället",
         "commuterTrains": "Pendeltåg",
         "ariaMapViewButton": "Välj tåg att visa i kartvy: ",
-        "ariaExpandButton": "Visa mer information om tågresan "
+        "ariaExpandButton": "Visa mer information om tågresan ",
+        "minTime": "Tid från",
+        "maxTime": "Tid upp till",
+        "filter": "Spara",
+        "reset": "Rensa val",
+        "timeRangeLabel": "Tidsintervall",
+        "timeRangeDescription": "Ange tidsintervallet för tabellen."
+        
     },
     "AriaTimeTable": {
         "select": "Välj alla"

@@ -31,7 +31,13 @@
         "commuteSuggestion": "Search for commuter trains instead",
         "commuterTrains": "Commuter Trains",
         "ariaMapViewButton": "Select train to be shown in map view: ",
-        "ariaExpandButton": "Expand more information about train journey "
+        "ariaExpandButton": "Expand more information about train journey ",
+        "minTime": "Time from",
+        "maxTime": "Time up to",
+        "filter": "Save",
+        "reset": "Clear selections",
+        "timeRangeLabel": "Time interval",
+        "timeRangeDescription": "Set the time interval for the table."
     },
     "AriaTimeTable": {
         "select": "Select all"

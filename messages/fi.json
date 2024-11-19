@@ -31,7 +31,13 @@
         "commuteSuggestion": "Hae sen sijaan paikallisjunia",
         "commuterTrains": "Paikallisjunat",
         "ariaMapViewButton": "Valitse karttanäkymässä näytettävä juna: ",
-        "ariaExpandButton": "Laajenna lisätietoja junamatkasta "
+        "ariaExpandButton": "Laajenna lisätietoja junamatkasta ",
+        "minTime": "Aika alkaen",
+        "maxTime": "Aika enintään",
+        "filter": "Tallenna",
+        "reset": "Poista valinnat",
+        "timeRangeLabel": "Aikaväli",
+        "timeRangeDescription": "Määritä taulukon aikaväli."
     },
     "AriaTimeTable": {
         "select": "Valitse kaikki"
