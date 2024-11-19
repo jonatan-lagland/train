@@ -29,7 +29,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { DualRangeSlider } from "../ui/dual-range-slider";
 import { createColumns, epochToHourMinute, epochToISO, setEpochFromTimeString } from "@/lib/utils/tableUtils";
 import { Label } from "../ui/label";
-import MemoizedTableRow from "./table-components/memoizedTablerow";
+import MemoizedTableRow from "./table-components/memoizedTableRow";
 import MemoizedEmptyRow from "./table-components/memoizedEmptyTableRow";
 
 export const timeRangeInputId = ["timeStartInput", "timeEndInput"];
