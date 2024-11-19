@@ -8,13 +8,13 @@ import { flexRender, Row } from "@tanstack/react-table";
 import React from "react";
 import JourneyItem from "./journeyItem";
 
-type MemoizedTableRowProps = {
+type TimetableRowProps = {
   row: Row<TransformedTimeTableRow>;
   tTimeTable: any;
   locale: LocaleNextIntl;
 };
 
-const MemoizedTableRow = React.memo(({ row, tTimeTable, locale }: MemoizedTableRowProps) => {
+const TimetableRow = ({ row, tTimeTable, locale }: TimetableRowProps) => {
   const { liveEstimateTime, cancelled, scheduledTime } = row.original;
   const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
   const isGreyBg = liveDateTime < Date.now() || cancelled;
@@ -54,8 +54,6 @@ const MemoizedTableRow = React.memo(({ row, tTimeTable, locale }: MemoizedTableR
       </TableRow>
     </React.Fragment>
   );
-});
+};
 
-MemoizedTableRow.displayName = "MemoizedTableRow";
-
-export default MemoizedTableRow;
+export default TimetableRow;
