@@ -51,7 +51,7 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent side="bottom" className=" w-96 z-[1000]">
+        <PopoverContent side="bottom" className=" z-[1000]">
           <div className="grid gap-4">
             <div className="space-y-2">
               <h4 className="font-medium leading-none">{tTimeTable("timeRangeLabel")}</h4>
