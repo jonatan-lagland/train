@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { epochToHourMinute, epochToISO, setEpochFromTimeString } from "@/lib/utils/tableUtils";
 import { DualRangeSlider } from "@/components/ui/dual-range-slider";
-import { Table } from "@tanstack/react-table";
+import { Column, Table } from "@tanstack/react-table";
 import { TransformedTimeTableRow } from "@/lib/types";
 import { useCalculateWindowSize } from "@/lib/utils/calculateWindowSize";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import * as Dialog from "@radix-ui/react-dialog";
 
 export const timeRangeInputId = ["timeStartInput", "timeEndInput"];
 
@@ -21,7 +20,23 @@ type TimeFilterComponentProps = {
   isDisableFilter: boolean;
 };
 
-const TimeFilterComponentContent = ({ tTimeTable, isDisableFilter, sliderValues, defaultSliderValues, setSliderValues, column }) => {
+type TimeFilterComponentContentProps = {
+  tTimeTable: any;
+  isDisableFilter: boolean;
+  sliderValues: number[];
+  defaultSliderValues: number[];
+  setSliderValues: Dispatch<SetStateAction<number[]>>;
+  column: Column<TransformedTimeTableRow, unknown> | undefined;
+};
+
+const TimeFilterComponentContent = ({
+  tTimeTable,
+  isDisableFilter,
+  sliderValues,
+  defaultSliderValues,
+  setSliderValues,
+  column,
+}: TimeFilterComponentContentProps) => {
   return (
     <div className="grid gap-4">
       <div className="space-y-2">
