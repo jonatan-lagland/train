@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import React, { Dispatch, SetStateAction } from "react";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { CalendarIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { epochToHourMinute, epochToISO, setEpochFromTimeString } from "@/lib/utils/tableUtils";
@@ -27,6 +27,7 @@ type TimeFilterComponentContentProps = {
   defaultSliderValues: number[];
   setSliderValues: Dispatch<SetStateAction<number[]>>;
   column: Column<TransformedTimeTableRow, unknown> | undefined;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const TimeFilterComponentContent = ({
@@ -36,6 +37,7 @@ const TimeFilterComponentContent = ({
   defaultSliderValues,
   setSliderValues,
   column,
+  setOpen,
 }: TimeFilterComponentContentProps) => {
   return (
     <div className="grid gap-4">
@@ -100,9 +102,12 @@ const TimeFilterComponentContent = ({
         </div>
         <div className="flex flex-col gap-2">
           <Button
-            className=" transition-all fade-in"
+            className="transition-all fade-in"
             disabled={(sliderValues[0] === defaultSliderValues[0] && sliderValues[1] === defaultSliderValues[1]) || isDisableFilter}
-            onClick={() => column?.setFilterValue([epochToISO(sliderValues[0]), epochToISO(sliderValues[1])])}>
+            onClick={() => {
+              column?.setFilterValue([epochToISO(sliderValues[0]), epochToISO(sliderValues[1])]);
+              setOpen(false);
+            }}>
             {tTimeTable("filter")}
           </Button>
           <Button
@@ -110,6 +115,7 @@ const TimeFilterComponentContent = ({
             onClick={() => {
               column?.setFilterValue(undefined);
               setSliderValues([defaultSliderValues[0], defaultSliderValues[1]]);
+              setOpen(false);
             }}
             variant="outline">
             {tTimeTable("reset")}
@@ -139,12 +145,15 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
 
   const { isSmallerThanBreakPoint } = useCalculateWindowSize();
 
+  const [open, setOpen] = React.useState(false);
+
   return (
     <div className="flex flex-row items-center justify-start">
       {isSmallerThanBreakPoint ? (
-        <Drawer>
+        <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
-            <Button className="flex flex-row justify-center py-5 rounded-none items-center" variant="outline">
+            <Button className="flex flex-row justify-center py-5 gap-1 items-center" variant="outline">
+              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               <span className="">{tTimeTable("timeRangeLabel")}</span>
               <div className="w-6">
                 {table.getColumn("scheduledTime")?.getIsFiltered() ? (
@@ -160,11 +169,12 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
               sliderValues={sliderValues}
               defaultSliderValues={defaultSliderValues}
               setSliderValues={setSliderValues}
-              column={column}></TimeFilterComponentContent>
+              column={column}
+              setOpen={setOpen}></TimeFilterComponentContent>
           </DrawerContent>
         </Drawer>
       ) : (
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button className="flex flex-row justify-center py-5 rounded-none items-center" variant="outline">
               <span className="">{tTimeTable("timeRangeLabel")}</span>
@@ -185,7 +195,8 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
               sliderValues={sliderValues}
               defaultSliderValues={defaultSliderValues}
               setSliderValues={setSliderValues}
-              column={column}></TimeFilterComponentContent>
+              column={column}
+              setOpen={setOpen}></TimeFilterComponentContent>
           </PopoverContent>
         </Popover>
       )}
