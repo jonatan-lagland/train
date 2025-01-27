@@ -153,7 +153,7 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
               </div>
             </Button>
           </DrawerTrigger>
-          <DrawerContent className=" px-4 py-2 z-[1000]">
+          <DrawerContent className="px-4 py-2">
             <TimeFilterComponentContent
               tTimeTable={tTimeTable}
               isDisableFilter={isDisableFilter}
