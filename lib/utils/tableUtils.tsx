@@ -89,7 +89,7 @@ export const createColumns = ({
         const isButtonDisabled = liveDateTime < Date.now() || cancelled;
 
         return (
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center text-center">
             <Button
               aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
               disabled={isButtonDisabled}

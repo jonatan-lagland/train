@@ -22,9 +22,9 @@ const TimetableRow = ({ row, tTimeTable, locale }: TimetableRowProps) => {
 
   return (
     <React.Fragment>
-      <TableRow className={`border-none transition-all fade-in ${rowBgClass}`} data-state={row.getIsSelected() && "selected"}>
+      <TableRow className={`border-none transition-all w-2 fade-in ${rowBgClass}`} data-state={row.getIsSelected() && "selected"}>
         {row.getVisibleCells().map((cell) => (
-          <TableCell key={cell.id} className="pt-8 h-28">
+          <TableCell key={cell.id} className="pt-8">
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
         ))}
