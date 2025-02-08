@@ -1,4 +1,5 @@
 import { Train, TrainError } from "@/lib/types";
+import { headers } from "@/lib/utils";
 
 let amount = 30;
 
@@ -28,7 +29,7 @@ async function fetchLiveDestinationTrain({
   if (isCommuter === "true") amount = 50; // Fetch more for commuter
 
   try {
-    const response = await fetch(URL);
+    const response = await fetch(URL, { headers });
     const data: Train[] = await response.json();
     return data;
   } catch (error) {

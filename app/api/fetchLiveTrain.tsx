@@ -1,4 +1,5 @@
 import { Train, TrainTypeParam, TrainError } from "@/lib/types";
+import { headers } from "@/lib/utils";
 
 let amount: number = 30;
 
@@ -23,12 +24,12 @@ async function fetchLiveTrain({ stationShortCode, type, isCommuter }: fetchLiveT
   const departingTrains = `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationShortCode}?arrived_trains=0&arriving_trains=0&departed_trains=0&departing_trains=${amount}&include_nonstopping=false&train_categories=${trainCategory}`;
   try {
     if (type.toLowerCase() === "arrival") {
-      const response = await fetch(arrivalTrains);
+      const response = await fetch(arrivalTrains, { headers });
       const data: Train[] = await response.json();
       return data;
     }
     if (type.toLowerCase() === "departure") {
-      const response = await fetch(departingTrains);
+      const response = await fetch(departingTrains, { headers });
       const data: Train[] = await response.json();
       return data;
     }

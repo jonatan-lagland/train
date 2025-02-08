@@ -1,4 +1,5 @@
 import { TrainGPS } from "@/lib/types";
+import { headers } from "@/lib/utils";
 
 const revalidateDuration: number = 6;
 
@@ -10,14 +11,14 @@ const revalidateDuration: number = 6;
  */
 
 async function fetchLiveTrainGPS(stationShortCode: number) {
-    if (!stationShortCode) return []
+  if (!stationShortCode) return [];
 
-    const response = await fetch(
-        `https://rata.digitraffic.fi/api/v1/train-locations/latest/${stationShortCode}`,
-        { next: { revalidate: revalidateDuration } }
-    );
-    const data: TrainGPS[] | [] = await response.json();
-    return data;
+  const response = await fetch(`https://rata.digitraffic.fi/api/v1/train-locations/latest/${stationShortCode}`, {
+    headers,
+    next: { revalidate: revalidateDuration },
+  });
+  const data: TrainGPS[] | [] = await response.json();
+  return data;
 }
 
 export default fetchLiveTrainGPS;
