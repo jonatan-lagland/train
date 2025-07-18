@@ -1,9 +1,9 @@
 import { RefObject, useEffect, useState } from "react";
 
 export function useToggleNavBarVisibility(targetRef: RefObject<HTMLDivElement> | null) {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [isInView, setIsInView] = useState(true);
+  const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

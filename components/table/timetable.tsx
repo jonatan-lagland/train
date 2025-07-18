@@ -115,7 +115,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
           </TableBody>
         </Table>
         <div
-          className={`fixed bottom-0 left-0 w-full z-[1000] overflow-x-auto bg-white border shadow-md py-4 gap-2 flex flex-wrap items-center justify-center md:justify-between px-4 transition-transform duration-300 ${
+          className={`px-4 fixed bottom-0 left-0 w-full z-[1000] overflow-x-auto bg-white border shadow-md md:py-4 py-2 gap-2 flex items-center justify-center md:justify-between transition-transform duration-300 ${
             show ? "translate-y-0" : "translate-y-full"
           }`}
         >
