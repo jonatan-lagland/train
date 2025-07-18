@@ -19,13 +19,7 @@ const robotoslab = Roboto_Slab({
   variable: "--robotoslab",
 });
 
-export default function LocaleLayout({
-  children,
-  params: { locale },
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
+export default function LocaleLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
   const messages = useMessages();
 
   return (
@@ -38,21 +32,16 @@ export default function LocaleLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <NextIntlClientProvider messages={messages}>
-        <body
-          className={`${inter.variable} ${besley.variable} ${robotoslab.variable} bg-[#F3F3F3]`}
-        >
+        <body className={`${inter.variable} ${besley.variable} ${robotoslab.variable} bg-[#F3F3F3]`}>
           {/* Header */}
           <header className="flex-row w-full flex shadow-md px-2 justify-evenly bg-white">
             <Nav />
           </header>
           {/* Main */}
-          <main className=" min-h-lvh">
+          <main>
             {children}
             <Analytics />
           </main>
-          <footer className="w-full h-full bg-inherit p-4 shadow-md border-y">
-            <Footer></Footer>
-          </footer>
         </body>
       </NextIntlClientProvider>
     </html>

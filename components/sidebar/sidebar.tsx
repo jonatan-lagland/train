@@ -10,6 +10,7 @@ import { SiteLocale, TrainTypeParam, TransformedTimeTableRow } from "@/lib/types
 import LiveTrainGPS from "./liveTrainGPS";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 import useCommuterLink from "@/lib/utils/commuterLink";
+import Footer from "../footer/footer";
 
 type SidebarProps = {
   data: TransformedTimeTableRow[];
@@ -64,11 +65,15 @@ function Sidebar({ data, destinationType }: SidebarProps) {
             stationNextTrainTrack={stationNextTrainTrack}
             timeStampNow={timeStampNow}
             data={data}
-            commuterLink={commuterLink}></ArrivalTimestamp>
+            commuterLink={commuterLink}
+          ></ArrivalTimestamp>
         </div>
       </div>
       <div ref={sidebarRef} className="flex flex-col gap-2">
         <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
+        <div className="w-full h-full bg-inherit">
+          <Footer></Footer>
+        </div>
         <div className="text-sm text-slate-600">
           <span className="font-medium">{translation("disclaimerTitle")}: </span>
           <span>{translation("disclaimer")}</span>

@@ -27,6 +27,7 @@ import { createColumns } from "@/lib/utils/tableUtils";
 import TimetableRow from "./table-components/timetableRow";
 import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
+import Footer from "../footer/footer";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -85,8 +86,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   }, [selectedTrainNumber, table]);
 
   return (
-    <div className="flex flex-col gap-10">
-      <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter}></TimeFilterComponent>
+    <div className="flex flex-col pb-20">
       <Accordion type="single" collapsible>
         <Table className="relative">
           <TableHeader>
@@ -110,45 +110,54 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
             )}
           </TableBody>
         </Table>
-        <div className="flex items-start justify-end space-x-2 py-4 ">
-          <div className="flex flex-wrap items-center space-x-2">
-            <Button
-              aria-label={t("Navigation.firstPage")}
-              variant="outline"
-              size="sm"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}>
-              <FirstPageIcon fontSize="small"></FirstPageIcon>
-            </Button>
-            <Button
-              aria-label={t("Navigation.previousPage")}
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}>
-              <KeyboardArrowLeftIcon fontSize="small"></KeyboardArrowLeftIcon>
-            </Button>
-            <div className="flex-1 text-sm text-secondary-foreground">
-              <span>
-                {table.getState().pagination.pageIndex + 1} / {table.getPageCount() === 0 ? 1 : table.getPageCount()}
-              </span>
+        <div className="fixed bottom-0 left-0 w-full z-[1000] overflow-x-auto bg-white border shadow-md py-4 gap-2 flex flex-wrap items-center justify-center md:justify-between px-4">
+          <div className="flex-shrink-0 order-2 md:order-1">
+            <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
+          </div>
+          <div className="flex-1 flex justify-center order-1 md:order-2">
+            <div className="flex items-center space-x-2">
+              <Button
+                aria-label={t("Navigation.firstPage")}
+                variant="outline"
+                size="sm"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <FirstPageIcon fontSize="small" />
+              </Button>
+              <Button
+                aria-label={t("Navigation.previousPage")}
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <KeyboardArrowLeftIcon fontSize="small" />
+              </Button>
+              <div className="text-sm text-secondary-foreground whitespace-nowrap overflow-hidden text-ellipsis">
+                <span>
+                  {table.getState().pagination.pageIndex + 1} / {table.getPageCount() === 0 ? 1 : table.getPageCount()}
+                </span>
+              </div>
+              <Button
+                aria-label={t("Navigation.nextPage")}
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <KeyboardArrowRightIcon fontSize="small" />
+              </Button>
+              <Button
+                aria-label={t("Navigation.lastPage")}
+                variant="outline"
+                size="sm"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <LastPageIcon fontSize="small" />
+              </Button>
             </div>
-            <Button
-              aria-label={t("Navigation.nextPage")}
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}>
-              <KeyboardArrowRightIcon fontSize="small"></KeyboardArrowRightIcon>
-            </Button>
-            <Button
-              aria-label={t("Navigation.lastPage")}
-              variant="outline"
-              size="sm"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}>
-              <LastPageIcon fontSize="small"></LastPageIcon>
-            </Button>
           </div>
         </div>
       </Accordion>
