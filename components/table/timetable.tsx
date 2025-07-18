@@ -28,6 +28,7 @@ import TimetableRow from "./table-components/timetableRow";
 import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
 import Footer from "../footer/footer";
+import { useScrollDirectionShow } from "@/lib/utils/scrollHide";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -85,6 +86,8 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     }
   }, [selectedTrainNumber, table]);
 
+  const show = useScrollDirectionShow();
+
   return (
     <div className="flex flex-col pb-20">
       <Accordion type="single" collapsible>
@@ -110,7 +113,11 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
             )}
           </TableBody>
         </Table>
-        <div className="fixed bottom-0 left-0 w-full z-[1000] overflow-x-auto bg-white border shadow-md py-4 gap-2 flex flex-wrap items-center justify-center md:justify-between px-4">
+        <div
+          className={`fixed bottom-0 left-0 w-full z-[1000] overflow-x-auto bg-white border shadow-md py-4 gap-2 flex flex-wrap items-center justify-center md:justify-between px-4 transition-transform duration-300 ${
+            show ? "translate-y-0" : "translate-y-full"
+          }`}
+        >
           <div className="flex-shrink-0 order-2 md:order-1">
             <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
           </div>
