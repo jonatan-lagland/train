@@ -27,8 +27,8 @@ import { createColumns } from "@/lib/utils/tableUtils";
 import TimetableRow from "./table-components/timetableRow";
 import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
-import Footer from "../footer/footer";
-import { useScrollDirectionShow } from "@/lib/utils/scrollHide";
+import { useRef } from "react";
+import { useToggleNavBarVisibility } from "@/lib/utils/toggleNavbarVisibility";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -86,10 +86,11 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     }
   }, [selectedTrainNumber, table]);
 
-  const show = useScrollDirectionShow();
+  const observedRef = useRef(null);
+  const show = useToggleNavBarVisibility(observedRef);
 
   return (
-    <div className="flex flex-col pb-20">
+    <div ref={observedRef} className="flex flex-col pb-20">
       <Accordion type="single" collapsible>
         <Table className="relative">
           <TableHeader>
