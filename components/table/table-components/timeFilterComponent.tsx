@@ -10,10 +10,12 @@ import { Column, Table } from "@tanstack/react-table";
 import { TransformedTimeTableRow } from "@/lib/types";
 import { useCalculateWindowSize } from "@/lib/utils/calculateWindowSize";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Virtualizer } from "@tanstack/react-virtual";
 
 export const timeRangeInputId = ["timeStartInput", "timeEndInput"];
 
 type TimeFilterComponentProps = {
+  rowVirtualizer: Virtualizer<HTMLDivElement, Element>;
   table: Table<TransformedTimeTableRow>;
   data: TransformedTimeTableRow[];
   tTimeTable: any;
@@ -21,6 +23,7 @@ type TimeFilterComponentProps = {
 };
 
 type TimeFilterComponentContentProps = {
+  rowVirtualizer: Virtualizer<HTMLDivElement, Element>;
   tTimeTable: any;
   isDisableFilter: boolean;
   sliderValues: number[];
@@ -31,6 +34,7 @@ type TimeFilterComponentContentProps = {
 };
 
 const TimeFilterComponentContent = ({
+  rowVirtualizer,
   tTimeTable,
   isDisableFilter,
   sliderValues,
@@ -107,7 +111,9 @@ const TimeFilterComponentContent = ({
             onClick={() => {
               column?.setFilterValue([epochToISO(sliderValues[0]), epochToISO(sliderValues[1])]);
               setOpen(false);
-            }}>
+              rowVirtualizer.scrollToIndex(0, { align: "start" });
+            }}
+          >
             {tTimeTable("filter")}
           </Button>
           <Button
@@ -116,8 +122,10 @@ const TimeFilterComponentContent = ({
               column?.setFilterValue(undefined);
               setSliderValues([defaultSliderValues[0], defaultSliderValues[1]]);
               setOpen(false);
+              rowVirtualizer.scrollToIndex(0, { align: "start" });
             }}
-            variant="outline">
+            variant="outline"
+          >
             {tTimeTable("reset")}
           </Button>
         </div>
@@ -126,7 +134,7 @@ const TimeFilterComponentContent = ({
   );
 };
 
-const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeFilterComponentProps) => {
+const TimeFilterComponent = ({ rowVirtualizer, table, data, tTimeTable, isDisableFilter }: TimeFilterComponentProps) => {
   const column = table.getColumn("scheduledTime");
   const [defaultSliderValues, setDefaultSliderValues] = React.useState([0, 0]);
   const [sliderValues, setSliderValues] = React.useState([0, 0]);
@@ -156,21 +164,21 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               <span className="">{tTimeTable("timeRangeLabel")}</span>
               <div className="w-6">
-                {table.getColumn("scheduledTime")?.getIsFiltered() ? (
-                  <span className="bg-black rounded-sm px-1 font-bold text-white">1</span>
-                ) : null}
+                {table.getColumn("scheduledTime")?.getIsFiltered() ? <span className="bg-black rounded-sm px-1 font-bold text-white">1</span> : null}
               </div>
             </Button>
           </DrawerTrigger>
           <DrawerContent className="px-4 py-2">
             <TimeFilterComponentContent
+              rowVirtualizer={rowVirtualizer}
               tTimeTable={tTimeTable}
               isDisableFilter={isDisableFilter}
               sliderValues={sliderValues}
               defaultSliderValues={defaultSliderValues}
               setSliderValues={setSliderValues}
               column={column}
-              setOpen={setOpen}></TimeFilterComponentContent>
+              setOpen={setOpen}
+            ></TimeFilterComponentContent>
           </DrawerContent>
         </Drawer>
       ) : (
@@ -179,9 +187,7 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
             <Button className="flex flex-row justify-center py-5 rounded-none items-center" variant="outline">
               <span className="">{tTimeTable("timeRangeLabel")}</span>
               <div className="w-6">
-                {table.getColumn("scheduledTime")?.getIsFiltered() ? (
-                  <span className="bg-black rounded-sm px-1 font-bold text-white">1</span>
-                ) : null}
+                {table.getColumn("scheduledTime")?.getIsFiltered() ? <span className="bg-black rounded-sm px-1 font-bold text-white">1</span> : null}
               </div>
               <div className="px-1">
                 <ChevronDownIcon></ChevronDownIcon>
@@ -190,13 +196,15 @@ const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeF
           </PopoverTrigger>
           <PopoverContent side="bottom" className=" z-[1000]">
             <TimeFilterComponentContent
+              rowVirtualizer={rowVirtualizer}
               tTimeTable={tTimeTable}
               isDisableFilter={isDisableFilter}
               sliderValues={sliderValues}
               defaultSliderValues={defaultSliderValues}
               setSliderValues={setSliderValues}
               column={column}
-              setOpen={setOpen}></TimeFilterComponentContent>
+              setOpen={setOpen}
+            ></TimeFilterComponentContent>
           </PopoverContent>
         </Popover>
       )}

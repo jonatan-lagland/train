@@ -79,6 +79,7 @@ export const createColumns = ({
   return [
     {
       accessorKey: "trainType",
+      size: 100,
       header: () => {
         return <div className="flex flex-row justify-center items-end">{translation("train")}</div>;
       },
@@ -94,7 +95,8 @@ export const createColumns = ({
               aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
               disabled={isButtonDisabled}
               variant={"ghost"}
-              onClick={() => handleButtonClick(trainNumber)}>
+              onClick={() => handleButtonClick(trainNumber)}
+            >
               <PlaceIcon style={{ fill: iconColor }}></PlaceIcon>
             </Button>
             <span>{`${trainType} ${trainNumber}`}</span>
@@ -104,6 +106,7 @@ export const createColumns = ({
     },
     {
       accessorKey: "commercialTrack",
+      size: 100,
       header: () => {
         return <div className="flex flex-row justify-center items-end">{translation(`track`)}</div>;
       },
@@ -114,6 +117,7 @@ export const createColumns = ({
     },
     {
       accessorKey: "stationName",
+      size: 100,
       header: () => {
         if (!tableType) return null;
         const tableTypeFormatted = tableType.toLowerCase();
@@ -129,6 +133,7 @@ export const createColumns = ({
       accessorKey: "scheduledTime",
       filterFn: inTimeRange,
       enableColumnFilter: true, // Ensure column filtering is enabled
+      size: 200,
       header: () => {
         if (!tableType) return null;
         const tableTypeFormatted = tableType.toLowerCase();

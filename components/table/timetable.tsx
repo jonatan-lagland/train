@@ -8,27 +8,20 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import LastPageIcon from "@mui/icons-material/LastPage";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
-import { Accordion } from "../ui/accordion";
-import { TrainTypeParam, TransformedTimeTableRow } from "@/lib/types";
+import { TimeTableRow, TrainTypeParam, TransformedTimeTableRow } from "@/lib/types";
 import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 import { LocaleNextIntl } from "@/lib/utils/timeStampUtils";
 import { createColumns } from "@/lib/utils/tableUtils";
-import TimetableRow from "./table-components/timetableRow";
 import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
-import { useRef } from "react";
-import { useToggleNavBarVisibility } from "@/lib/utils/toggleNavbarVisibility";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import JourneyItem from "./table-components/journeyItem";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -55,12 +48,11 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   });
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -74,101 +66,150 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   });
 
   const isDisableFilter = data.length < 2;
-  // Sets page number to where the currently selected train is
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
+  const { rows } = table.getRowModel();
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length * 2, // Each row has a main row and an accordion row, so we double the count
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: (index) => {
+      return index % 2 === 0 ? 43 : 58; // even = main row, odd = accordion row
+    },
+    overscan: 10,
+  });
+  const virtualRows = rowVirtualizer.getVirtualItems();
+
   React.useEffect(() => {
-    // Use sorted rows to find the index
-    const sortedRows = table.getSortedRowModel().rows;
-    const rowIndex = sortedRows.findIndex((row) => row.original.trainNumber === selectedTrainNumber);
-
-    if (rowIndex !== -1) {
-      const pageIndex = Math.floor(rowIndex / table.getState().pagination.pageSize);
-      table.setPageIndex(pageIndex);
+    const lastVirtualItemIndex = virtualRows[virtualRows.length - 1]?.index;
+    if (lastVirtualItemIndex !== undefined && lastVirtualItemIndex >= rows.length - 1 - rowVirtualizer.options.overscan) {
     }
-  }, [selectedTrainNumber, table]);
-
-  const observedRef = useRef(null);
-  const show = useToggleNavBarVisibility(observedRef);
+  }, [virtualRows, rows.length, rowVirtualizer.options.overscan]);
 
   return (
-    <div ref={observedRef} className="flex flex-col pb-20">
-      <Accordion type="single" collapsible>
-        <Table className="relative">
-          <TableHeader>
+    <div className="flex flex-col gap-4">
+      <TimeFilterComponent rowVirtualizer={rowVirtualizer} table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
+      <div ref={tableContainerRef} style={{ height: "600px", position: "relative", overflow: "auto" }} className="border bg-background">
+        <Table>
+          <TableHeader
+            className="bg-background"
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 1,
+            }}
+          >
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="py-2  text-secondary-foreground">
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} style={{ width: header.getSize() }} className="text-secondary-foreground">
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="border">
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => <TimetableRow key={row.id} row={row} tTimeTable={tTimeTable} locale={locale} />)
+          <TableBody
+            style={{
+              height: `${rowVirtualizer.getTotalSize()}px`,
+              position: "relative",
+              width: "100%",
+            }}
+          >
+            {rows.length > 0 ? (
+              virtualRows.map((virtualRow) => {
+                const rowIndex = Math.floor(virtualRow.index / 2); // Get the index of the actual data row
+                const isAccordionRow = virtualRow.index % 2 === 1; // Check if it's the second (accordion) row
+                const row = rows[rowIndex];
+                if (!row) return null;
+                const key = `${row.id}-${isAccordionRow ? "accordion" : "main"}`;
+                const { liveEstimateTime, cancelled, scheduledTime } = row.original;
+                const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
+                const isGreyBg = liveDateTime < Date.now() || cancelled;
+                const rowBgClass = isGreyBg ? "bg-gray-200 hover:bg-gray-200" : "hover:bg-white bg-white";
+                if (isAccordionRow) {
+                  return (
+                    <TableRow
+                      key={key}
+                      data-index={virtualRow.index}
+                      ref={(node) => {
+                        requestAnimationFrame(() => {
+                          rowVirtualizer.measureElement(node);
+                        });
+                      }}
+                      style={{
+                        position: "absolute",
+                        transform: `translateY(${virtualRow.start}px)`,
+                        width: "100%",
+                      }}
+                      className={`transition-all fade-in ${rowBgClass}`}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      <TableCell
+                        style={{
+                          width: table.getAllFlatColumns().reduce((acc, column) => acc + column.getSize(), 0),
+                        }}
+                      >
+                        <Accordion type="single" collapsible>
+                          <AccordionItem className="border-none w-full" value={row.id}>
+                            <AccordionTrigger
+                              aria-label={`${tTimeTable("ariaExpandButton")} ${row.original.trainType} ${row.original.trainNumber}`}
+                              className="flex-row justify-center gap-2 items-center p-3"
+                            ></AccordionTrigger>
+                            <AccordionContent className="flex flex-col items-center justify-center">
+                              <ol className="grid grid-cols-[min-content_min-content_1fr_min-content]">
+                                {row.original.trainJourney.map((journey, index) => (
+                                  <JourneyItem
+                                    key={index}
+                                    index={index}
+                                    timeTableRow={row.original.trainJourney as TimeTableRow[]}
+                                    journey={journey}
+                                    locale={locale}
+                                  />
+                                ))}
+                              </ol>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </TableCell>
+                    </TableRow>
+                  );
+                } else {
+                  return (
+                    <TableRow
+                      key={key}
+                      ref={(node) => {
+                        requestAnimationFrame(() => {
+                          rowVirtualizer.measureElement(node);
+                        });
+                      }}
+                      style={{
+                        position: "absolute",
+                        transform: `translateY(${virtualRow.start}px)`,
+                        width: "100%",
+                      }}
+                      data-index={virtualRow.index}
+                      className={`transition-all fade-in border-b-0 ${rowBgClass}`}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          style={{
+                            width: cell.column.getSize(),
+                          }}
+                          key={cell.id}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                }
+              })
             ) : (
               <TimetableEmptyRow columns={columns} t={t} />
             )}
           </TableBody>
         </Table>
-        <div
-          className={`px-4 fixed bottom-0 left-0 w-full z-[1000] overflow-x-auto bg-white border shadow-md md:py-4 py-2 gap-2 flex items-center justify-center md:justify-between transition-transform duration-300 ${
-            show ? "translate-y-0" : "translate-y-full"
-          }`}
-        >
-          <div className="flex-shrink-0 order-2 md:order-1">
-            <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
-          </div>
-          <div className="flex-1 flex justify-center order-1 md:order-2">
-            <div className="flex items-center space-x-2">
-              <Button
-                aria-label={t("Navigation.firstPage")}
-                variant="outline"
-                size="sm"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <FirstPageIcon fontSize="small" />
-              </Button>
-              <Button
-                aria-label={t("Navigation.previousPage")}
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <KeyboardArrowLeftIcon fontSize="small" />
-              </Button>
-              <div className="text-sm text-secondary-foreground whitespace-nowrap overflow-hidden text-ellipsis">
-                <span>
-                  {table.getState().pagination.pageIndex + 1} / {table.getPageCount() === 0 ? 1 : table.getPageCount()}
-                </span>
-              </div>
-              <Button
-                aria-label={t("Navigation.nextPage")}
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                <KeyboardArrowRightIcon fontSize="small" />
-              </Button>
-              <Button
-                aria-label={t("Navigation.lastPage")}
-                variant="outline"
-                size="sm"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
-                <LastPageIcon fontSize="small" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Accordion>
+      </div>
     </div>
   );
 }
