@@ -87,7 +87,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   return (
     <div className="flex flex-col gap-4">
       <TimeFilterComponent rowVirtualizer={rowVirtualizer} table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
-      <div ref={tableContainerRef} style={{ height: "600px", position: "relative", overflow: "auto" }} className="border bg-background">
+      <div ref={tableContainerRef} style={{ height: "400px", position: "relative", overflow: "auto" }} className="border bg-background">
         <Table>
           <TableHeader
             className="bg-background"
