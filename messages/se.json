@@ -1,94 +1,95 @@
 {
-    "TimeTable": {
-        "destination": "Destination",
-        "origin": "Ursprung",
-        "departure": "Avgång",
-        "arrival": "Ankomst",
-        "train": "Tåg",
-        "track": "Spår",
-        "placeholder": "Filtrera efter plats...",
-        "arrivalTrains": "Inkommande tåg",
-        "departureTrains": "Avgående tåg",
-        "incoming": "Inkommande",
-        "outgoing": "Avgående",
-        "shortHour": "t",
-        "shortMin": "m",
-        "longDay": "dagar",
-        "longHour": "timmar",
-        "longMin": "minuter",
-        "disclaimerTitle": "Ansvarsfriskrivning",
-        "disclaimer": "Tågets faktiska position kan avvika med flera meter. För exakt tidtabellsinformation, kontrollera din biljett eller VR-appen.",
-        "noJourneyFound": "Det finns för närvarande inga resor inlagda i tidtabellen.",
-        "nextDestination": "Tåg destination",
-        "nextDeparture": "Tåg avgångsstation",
-        "arrivesAt": "Anländer till stationen",
-        "leavesFrom": "Avgår från stationen",
-        "unknown": "Ingen tid",
-        "cancelled": "Inställt",
-        "trainNumber": "Tåg",
-        "trainSpeed": "Hastighet",
-        "trainAccuracy": "Noggrannhet",
-        "commuteSuggestion": "Sök efter pendeltåg istället",
-        "commuterTrains": "Pendeltåg",
-        "ariaMapViewButton": "Välj tåg att visa i kartvy: ",
-        "ariaExpandButton": "Visa mer information om tågresan ",
-        "minTime": "Tid från",
-        "maxTime": "Tid upp till",
-        "filter": "Spara",
-        "reset": "Rensa val",
-        "timeRangeLabel": "Tidsintervall",
-        "timeRangeDescription": "Ange tidsintervallet för tabellen."
-        
-    },
-    "AriaTimeTable": {
-        "select": "Välj alla"
-    },
-    "Navigation": {
-        "nextPage": "Nästa sidan",
-        "previousPage": "Föregående sidan",
-        "firstPage": "Första sidan",
-        "lastPage": "Sista sidan",
-        "columns": "Kolumner",
-        "searchnotfound": "Inga resultat.",
-        "settingsTitle": "Inställningar",
-        "settingsDescription": "Anpassa dina inställningar.",
-        "language": "Språk",
-        "home": "Hem",
-        "selectCity": "Från",
-        "searchCity": "Sök efter en stad...",
-        "submitButton": "Hitta en rutt",
-        "errorSelectLocation": "Vänligen välj en plats.",
-        "search": "Sök",
-        "commuterRail": "Sök efter pendeltåg",
-        "title": "Börja med att välja en resa.",
-        "selectLanguage": "Välj ett språk",
-        "ariaSwapStation": "Byt startstation och destinationsstation för tåget",
-        "today": "I dag",
-        "selectDate": "Välj ett datum"
-    },
-    "MetaData": {
-        "landingTitle": "Tidtabeller för det finska järnvägsnätet",
-        "title": "Tågtidtabeller",
-        "titleDeparture": "Avgående tåg",
-        "titleArrival": "Ankommande tåg",
-        "commuterTrains": "Pendeltåg",
-        "description": "Följ tågtidtabeller i realtid i Finland. Få tillgång till aktuella tidtabeller, ruttinformation och plattformsdetaljer för att säkerställa en smidig resa genom det finska järnvägsnätet."
-    },
-    "NotFoundPage": {
-        "title": "Sidan hittades inte",
-        "description": "Tyvärr, sidan du letar efter finns inte.",
-        "return": "Återvänd"
-    },
-    "TermsOfService": {
-        "title": "Trafikdatakälla Fintraffic licens CC 4.0 BY",
-        "titleShort": "Licens"
-    },
-    "Landing": {
-        "header": "Tidtabeller för Finlands Järnvägsnät",
-        "subheader": "Suomilinja erbjuder en användarvänlig tjänst för realtidsövervakning av tåg.",
-        "imageTilesTitle": "Utforska en av platserna nedan"
-    },
-    "Nav": {
-        "logo": "Tidtabeller"
-    }
+  "TimeTable": {
+    "destination": "Destination",
+    "origin": "Ursprung",
+    "departure": "Avgång",
+    "arrival": "Ankomst",
+    "train": "Tåg",
+    "track": "Spår",
+    "placeholder": "Filtrera efter plats...",
+    "arrivalTrains": "Inkommande tåg",
+    "departureTrains": "Avgående tåg",
+    "incoming": "Inkommande",
+    "outgoing": "Avgående",
+    "shortHour": "t",
+    "shortMin": "m",
+    "longDay": "dagar",
+    "longHour": "timmar",
+    "longMin": "minuter",
+    "disclaimerTitle": "Ansvarsfriskrivning",
+    "disclaimer": "Tågets faktiska position kan avvika med flera meter. För exakt tidtabellsinformation, kontrollera din biljett eller VR-appen.",
+    "noJourneyFound": "Det finns för närvarande inga resor inlagda i tidtabellen.",
+    "nextDestination": "Tåg destination",
+    "nextDeparture": "Tåg avgångsstation",
+    "arrivesAt": "Anländer till stationen",
+    "leavesFrom": "Avgår från stationen",
+    "unknown": "Ingen tid",
+    "cancelled": "Inställt",
+    "trainNumber": "Tåg",
+    "trainSpeed": "Hastighet",
+    "trainAccuracy": "Noggrannhet",
+    "commuteSuggestion": "Sök efter pendeltåg istället",
+    "commuterTrains": "Pendeltåg",
+    "ariaMapViewButton": "Välj tåg att visa i kartvy: ",
+    "ariaExpandButton": "Visa mer information om tågresan ",
+    "minTime": "Tid från",
+    "maxTime": "Tid upp till",
+    "filter": "Spara",
+    "reset": "Rensa val",
+    "timeRangeLabel": "Tidsintervall",
+    "timeRangeDescription": "Ange tidsintervallet för tabellen.",
+    "scrollToMap": "Gå till kartan",
+    "city": "Stad"
+  },
+  "AriaTimeTable": {
+    "select": "Välj alla"
+  },
+  "Navigation": {
+    "nextPage": "Nästa sidan",
+    "previousPage": "Föregående sidan",
+    "firstPage": "Första sidan",
+    "lastPage": "Sista sidan",
+    "columns": "Kolumner",
+    "searchnotfound": "Inga resultat.",
+    "settingsTitle": "Inställningar",
+    "settingsDescription": "Anpassa dina inställningar.",
+    "language": "Språk",
+    "home": "Hem",
+    "selectCity": "Från",
+    "searchCity": "Sök efter en stad...",
+    "submitButton": "Hitta en rutt",
+    "errorSelectLocation": "Vänligen välj en plats.",
+    "search": "Sök",
+    "commuterRail": "Sök efter pendeltåg",
+    "title": "Börja med att välja en resa.",
+    "selectLanguage": "Välj ett språk",
+    "ariaSwapStation": "Byt startstation och destinationsstation för tåget",
+    "today": "I dag",
+    "selectDate": "Välj ett datum"
+  },
+  "MetaData": {
+    "landingTitle": "Tidtabeller för det finska järnvägsnätet",
+    "title": "Tågtidtabeller",
+    "titleDeparture": "Avgående tåg",
+    "titleArrival": "Ankommande tåg",
+    "commuterTrains": "Pendeltåg",
+    "description": "Följ tågtidtabeller i realtid i Finland. Få tillgång till aktuella tidtabeller, ruttinformation och plattformsdetaljer för att säkerställa en smidig resa genom det finska järnvägsnätet."
+  },
+  "NotFoundPage": {
+    "title": "Sidan hittades inte",
+    "description": "Tyvärr, sidan du letar efter finns inte.",
+    "return": "Återvänd"
+  },
+  "TermsOfService": {
+    "title": "Trafikdatakälla Fintraffic licens CC 4.0 BY",
+    "titleShort": "Licens"
+  },
+  "Landing": {
+    "header": "Tidtabeller för Finlands Järnvägsnät",
+    "subheader": "Suomilinja erbjuder en användarvänlig tjänst för realtidsövervakning av tåg.",
+    "imageTilesTitle": "Utforska en av platserna nedan"
+  },
+  "Nav": {
+    "logo": "Tidtabeller"
+  }
 }

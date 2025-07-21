@@ -1,93 +1,95 @@
 {
-    "TimeTable": {
-        "destination": "Destination",
-        "origin": "Origin",
-        "departure": "Departure",
-        "arrival": "Arrival",
-        "train": "Train",
-        "track": "Track",
-        "placeholder": "Filter by destination...",
-        "arrivalTrains": "Incoming Trains",
-        "departureTrains": "Outgoing Trains",
-        "incoming": "Incoming",
-        "outgoing": "Outgoing",
-        "shortHour": "h",
-        "shortMin": "m",
-        "longDay": "days",
-        "longHour": "hours",
-        "longMin": "minutes",
-        "disclaimerTitle": "Disclaimer",
-        "disclaimer": "The train's actual location may vary by several meters. For accurate schedule information, check your ticket or the VR app.",
-        "noJourneyFound": "There are currently no scheduled journeys.",
-        "nextDestination": "Train destination",
-        "nextDeparture": "Train departure station",
-        "arrivesAt": "Arrives at station",
-        "leavesFrom": "Leaves from station",
-        "unknown": "No estimate",
-        "cancelled": "Cancelled",
-        "trainNumber": "Train",
-        "trainSpeed": "Speed",
-        "trainAccuracy": "Accuracy",
-        "commuteSuggestion": "Search for commuter trains instead",
-        "commuterTrains": "Commuter Trains",
-        "ariaMapViewButton": "Select train to be shown in map view: ",
-        "ariaExpandButton": "Expand more information about train journey ",
-        "minTime": "Time from",
-        "maxTime": "Time up to",
-        "filter": "Save",
-        "reset": "Clear selections",
-        "timeRangeLabel": "Time interval",
-        "timeRangeDescription": "Set the time interval for the table."
-    },
-    "AriaTimeTable": {
-        "select": "Select all"
-    },
-    "Navigation": {
-        "nextPage": "Next page",
-        "previousPage": "Previous page",
-        "firstPage": "First page",
-        "lastPage": "Last page",
-        "columns": "Columns",
-        "searchnotfound": "No results.",
-        "settingsTitle": "Settings",
-        "settingsDescription": "Customize your settings.",
-        "language": "Language",
-        "home": "Home",
-        "selectCity": "From",
-        "searchCity": "Search for a city...",
-        "submitButton": "Find a route",
-        "errorSelectLocation": "Please select a location.",
-        "search": "Search",
-        "commuterRail": "Search for commuter trains",
-        "title": "Start off by choosing a journey.",
-        "selectLanguage": "Select a language",
-        "ariaSwapStation": "Swap train starting station and destination station",
-        "today": "Today",
-        "selectDate": "Pick a date" 
-    },
-    "MetaData": {
-        "landingTitle": "Finnish railway network timetables",
-        "title": "Train timetables",
-        "titleDeparture": "Departing Trains",
-        "titleArrival": "Arriving Trains",
-        "commuterTrains": "Commuter Trains",
-        "description": "Track real-time train timetables in Finland. Access up-to-date schedules, route information, and platform details to ensure a smooth journey across the Finnish rail network."
-    },
-    "NotFoundPage": {
-        "title": "Page Not Found",
-        "description": "Sorry, the page you are looking for does not exist.",
-        "return": "Return"
-    },
-    "TermsOfService": {
-        "title": "Traffic data source Fintraffic license CC 4.0 BY",
-        "titleShort": "License"
-    },
-    "Landing": {
-        "header": "Timetables for Finland's Rail Network",
-        "subheader": "Suomilinja offers an easy-to-use service for real-time train tracking.",
-        "imageTilesTitle": "Explore one of the locations below"
-    },
-    "Nav": {
-        "logo": "Schedules"
-    }
+  "TimeTable": {
+    "destination": "Destination",
+    "origin": "Origin",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "train": "Train",
+    "track": "Track",
+    "placeholder": "Filter by destination...",
+    "arrivalTrains": "Incoming Trains",
+    "departureTrains": "Outgoing Trains",
+    "incoming": "Incoming",
+    "outgoing": "Outgoing",
+    "shortHour": "h",
+    "shortMin": "m",
+    "longDay": "days",
+    "longHour": "hours",
+    "longMin": "minutes",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimer": "The train's actual location may vary by several meters. For accurate schedule information, check your ticket or the VR app.",
+    "noJourneyFound": "There are currently no scheduled journeys.",
+    "nextDestination": "Train destination",
+    "nextDeparture": "Train departure station",
+    "arrivesAt": "Arrives at station",
+    "leavesFrom": "Leaves from station",
+    "unknown": "No estimate",
+    "cancelled": "Cancelled",
+    "trainNumber": "Train",
+    "trainSpeed": "Speed",
+    "trainAccuracy": "Accuracy",
+    "commuteSuggestion": "Search for commuter trains instead",
+    "commuterTrains": "Commuter Trains",
+    "ariaMapViewButton": "Select train to be shown in map view: ",
+    "ariaExpandButton": "Expand more information about train journey ",
+    "minTime": "Time from",
+    "maxTime": "Time up to",
+    "filter": "Save",
+    "reset": "Clear selections",
+    "timeRangeLabel": "Time interval",
+    "timeRangeDescription": "Set the time interval for the table.",
+    "scrollToMap": "Go to map",
+    "city": "City"
+  },
+  "AriaTimeTable": {
+    "select": "Select all"
+  },
+  "Navigation": {
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "firstPage": "First page",
+    "lastPage": "Last page",
+    "columns": "Columns",
+    "searchnotfound": "No results.",
+    "settingsTitle": "Settings",
+    "settingsDescription": "Customize your settings.",
+    "language": "Language",
+    "home": "Home",
+    "selectCity": "From",
+    "searchCity": "Search for a city...",
+    "submitButton": "Find a route",
+    "errorSelectLocation": "Please select a location.",
+    "search": "Search",
+    "commuterRail": "Search for commuter trains",
+    "title": "Start off by choosing a journey.",
+    "selectLanguage": "Select a language",
+    "ariaSwapStation": "Swap train starting station and destination station",
+    "today": "Today",
+    "selectDate": "Pick a date"
+  },
+  "MetaData": {
+    "landingTitle": "Finnish railway network timetables",
+    "title": "Train timetables",
+    "titleDeparture": "Departing Trains",
+    "titleArrival": "Arriving Trains",
+    "commuterTrains": "Commuter Trains",
+    "description": "Track real-time train timetables in Finland. Access up-to-date schedules, route information, and platform details to ensure a smooth journey across the Finnish rail network."
+  },
+  "NotFoundPage": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "return": "Return"
+  },
+  "TermsOfService": {
+    "title": "Traffic data source Fintraffic license CC 4.0 BY",
+    "titleShort": "License"
+  },
+  "Landing": {
+    "header": "Timetables for Finland's Rail Network",
+    "subheader": "Suomilinja offers an easy-to-use service for real-time train tracking.",
+    "imageTilesTitle": "Explore one of the locations below"
+  },
+  "Nav": {
+    "logo": "Schedules"
+  }
 }

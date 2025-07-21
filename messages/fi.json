@@ -1,93 +1,95 @@
 {
-    "TimeTable": {
-        "destination": "Määränpää",
-        "origin": "Lähtöasema",
-        "departure": "Lähtöaika",
-        "arrival": "Saapumisaika",
-        "train": "Juna",
-        "track": "Raide",
-        "placeholder": "Etsi sijainti...",
-        "arrivalTrains": "Saapuvat Junat",
-        "departureTrains": "Lähtevät Junat",
-        "incoming": "Saapuvat",
-        "outgoing": "Lähtevät",
-        "shortHour": "t",
-        "shortMin": "m",
-        "longDay": "päivän",
-        "longHour": "tunnin",
-        "longMin": "minuutin",
-        "disclaimerTitle": "Huomatus",
-        "disclaimer": "Junan todellinen sijainti voi poiketa usealla metrillä. Tarkista aikataulu lipusta tai VR:n sovelluksesta.",
-        "noJourneyFound": "Aikatauluun ei tällä hetkellä ole merkitty matkoja.",
-        "nextDestination": "Junan määränpää",
-        "nextDeparture": "Junan lähtöasema",
-        "arrivesAt": "Saapuu asemalle",
-        "leavesFrom": "Lähtee asemalta",
-        "unknown": "Ei arviota",
-        "cancelled": "Peruutettu",
-        "trainNumber": "Juna",
-        "trainSpeed": "Nopeus",
-        "trainAccuracy": "Tarkkuus",
-        "commuteSuggestion": "Hae sen sijaan paikallisjunia",
-        "commuterTrains": "Paikallisjunat",
-        "ariaMapViewButton": "Valitse karttanäkymässä näytettävä juna: ",
-        "ariaExpandButton": "Laajenna lisätietoja junamatkasta ",
-        "minTime": "Aika alkaen",
-        "maxTime": "Aika enintään",
-        "filter": "Tallenna",
-        "reset": "Poista valinnat",
-        "timeRangeLabel": "Aikaväli",
-        "timeRangeDescription": "Määritä taulukon aikaväli."
-    },
-    "AriaTimeTable": {
-        "select": "Valitse kaikki"
-    },
-    "Navigation": {
-        "nextPage": "Seuraava sivu",
-        "previousPage": "Edellinen sivu",
-        "firstPage": "Ensimmäinen sivu",
-        "lastPage": "Viimeinen sivu",
-        "columns": "Sarake",
-        "searchnotfound": "Haulle ei löytynyt tuloksia.",
-        "settingsTitle": "Asetukset",
-        "settingsDescription": "Muokkaa asetuksia.",
-        "language": "Kieli",
-        "home": "Etusivu",
-        "selectCity": "Mistä",
-        "searchCity": "Etsi kaupunki...",
-        "submitButton": "Hae matkoja",
-        "errorSelectLocation": "Ole hyvä ja valitse sijainti.",
-        "search": "Hae",
-        "commuterRail": "Hae paikallisjunia",
-        "title": "Aloita valitsemalla matka.",
-        "selectLanguage": "Valitse kieli",
-        "ariaSwapStation": "Vaihda junan lähtöasema ja määränpääasema",
-        "today": "Tänään",
-        "selectDate": "Valitse päivä"
-    },
-    "MetaData": {
-        "landingTitle": "Suomen rataverkon aikataulut",
-        "title": "Juna-aikataulut",
-        "titleDeparture": "Lähtevät Junat",
-        "titleArrival": "Saapuvat Junat",
-        "commuterTrains": "Paikallisjunat",
-        "description": "Seuraa Suomen juna-aikatauluja reaaliajassa. Pääset käsiksi ajantasaisiin aikatauluihin, reittitietoihin ja laituritietoihin varmistaaksesi sujuvan matkan Suomen rautatieverkossa."
-    },
-    "NotFoundPage": {
-        "title": "Sivua ei löytynyt",
-        "description": "Emme valitettavasti löytäneet etsimääsi sivua.",
-        "return": "Palaa takaisin"
-    },
-    "TermsOfService": {
-        "title": "Liikennetietojen lähde Fintraffic lisenssi CC 4.0 BY",
-        "titleShort": "Lisenssi"
-    },
-    "Landing": {
-        "header": "Suomen Rataverkon Aikataulut",
-        "subheader": "Suomilinja tarjoaa helppokäyttöisen palvelun junien reaaliaikaiseen seurantaan.",
-        "imageTilesTitle": "Tutustu johonkin alla olevista sijainneista"
-    },
-    "Nav": {
-        "logo": "Aikataulut"
-    }
+  "TimeTable": {
+    "destination": "Määränpää",
+    "origin": "Lähtöasema",
+    "departure": "Lähtöaika",
+    "arrival": "Saapumisaika",
+    "train": "Juna",
+    "track": "Raide",
+    "placeholder": "Etsi sijainti...",
+    "arrivalTrains": "Saapuvat Junat",
+    "departureTrains": "Lähtevät Junat",
+    "incoming": "Saapuvat",
+    "outgoing": "Lähtevät",
+    "shortHour": "t",
+    "shortMin": "m",
+    "longDay": "päivän",
+    "longHour": "tunnin",
+    "longMin": "minuutin",
+    "disclaimerTitle": "Huomatus",
+    "disclaimer": "Junan todellinen sijainti voi poiketa usealla metrillä. Tarkista aikataulu lipusta tai VR:n sovelluksesta.",
+    "noJourneyFound": "Aikatauluun ei tällä hetkellä ole merkitty matkoja.",
+    "nextDestination": "Junan määränpää",
+    "nextDeparture": "Junan lähtöasema",
+    "arrivesAt": "Saapuu asemalle",
+    "leavesFrom": "Lähtee asemalta",
+    "unknown": "Ei arviota",
+    "cancelled": "Peruutettu",
+    "trainNumber": "Juna",
+    "trainSpeed": "Nopeus",
+    "trainAccuracy": "Tarkkuus",
+    "commuteSuggestion": "Hae sen sijaan paikallisjunia",
+    "commuterTrains": "Paikallisjunat",
+    "ariaMapViewButton": "Valitse karttanäkymässä näytettävä juna: ",
+    "ariaExpandButton": "Laajenna lisätietoja junamatkasta ",
+    "minTime": "Aika alkaen",
+    "maxTime": "Aika enintään",
+    "filter": "Tallenna",
+    "reset": "Poista valinnat",
+    "timeRangeLabel": "Aikaväli",
+    "timeRangeDescription": "Määritä taulukon aikaväli.",
+    "scrollToMap": "Siirry karttaan",
+    "city": "Kaupunki"
+  },
+  "AriaTimeTable": {
+    "select": "Valitse kaikki"
+  },
+  "Navigation": {
+    "nextPage": "Seuraava sivu",
+    "previousPage": "Edellinen sivu",
+    "firstPage": "Ensimmäinen sivu",
+    "lastPage": "Viimeinen sivu",
+    "columns": "Sarake",
+    "searchnotfound": "Haulle ei löytynyt tuloksia.",
+    "settingsTitle": "Asetukset",
+    "settingsDescription": "Muokkaa asetuksia.",
+    "language": "Kieli",
+    "home": "Etusivu",
+    "selectCity": "Mistä",
+    "searchCity": "Etsi kaupunki...",
+    "submitButton": "Hae matkoja",
+    "errorSelectLocation": "Ole hyvä ja valitse sijainti.",
+    "search": "Hae",
+    "commuterRail": "Hae paikallisjunia",
+    "title": "Aloita valitsemalla matka.",
+    "selectLanguage": "Valitse kieli",
+    "ariaSwapStation": "Vaihda junan lähtöasema ja määränpääasema",
+    "today": "Tänään",
+    "selectDate": "Valitse päivä"
+  },
+  "MetaData": {
+    "landingTitle": "Suomen rataverkon aikataulut",
+    "title": "Juna-aikataulut",
+    "titleDeparture": "Lähtevät Junat",
+    "titleArrival": "Saapuvat Junat",
+    "commuterTrains": "Paikallisjunat",
+    "description": "Seuraa Suomen juna-aikatauluja reaaliajassa. Pääset käsiksi ajantasaisiin aikatauluihin, reittitietoihin ja laituritietoihin varmistaaksesi sujuvan matkan Suomen rautatieverkossa."
+  },
+  "NotFoundPage": {
+    "title": "Sivua ei löytynyt",
+    "description": "Emme valitettavasti löytäneet etsimääsi sivua.",
+    "return": "Palaa takaisin"
+  },
+  "TermsOfService": {
+    "title": "Liikennetietojen lähde Fintraffic lisenssi CC 4.0 BY",
+    "titleShort": "Lisenssi"
+  },
+  "Landing": {
+    "header": "Suomen Rataverkon Aikataulut",
+    "subheader": "Suomilinja tarjoaa helppokäyttöisen palvelun junien reaaliaikaiseen seurantaan.",
+    "imageTilesTitle": "Tutustu johonkin alla olevista sijainneista"
+  },
+  "Nav": {
+    "logo": "Aikataulut"
+  }
 }

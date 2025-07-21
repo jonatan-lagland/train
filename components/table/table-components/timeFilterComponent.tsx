@@ -156,7 +156,7 @@ const TimeFilterComponent = ({ rowVirtualizer, table, data, tTimeTable, isDisabl
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="flex flex-row items-center justify-start">
+    <>
       {isSmallerThanBreakPoint ? (
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
@@ -208,7 +208,7 @@ const TimeFilterComponent = ({ rowVirtualizer, table, data, tTimeTable, isDisabl
           </PopoverContent>
         </Popover>
       )}
-    </div>
+    </>
   );
 };
 

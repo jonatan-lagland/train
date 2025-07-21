@@ -79,8 +79,11 @@ export default async function TimeTablePage({ params, searchParams }: TimeTableP
           <div className="flex flex-row items-center justify-center h-full">
             <Banner destinationLabel={destinationLabel} city={city} cityDestination={cityDestination} isCommuter={isCommuter}></Banner>
           </div>
-          <div className="flex flex-row items-center justify-center">
+          <div className="hidden md:flex flex-row items-center justify-center">
             <NavigationContainer></NavigationContainer>
+          </div>
+          <div className="flex md:hidden flex-row items-center justify-center">
+            <NavigationContainer size="small"></NavigationContainer>
           </div>
           <div className="absolute -z-10 w-full h-full items-center home-highlight">
             <Image

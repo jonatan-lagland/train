@@ -11,6 +11,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Map } from "@mui/icons-material";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
@@ -22,6 +23,7 @@ import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import JourneyItem from "./table-components/journeyItem";
+import { Button } from "../ui/button";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -84,12 +86,61 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     }
   }, [virtualRows, rows.length, rowVirtualizer.options.overscan]);
 
+  const [isAtTopOrBottom, setIsAtTopOrBottom] = React.useState(true);
+
+  React.useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      setIsAtTopOrBottom(atTop || atBottom);
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleScrollIntoView = () => {
+    if (tableContainerRef.current && !isAtTopOrBottom) {
+      tableContainerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
+  const handleScrollToMap = () => {
+    if (sidebarRef.current) {
+      sidebarRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4">
-      <TimeFilterComponent rowVirtualizer={rowVirtualizer} table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap gap-1 items-center justify-start">
+        <TimeFilterComponent rowVirtualizer={rowVirtualizer} table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
+        <div className="md:hidden flex justify-center items-center">
+          <Button className="py-5" onClick={handleScrollToMap} variant="outline">
+            <Map className="mr-2" />
+            {tTimeTable("scrollToMap")}
+          </Button>
+        </div>
+      </div>
       <div
         ref={tableContainerRef}
-        style={{ height: "400px", position: "relative", overflow: "auto", overscrollBehavior: "contain" }}
+        onTouchEnd={handleScrollIntoView} // For touch release
+        style={{ height: "400px", position: "relative", overflow: "auto", overscrollBehavior: "auto" }}
         className="border bg-background"
       >
         <Table>
