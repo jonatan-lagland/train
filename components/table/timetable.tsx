@@ -97,7 +97,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   };
 
   const [isScrollable, setIsScrollable] = React.useState(false);
-  const [isScrolledBackTop, setIsScrolledBackTop] = React.useState(false);
+  const [hasUsedVirtualScroll, setHasUsedVirtualScroll] = React.useState(false);
 
   React.useEffect(() => {
     const container = tableContainerRef.current;
@@ -106,9 +106,11 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     // Instantly disables container scrolling if the user has scrolled back to the virtual top,
     // instead of waiting for browser api to swap between the scroll bars
     const handleInternalScroll = () => {
-      if (!isScrolledBackTop && container.scrollTop > 0) {
-        setIsScrolledBackTop(true);
-        setIsScrollable(false);
+      if (container.scrollTop <= 0) {
+        setHasUsedVirtualScroll(true);
+        setTimeout(() => {
+          setHasUsedVirtualScroll(false);
+        }, 1000);
       }
     };
 
@@ -118,7 +120,6 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
         setIsScrollable(true);
       } else {
         setIsScrollable(false);
-        setIsScrolledBackTop(false);
       }
     };
 
@@ -135,7 +136,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
       observer.unobserve(container);
       container.removeEventListener("scroll", handleInternalScroll);
     };
-  }, [isScrolledBackTop]);
+  }, []);
 
   const { isSmallerThanBreakPoint } = useCalculateWindowSize();
 
@@ -155,7 +156,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
         style={{
           height: "400px",
           position: "relative",
-          overflow: !isScrollable && isSmallerThanBreakPoint ? "hidden" : "auto",
+          overflow: (!isScrollable || hasUsedVirtualScroll) && isSmallerThanBreakPoint ? "hidden" : "auto",
           overscrollBehavior: "auto",
         }}
         className="border bg-background"
