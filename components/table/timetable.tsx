@@ -24,6 +24,7 @@ import TimeFilterComponent from "./table-components/timeFilterComponent";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import JourneyItem from "./table-components/journeyItem";
 import { Button } from "../ui/button";
+import { useCalculateWindowSize } from "@/lib/utils/calculateWindowSize";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -96,28 +97,47 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   };
 
   const [isScrollable, setIsScrollable] = React.useState(false);
+  const [isScrolledBackTop, setIsScrolledBackTop] = React.useState(false);
 
   React.useEffect(() => {
     const container = tableContainerRef.current;
     if (!container) return;
 
+    // Instantly disables container scrolling if the user has scrolled back to the virtual top,
+    // instead of waiting for browser api to swap between the scroll bars
+    const handleInternalScroll = () => {
+      if (!isScrolledBackTop && container.scrollTop > 0) {
+        setIsScrolledBackTop(true);
+        setIsScrollable(false);
+      }
+    };
+
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
-      setIsScrollable(entry.isIntersecting);
+      if (entry.isIntersecting) {
+        setIsScrollable(true);
+      } else {
+        setIsScrollable(false);
+        setIsScrolledBackTop(false);
+      }
     };
 
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
-      rootMargin: "0px",
+      rootMargin: "10px",
       threshold: 1.0,
     });
 
     observer.observe(container);
+    container.addEventListener("scroll", handleInternalScroll);
 
     return () => {
       observer.unobserve(container);
+      container.removeEventListener("scroll", handleInternalScroll);
     };
-  }, []);
+  }, [isScrolledBackTop]);
+
+  const { isSmallerThanBreakPoint } = useCalculateWindowSize();
 
   return (
     <div className="flex flex-col gap-2">
@@ -135,7 +155,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
         style={{
           height: "400px",
           position: "relative",
-          overflow: isScrollable ? "auto" : "hidden",
+          overflow: !isScrollable && isSmallerThanBreakPoint ? "hidden" : "auto",
           overscrollBehavior: "auto",
         }}
         className="border bg-background"
