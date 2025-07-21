@@ -86,37 +86,6 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     }
   }, [virtualRows, rows.length, rowVirtualizer.options.overscan]);
 
-  const [isAtTopOrBottom, setIsAtTopOrBottom] = React.useState(true);
-
-  React.useEffect(() => {
-    const container = tableContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const atTop = scrollTop === 0;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-
-      setIsAtTopOrBottom(atTop || atBottom);
-    };
-
-    container.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => {
-      container.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const handleScrollIntoView = () => {
-    if (tableContainerRef.current && !isAtTopOrBottom) {
-      tableContainerRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  };
-
   const handleScrollToMap = () => {
     if (sidebarRef.current) {
       sidebarRef.current.scrollIntoView({
@@ -125,6 +94,30 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
       });
     }
   };
+
+  const [isScrollable, setIsScrollable] = React.useState(false);
+
+  React.useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      setIsScrollable(entry.isIntersecting);
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0,
+    });
+
+    observer.observe(container);
+
+    return () => {
+      observer.unobserve(container);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-2">
@@ -139,8 +132,12 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
       </div>
       <div
         ref={tableContainerRef}
-        onTouchEnd={handleScrollIntoView} // For touch release
-        style={{ height: "400px", position: "relative", overflow: "auto", overscrollBehavior: "auto" }}
+        style={{
+          height: "400px",
+          position: "relative",
+          overflow: isScrollable ? "auto" : "hidden",
+          overscrollBehavior: "auto",
+        }}
         className="border bg-background"
       >
         <Table>
