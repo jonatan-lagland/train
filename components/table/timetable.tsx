@@ -110,7 +110,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
         setHasUsedVirtualScroll(true);
         setTimeout(() => {
           setHasUsedVirtualScroll(false);
-        }, 1000);
+        }, 300);
       }
     };
 
