@@ -42,6 +42,7 @@ export default function LocaleLayout({ children, params: { locale } }: { childre
             {children}
             <Analytics />
           </main>
+          <footer className="flex flex-col items-center justify-center w-full h-44 bg-secondary-foreground shadow-md"></footer>
         </body>
       </NextIntlClientProvider>
     </html>
