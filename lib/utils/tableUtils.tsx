@@ -110,12 +110,7 @@ export const createColumns = ({
       accessorKey: "stationName",
       size: 80,
       header: () => {
-        if (!tableType) return null;
-        const tableTypeFormatted = tableType.toLowerCase();
-
-        return (
-          <div className="text-start font-semibold">{tableTypeFormatted === "arrival" ? translation(`origin`) : translation(`destination`)}</div>
-        );
+        return <div className="text-start font-semibold">{translation(`destination`)}</div>;
       },
       cell: ({ row }) => {
         const stationName = row.getValue("stationName") as string;
