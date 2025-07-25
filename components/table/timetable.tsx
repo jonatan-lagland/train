@@ -131,17 +131,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
 
                 return (
                   <React.Fragment key={`${row.id}-fragment`}>
-                    <TableRow
-                      onMouseDown={() => {
-                        setTrainNumber(trainNumber);
-                      }}
-                      onClick={() => {
-                        setTrainNumber(trainNumber);
-                      }}
-                      data-state={dataState}
-                      key={row.id}
-                      className={`transition-all fade-in border-b-0`}
-                    >
+                    <TableRow data-state={dataState} key={row.id} className={`transition-all fade-in border-b-0`}>
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           style={{

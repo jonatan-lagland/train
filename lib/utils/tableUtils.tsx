@@ -87,7 +87,7 @@ export const createColumns = ({
                 </Button>
               </DrawerTrigger>
               <DrawerContent className="flex flex-col justify-center items-center pb-6">
-                <Sidebar data={data} destinationType={destinationType}></Sidebar>
+                <Sidebar size="minimized" data={data} destinationType={destinationType}></Sidebar>
               </DrawerContent>
             </Drawer>
             <span>{`${trainType} ${trainNumber}`}</span>

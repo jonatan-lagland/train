@@ -15,9 +15,10 @@ import Footer from "../footer/footer";
 type SidebarProps = {
   data: TransformedTimeTableRow[];
   destinationType: TrainTypeParam;
+  size?: "full" | "minimized";
 };
 
-function Sidebar({ data, destinationType }: SidebarProps) {
+function Sidebar({ data, destinationType, size = "full" }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
@@ -69,15 +70,21 @@ function Sidebar({ data, destinationType }: SidebarProps) {
           ></ArrivalTimestamp>
         </div>
       </div>
-      <div ref={sidebarRef} className="flex flex-col gap-2">
-        <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
-        <div className="w-full h-full bg-inherit">
-          <Footer></Footer>
-        </div>
-        <div className="text-sm text-slate-600">
-          <span className="font-medium">{translation("disclaimerTitle")}: </span>
-          <span>{translation("disclaimer")}</span>
-        </div>
+      <div ref={sidebarRef}>
+        {size === "minimized" ? (
+          <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <LiveTrainGPS nextStation={nextStation}></LiveTrainGPS>
+            <div className="w-full h-full bg-inherit">
+              <Footer></Footer>
+            </div>
+            <div className="text-sm text-slate-600">
+              <span className="font-medium">{translation("disclaimerTitle")}: </span>
+              <span>{translation("disclaimer")}</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
