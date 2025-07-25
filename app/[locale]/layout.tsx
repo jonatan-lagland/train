@@ -42,6 +42,9 @@ export default function LocaleLayout({ children, params: { locale } }: { childre
             {children}
             <Analytics />
           </main>
+          <footer className="flex flex-col justify-center px-6 py-2 w-full h-28 border bg-highlight">
+            <Footer></Footer>
+          </footer>
         </body>
       </NextIntlClientProvider>
     </html>
