@@ -11,7 +11,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Map } from "@mui/icons-material";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
 import { TimeTableRow, TrainTypeParam, TransformedTimeTableRow } from "@/lib/types";
@@ -22,7 +21,6 @@ import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import JourneyItem from "./table-components/journeyItem";
-import { Button } from "../ui/button";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -126,14 +124,21 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
           <TableBody>
             {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map((row) => {
-                const { liveEstimateTime, cancelled, scheduledTime } = row.original;
+                const { liveEstimateTime, cancelled, scheduledTime, trainNumber } = row.original;
                 const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
-                const isGreyBg = liveDateTime < Date.now() || cancelled;
-                const rowBgClass = isGreyBg ? "bg-gray-200 hover:bg-gray-200" : "hover:bg-white bg-white";
+                const isPastTime = liveDateTime < Date.now() || cancelled;
+                const dataState = isPastTime ? "disabled" : selectedTrainNumber === trainNumber ? "selected" : "default";
 
                 return (
                   <React.Fragment key={`${row.id}-fragment`}>
-                    <TableRow key={row.id} className={`transition-all fade-in border-b-0 ${rowBgClass}`}>
+                    <TableRow
+                      onClick={() => {
+                        setTrainNumber(trainNumber);
+                      }}
+                      data-state={dataState}
+                      key={row.id}
+                      className={`transition-all fade-in border-b-0`}
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           style={{
@@ -145,7 +150,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                         </TableCell>
                       ))}
                     </TableRow>
-                    <TableRow key={`${row.id}-accordion`} className={`transition-all fade-in ${rowBgClass}`}>
+                    <TableRow data-state={dataState} key={`${row.id}-accordion`} className={`transition-all fade-in`}>
                       <TableCell
                         colSpan={row.getVisibleCells().length}
                         style={{

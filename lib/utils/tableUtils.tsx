@@ -63,7 +63,6 @@ export const createColumns = ({
       },
       cell: ({ row }) => {
         const { trainType, trainNumber, liveEstimateTime, scheduledTime, cancelled } = row.original;
-        const iconColor = selectedTrainNumber === trainNumber ? "#3e64ed" : "#646770";
         const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
         const isButtonDisabled = liveDateTime < Date.now() || cancelled;
 
@@ -84,18 +83,13 @@ export const createColumns = ({
                   disabled={isButtonDisabled}
                   variant={"ghost"}
                 >
-                  {trainNumber === selectedTrainNumber ? (
-                    <Image width="32" height="32" quality={100} src="/icons/icons8-map-32.png" alt="map-marker" />
-                  ) : (
-                    <Image width="32" height="32" quality={100} src="/icons/icons8-map-desaturated-32.png" alt="map-marker" />
-                  )}
+                  <Image width="32" height="32" quality={100} src="/icons/icons8-map-32.png" alt="map-marker" />
                 </Button>
               </DrawerTrigger>
               <DrawerContent className="flex flex-col justify-center items-center pb-6">
                 <Sidebar data={data} destinationType={destinationType}></Sidebar>
               </DrawerContent>
             </Drawer>
-
             <span>{`${trainType} ${trainNumber}`}</span>
           </div>
         );
