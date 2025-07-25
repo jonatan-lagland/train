@@ -60,20 +60,20 @@ export default function ArrivalTimestamp({
       case "se":
         return (
           <>
-            {destinationType === "arrival" ? "Anländer till" : "Avgår från"} <span className="capitalize">{decodedCity}</span> station om{" "}
-            <span className="font-bold">{travelTimeLabel}</span>
-            {destinationType === "arrival" ? "på spår " : " från spår "}
+            {destinationType.toLowerCase() === "arrival" ? "Anländer till" : "Avgår från"} <span className="capitalize">{decodedCity}</span> station
+            om <span className="font-bold">{travelTimeLabel}</span>
+            {destinationType.toLowerCase() === "arrival" ? "på spår " : " från spår "}
             <span>{stationNextTrainTrack}</span>.
           </>
         );
       case "en":
         return (
           <>
-            {destinationType === "arrival" ? "Arrives at " : "Departs from "} <span className="capitalize">{decodedCity}</span> station in{" "}
-            <span className="font-bold">{travelTimeLabel}</span>
+            {destinationType.toLowerCase() === "arrival" ? "Arrives at " : "Departs from "} <span className="capitalize">{decodedCity}</span> station
+            in <span className="font-bold">{travelTimeLabel}</span>
             {stationNextTrainTrack ? (
               <>
-                {destinationType === "arrival" ? "on track " : " from track "}
+                {destinationType.toLowerCase() === "arrival" ? "on track " : " from track "}
                 <span>{stationNextTrainTrack}</span>
               </>
             ) : null}
@@ -83,11 +83,11 @@ export default function ArrivalTimestamp({
       default:
         return (
           <>
-            {destinationType === "arrival" ? "Saapuu " : "Lähtee "} <span className="capitalize">{decodedCity}</span>{" "}
-            {destinationType === "arrival" ? "asemalle " : "asemalta "} <span className="font-bold">{travelTimeLabel}</span> kuluttua
+            {destinationType.toLowerCase() === "arrival" ? "Saapuu " : "Lähtee "} <span className="capitalize">{decodedCity}</span>{" "}
+            {destinationType.toLowerCase() === "arrival" ? "asemalle " : "asemalta "} <span className="font-bold">{travelTimeLabel}</span> kuluttua
             {stationNextTrainTrack ? (
               <>
-                {destinationType === "arrival" ? " raiteelle " : " raiteelta "}
+                {destinationType.toLowerCase() === "arrival" ? " raiteelle " : " raiteelta "}
                 <span>{stationNextTrainTrack}</span>
               </>
             ) : null}
@@ -107,6 +107,7 @@ export default function ArrivalTimestamp({
   /*  useEffect hack is used here because in some cases the timestamp rendered during hydration
       would change as a minute passes, causing hydration errors
   */
+
   useEffect(() => {
     const localizedLabel = calculateLocalizedLabel();
     setLocalizedLabel(localizedLabel);
