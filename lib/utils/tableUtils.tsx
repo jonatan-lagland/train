@@ -82,6 +82,7 @@ export const createColumns = ({
                   aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
                   disabled={isButtonDisabled}
                   variant={"ghost"}
+                  size={"icon"}
                 >
                   <img width="32" height="32" loading="eager" src="https://img.icons8.com/skeuomorphism/32/map-marker.png" alt="map-marker" />
                 </Button>
@@ -90,14 +91,14 @@ export const createColumns = ({
                 <Sidebar size="minimized" data={data} destinationType={destinationType}></Sidebar>
               </DrawerContent>
             </Drawer>
-            <span>{`${trainType} ${trainNumber}`}</span>
+            <span className="text-base">{`${trainType} ${trainNumber}`}</span>
           </div>
         );
       },
     },
     {
       accessorKey: "commercialTrack",
-      size: 80,
+      size: 70,
       header: () => {
         return <div className="flex flex-row justify-center items-end">{translation(`track`)}</div>;
       },
