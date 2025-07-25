@@ -36,27 +36,24 @@ function Sidebar({ data, destinationType, size = "full" }: SidebarProps) {
   const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;
 
   return (
-    <div className="flex flex-col gap-5 px-4 max-w-lg">
+    <div className={`flex flex-col ${size === "full" ? "px-4 gap-5" : "px-1 gap-2"} max-w-lg`}>
       <div className="grid grid-rows-[min-content_min_content]">
         {data.length === 0 ? null : (
-          <>
-            <div className="flex flex-wrap justify-between py-8">
-              <div className="flex flex-col flex-grow">
-                <span className="uppercase font-medium text-slate-600">{destinationText}</span>
-
-                <div className="flex flex-wrap">
-                  <span className="font-bold text-4xl text-blue-500">{stationNextName}</span>
-                  <div className="flex flex-grow items-center justify-center">
-                    <span className="font-medium text-xl text-slate-700">
-                      {stationNextTrainType} {stationNextTrainNumber}
-                    </span>
-                  </div>
+          <div className={`flex flex-wrap justify-between ${size === "full" ? "py-8" : "py-2"}`}>
+            <div className="flex flex-col flex-grow">
+              <span className="uppercase font-medium text-slate-600">{destinationText}</span>
+              <div className="flex flex-wrap">
+                <span className={`font-bold ${size === "full" ? "text-4xl" : "text-2xl"} text-blue-500`}>{stationNextName}</span>
+                <div className="flex flex-grow items-center justify-center">
+                  <span className={`font-medium ${size === "full" ? "text-xl" : "text-lg"} text-slate-700`}>
+                    {stationNextTrainType} {stationNextTrainNumber}
+                  </span>
                 </div>
               </div>
             </div>
-          </>
+          </div>
         )}
-        <div className="flex items-center justify-center min-h-16">
+        <div className={`flex items-center justify-center ${size === "full" ? "text-xl" : "text-base"} min-h-16`}>
           <ArrivalTimestamp
             city={city}
             destinationType={destinationType}

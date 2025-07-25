@@ -114,7 +114,7 @@ export default function ArrivalTimestamp({
   }, [calculateLocalizedLabel]);
 
   return (
-    <span className="font-medium text-xl text-slate-600">
+    <span className="font-medium text-slate-600">
       {data.length === 0 ? (
         <div className="flex flex-col gap-2">
           <span>{translation("noJourneyFound")}</span>
