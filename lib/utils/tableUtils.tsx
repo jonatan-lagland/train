@@ -83,8 +83,18 @@ export const createColumns = ({
                   disabled={isButtonDisabled}
                   variant={"ghost"}
                   size={"icon"}
+                  style={{
+                    touchAction: "manipulation",
+                  }}
                 >
-                  <img width="32" height="32" loading="eager" src="https://img.icons8.com/skeuomorphism/32/map-marker.png" alt="map-marker" />
+                  <Image
+                    width="32"
+                    height="32"
+                    quality={100}
+                    loading="eager"
+                    src="https://img.icons8.com/skeuomorphism/32/map-marker.png"
+                    alt="map-marker"
+                  />
                 </Button>
               </DrawerTrigger>
               <DrawerContent className="flex flex-col justify-center items-center pb-6">
