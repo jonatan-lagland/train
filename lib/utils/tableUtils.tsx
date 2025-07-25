@@ -1,41 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { CaretSortIcon } from "@radix-ui/react-icons";
-import { Skeleton } from "@/components/ui/skeleton";
-import { TransformedTimeTableRow, TimeTableRow, TrainTypeParam } from "../types";
+import { TransformedTimeTableRow, TrainTypeParam } from "../types";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-import useTimestampInterval from "@/lib/utils/timestampInterval";
-import PlaceIcon from "@mui/icons-material/Place";
-import { getJourneyTimeStamp, getLiveEstimateTimestamp, getTimeStamp, LocaleNextIntl } from "@/lib/utils/timeStampUtils";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { Column, ColumnDef, FilterFnOption, Table } from "@tanstack/react-table";
+import { getTimeStamp, LocaleNextIntl } from "@/lib/utils/timeStampUtils";
+import { ColumnDef, FilterFnOption } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-type ColorIconProps = {
-  currentScheduledTime: number;
-  nextScheduledTime: number | null;
-  cancelled: boolean;
-};
-
-type ExternalLinkProps = {
-  href: string;
-  className?: string;
-  children: React.ReactNode;
-};
-
-type JourneyItemProps = {
-  index: number;
-  timeTableRow: TimeTableRow[];
-  journey: TransformedTimeTableRow;
-  locale: LocaleNextIntl;
-};
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import Sidebar from "@/components/sidebar/sidebar";
+import Image from "next/image";
 
 type CreateColumnsProps = {
+  data: TransformedTimeTableRow[];
+  destinationType: TrainTypeParam;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   tableType: TrainTypeParam;
   locale: LocaleNextIntl;
   translation: any;
@@ -59,27 +38,26 @@ export const inTimeRange: FilterFnOption<TransformedTimeTableRow> = (
 };
 
 export const createColumns = ({
+  data,
+  destinationType,
   tableType,
   locale,
   translation,
   selectedTrainNumber,
   setTrainNumber,
   sidebarRef,
+  isOpen,
+  setIsOpen,
 }: CreateColumnsProps): ColumnDef<TransformedTimeTableRow>[] => {
-  const handleButtonClick = (trainNumber: number) => {
-    setTrainNumber(trainNumber);
-    if (sidebarRef.current) {
-      sidebarRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
+  const handleOpenDrawer = (trainNumber: number) => {
+    setTrainNumber(trainNumber); // First, set the train number
+    setIsOpen(true);
   };
 
   return [
     {
       accessorKey: "trainType",
-      size: 100,
+      size: 90,
       header: () => {
         return <div className="flex flex-row justify-center items-end">{translation("train")}</div>;
       },
@@ -91,14 +69,33 @@ export const createColumns = ({
 
         return (
           <div className="flex flex-col items-center justify-center text-center">
-            <Button
-              aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
-              disabled={isButtonDisabled}
-              variant={"ghost"}
-              onClick={() => handleButtonClick(trainNumber)}
+            <Drawer
+              onClose={() => {
+                setIsOpen(false);
+              }}
+              open={isOpen && trainNumber === selectedTrainNumber}
             >
-              <PlaceIcon style={{ fill: iconColor }}></PlaceIcon>
-            </Button>
+              <DrawerTrigger asChild>
+                <Button
+                  onClick={() => {
+                    handleOpenDrawer(trainNumber);
+                  }}
+                  aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
+                  disabled={isButtonDisabled}
+                  variant={"ghost"}
+                >
+                  {trainNumber === selectedTrainNumber ? (
+                    <Image width="32" height="32" quality={100} src="/icons/icons8-map-32.png" alt="map-marker" />
+                  ) : (
+                    <Image width="32" height="32" quality={100} src="/icons/icons8-map-desaturated-32.png" alt="map-marker" />
+                  )}
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="flex flex-col justify-center items-center pb-6">
+                <Sidebar data={data} destinationType={destinationType}></Sidebar>
+              </DrawerContent>
+            </Drawer>
+
             <span>{`${trainType} ${trainNumber}`}</span>
           </div>
         );
@@ -106,7 +103,7 @@ export const createColumns = ({
     },
     {
       accessorKey: "commercialTrack",
-      size: 100,
+      size: 80,
       header: () => {
         return <div className="flex flex-row justify-center items-end">{translation(`track`)}</div>;
       },
@@ -117,23 +114,25 @@ export const createColumns = ({
     },
     {
       accessorKey: "stationName",
-      size: 100,
+      size: 80,
       header: () => {
         if (!tableType) return null;
         const tableTypeFormatted = tableType.toLowerCase();
 
-        return <span>{tableTypeFormatted === "arrival" ? translation(`origin`) : translation(`destination`)}</span>;
+        return (
+          <div className="text-start font-semibold">{tableTypeFormatted === "arrival" ? translation(`origin`) : translation(`destination`)}</div>
+        );
       },
       cell: ({ row }) => {
         const stationName = row.getValue("stationName") as string;
-        return <div className="text-start ps-1 font-semibold">{stationName}</div>;
+        return <div className="text-start font-semibold">{stationName}</div>;
       },
     },
     {
       accessorKey: "scheduledTime",
       filterFn: inTimeRange,
       enableColumnFilter: true, // Ensure column filtering is enabled
-      size: 200,
+      size: 150,
       header: () => {
         if (!tableType) return null;
         const tableTypeFormatted = tableType.toLowerCase();

@@ -12,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Map } from "@mui/icons-material";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
 import { TimeTableRow, TrainTypeParam, TransformedTimeTableRow } from "@/lib/types";
@@ -24,7 +23,6 @@ import TimeFilterComponent from "./table-components/timeFilterComponent";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import JourneyItem from "./table-components/journeyItem";
 import { Button } from "../ui/button";
-import { useCalculateWindowSize } from "@/lib/utils/calculateWindowSize";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -40,8 +38,13 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
   const [rowSelection, setRowSelection] = React.useState({});
   const tTimeTable = useTranslations("TimeTable");
   const locale = useLocale() as LocaleNextIntl;
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const columns = createColumns({
+    isOpen: isOpen,
+    setIsOpen: setIsOpen,
+    data: data,
+    destinationType: destinationType,
     tableType: destinationType,
     locale: locale,
     translation: tTimeTable,
@@ -49,6 +52,9 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     setTrainNumber: setTrainNumber,
     sidebarRef: sidebarRef,
   });
+
+  const isDisableFilter = data.length < 2;
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
 
   const table = useReactTable({
     data: data,
@@ -68,107 +74,44 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     },
   });
 
-  const isDisableFilter = data.length < 2;
-  const tableContainerRef = React.useRef<HTMLDivElement>(null);
-  const { rows } = table.getRowModel();
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length * 2, // Each row has a main row and an accordion row, so we double the count
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: (index) => {
-      return index % 2 === 0 ? 43 : 58; // even = main row, odd = accordion row
-    },
-    overscan: 10,
-  });
-  const virtualRows = rowVirtualizer.getVirtualItems();
+  const buttonsRowRef = React.useRef<HTMLDivElement>(null);
+  const [headerOffset, setHeaderOffset] = React.useState(0);
 
   React.useEffect(() => {
-    const lastVirtualItemIndex = virtualRows[virtualRows.length - 1]?.index;
-    if (lastVirtualItemIndex !== undefined && lastVirtualItemIndex >= rows.length - 1 - rowVirtualizer.options.overscan) {
-    }
-  }, [virtualRows, rows.length, rowVirtualizer.options.overscan]);
-
-  const handleScrollToMap = () => {
-    if (sidebarRef.current) {
-      sidebarRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  };
-
-  const [isScrollable, setIsScrollable] = React.useState(false);
-  const [hasUsedVirtualScroll, setHasUsedVirtualScroll] = React.useState(false);
-
-  React.useEffect(() => {
-    const container = tableContainerRef.current;
-    if (!container) return;
-
-    // Instantly disables container scrolling if the user has scrolled back to the virtual top,
-    // instead of waiting for browser api to swap between the scroll bars
-    const handleInternalScroll = () => {
-      if (container.scrollTop <= 0) {
-        setHasUsedVirtualScroll(true);
-        setTimeout(() => {
-          setHasUsedVirtualScroll(false);
-        }, 300);
+    const updateOffset = () => {
+      if (buttonsRowRef.current) {
+        setHeaderOffset(buttonsRowRef.current.offsetHeight);
       }
     };
 
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      const [entry] = entries;
-      if (entry.isIntersecting) {
-        setIsScrollable(true);
-      } else {
-        setIsScrollable(false);
-      }
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, {
-      root: null,
-      rootMargin: "10px",
-      threshold: 1.0,
-    });
-
-    observer.observe(container);
-    container.addEventListener("scroll", handleInternalScroll);
-
-    return () => {
-      observer.unobserve(container);
-      container.removeEventListener("scroll", handleInternalScroll);
-    };
-  }, []);
-
-  const { isSmallerThanBreakPoint } = useCalculateWindowSize();
+    updateOffset();
+    window.addEventListener("resize", updateOffset);
+    return () => window.removeEventListener("resize", updateOffset);
+  }, [buttonsRowRef]);
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap gap-1 items-center justify-start">
-        <TimeFilterComponent rowVirtualizer={rowVirtualizer} table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
-        <div className="md:hidden flex justify-center items-center">
-          <Button className="py-5" onClick={handleScrollToMap} variant="outline">
-            <Map className="mr-2" />
-            {tTimeTable("scrollToMap")}
-          </Button>
-        </div>
-      </div>
+    <div ref={tableContainerRef} className="flex flex-col gap-2">
       <div
-        ref={tableContainerRef}
+        ref={buttonsRowRef}
         style={{
-          height: "400px",
-          position: "relative",
-          overflow: (!isScrollable || hasUsedVirtualScroll) && isSmallerThanBreakPoint ? "hidden" : "auto",
-          overscrollBehavior: "auto",
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
         }}
-        className="border bg-background"
+        className="flex flex-wrap gap-1 items-center justify-start primary"
       >
+        <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
+        <div className="md:hidden flex justify-center items-center"></div>
+      </div>
+      <div className="border bg-background">
         <Table>
           <TableHeader
-            className="bg-background"
             style={{
               position: "sticky",
-              top: 0,
+              top: headerOffset,
               zIndex: 1,
             }}
+            className="bg-background"
           >
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -180,50 +123,41 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody
-            style={{
-              height: `${rowVirtualizer.getTotalSize()}px`,
-              position: "relative",
-              width: "100%",
-            }}
-          >
-            {rows.length > 0 ? (
-              virtualRows.map((virtualRow) => {
-                const rowIndex = Math.floor(virtualRow.index / 2); // Get the index of the actual data row
-                const isAccordionRow = virtualRow.index % 2 === 1; // Check if it's the second (accordion) row
-                const row = rows[rowIndex];
-                if (!row) return null;
-                const key = `${row.id}-${isAccordionRow ? "accordion" : "main"}`;
+          <TableBody>
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map((row) => {
                 const { liveEstimateTime, cancelled, scheduledTime } = row.original;
                 const liveDateTime = liveEstimateTime ? new Date(liveEstimateTime).getTime() : new Date(scheduledTime).getTime();
                 const isGreyBg = liveDateTime < Date.now() || cancelled;
                 const rowBgClass = isGreyBg ? "bg-gray-200 hover:bg-gray-200" : "hover:bg-white bg-white";
-                if (isAccordionRow) {
-                  return (
-                    <TableRow
-                      key={key}
-                      data-index={virtualRow.index}
-                      ref={(node) => {
-                        requestAnimationFrame(() => {
-                          rowVirtualizer.measureElement(node);
-                        });
-                      }}
-                      style={{
-                        position: "absolute",
-                        transform: `translateY(${virtualRow.start}px)`,
-                        width: "100%",
-                      }}
-                      className={`transition-all fade-in ${rowBgClass}`}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
+
+                return (
+                  <React.Fragment key={`${row.id}-fragment`}>
+                    <TableRow key={row.id} className={`transition-all fade-in border-b-0 ${rowBgClass}`}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          style={{
+                            width: cell.column.getSize(),
+                          }}
+                          key={cell.id}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    <TableRow key={`${row.id}-accordion`} className={`transition-all fade-in ${rowBgClass}`}>
                       <TableCell
+                        colSpan={row.getVisibleCells().length}
                         style={{
-                          width: table.getAllFlatColumns().reduce((acc, column) => acc + column.getSize(), 0),
+                          width: "100%",
                         }}
                       >
                         <Accordion type="single" collapsible>
                           <AccordionItem className="border-none w-full" value={row.id}>
                             <AccordionTrigger
+                              style={{
+                                width: "100%",
+                              }}
                               aria-label={`${tTimeTable("ariaExpandButton")} ${row.original.trainType} ${row.original.trainNumber}`}
                               className="flex-row justify-center gap-2 items-center p-3"
                             ></AccordionTrigger>
@@ -244,38 +178,8 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                         </Accordion>
                       </TableCell>
                     </TableRow>
-                  );
-                } else {
-                  return (
-                    <TableRow
-                      key={key}
-                      ref={(node) => {
-                        requestAnimationFrame(() => {
-                          rowVirtualizer.measureElement(node);
-                        });
-                      }}
-                      style={{
-                        position: "absolute",
-                        transform: `translateY(${virtualRow.start}px)`,
-                        width: "100%",
-                      }}
-                      data-index={virtualRow.index}
-                      className={`transition-all fade-in border-b-0 ${rowBgClass}`}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          style={{
-                            width: cell.column.getSize(),
-                          }}
-                          key={cell.id}
-                        >
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                }
+                  </React.Fragment>
+                );
               })
             ) : (
               <TimetableEmptyRow columns={columns} t={t} />

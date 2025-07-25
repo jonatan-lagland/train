@@ -10,12 +10,10 @@ import { Column, Table } from "@tanstack/react-table";
 import { TransformedTimeTableRow } from "@/lib/types";
 import { useCalculateWindowSize } from "@/lib/utils/calculateWindowSize";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Virtualizer } from "@tanstack/react-virtual";
 
 export const timeRangeInputId = ["timeStartInput", "timeEndInput"];
 
 type TimeFilterComponentProps = {
-  rowVirtualizer: Virtualizer<HTMLDivElement, Element>;
   table: Table<TransformedTimeTableRow>;
   data: TransformedTimeTableRow[];
   tTimeTable: any;
@@ -23,7 +21,6 @@ type TimeFilterComponentProps = {
 };
 
 type TimeFilterComponentContentProps = {
-  rowVirtualizer: Virtualizer<HTMLDivElement, Element>;
   tTimeTable: any;
   isDisableFilter: boolean;
   sliderValues: number[];
@@ -34,7 +31,6 @@ type TimeFilterComponentContentProps = {
 };
 
 const TimeFilterComponentContent = ({
-  rowVirtualizer,
   tTimeTable,
   isDisableFilter,
   sliderValues,
@@ -111,7 +107,6 @@ const TimeFilterComponentContent = ({
             onClick={() => {
               column?.setFilterValue([epochToISO(sliderValues[0]), epochToISO(sliderValues[1])]);
               setOpen(false);
-              rowVirtualizer.scrollToIndex(0, { align: "start" });
             }}
           >
             {tTimeTable("filter")}
@@ -122,7 +117,6 @@ const TimeFilterComponentContent = ({
               column?.setFilterValue(undefined);
               setSliderValues([defaultSliderValues[0], defaultSliderValues[1]]);
               setOpen(false);
-              rowVirtualizer.scrollToIndex(0, { align: "start" });
             }}
             variant="outline"
           >
@@ -134,7 +128,7 @@ const TimeFilterComponentContent = ({
   );
 };
 
-const TimeFilterComponent = ({ rowVirtualizer, table, data, tTimeTable, isDisableFilter }: TimeFilterComponentProps) => {
+const TimeFilterComponent = ({ table, data, tTimeTable, isDisableFilter }: TimeFilterComponentProps) => {
   const column = table.getColumn("scheduledTime");
   const [defaultSliderValues, setDefaultSliderValues] = React.useState([0, 0]);
   const [sliderValues, setSliderValues] = React.useState([0, 0]);
@@ -170,7 +164,6 @@ const TimeFilterComponent = ({ rowVirtualizer, table, data, tTimeTable, isDisabl
           </DrawerTrigger>
           <DrawerContent className="px-4 py-2">
             <TimeFilterComponentContent
-              rowVirtualizer={rowVirtualizer}
               tTimeTable={tTimeTable}
               isDisableFilter={isDisableFilter}
               sliderValues={sliderValues}
@@ -196,7 +189,6 @@ const TimeFilterComponent = ({ rowVirtualizer, table, data, tTimeTable, isDisabl
           </PopoverTrigger>
           <PopoverContent side="bottom" className=" z-[1000]">
             <TimeFilterComponentContent
-              rowVirtualizer={rowVirtualizer}
               tTimeTable={tTimeTable}
               isDisableFilter={isDisableFilter}
               sliderValues={sliderValues}

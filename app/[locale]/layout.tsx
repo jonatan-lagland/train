@@ -32,7 +32,7 @@ export default function LocaleLayout({ children, params: { locale } }: { childre
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <NextIntlClientProvider messages={messages}>
-        <body className={`${inter.variable} ${besley.variable} ${robotoslab.variable} bg-[#F3F3F3]`}>
+        <body className={`${inter.variable} ${besley.variable} ${robotoslab.variable} primary`}>
           {/* Header */}
           <header className="flex-row w-full flex shadow-md px-2 justify-evenly bg-white">
             <Nav />
@@ -42,7 +42,6 @@ export default function LocaleLayout({ children, params: { locale } }: { childre
             {children}
             <Analytics />
           </main>
-          <footer className="flex flex-col items-center justify-center w-full h-44 bg-secondary-foreground shadow-md"></footer>
         </body>
       </NextIntlClientProvider>
     </html>

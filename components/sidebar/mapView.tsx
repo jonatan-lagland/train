@@ -92,7 +92,8 @@ const MarkerPosition = ({ position, trainIcon, data, trainSpeedLabel, trainNumbe
               click: () => {
                 map.setView(position, 10, { animate: true });
               },
-            }}>
+            }}
+          >
             <Popup>
               <span className="font-bold">{trainNumberLabel}:</span> {train.trainNumber} <br />
               <span className="font-bold">{trainSpeedLabel}:</span> {train.speed} km/h <br />
@@ -115,9 +116,7 @@ export default function MapView({
   /* Values are memoized as to not re-render the icon with every coordinate change and keep the pulsating effect constant */
   const defaultPosition: [number, number] = useMemo(() => [departureLatitude, departureLongitude], [departureLatitude, departureLongitude]);
   const position: [number, number] = useMemo(() => {
-    return data.length > 0 && data[0]?.location?.coordinates
-      ? [data[0].location.coordinates[1], data[0].location.coordinates[0]]
-      : defaultPosition;
+    return data.length > 0 && data[0]?.location?.coordinates ? [data[0].location.coordinates[1], data[0].location.coordinates[0]] : defaultPosition;
   }, [data, defaultPosition]);
 
   const trainIcon = useMemo(() => {
@@ -143,13 +142,7 @@ export default function MapView({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <MarkerPosition
-        position={position}
-        trainIcon={trainIcon}
-        data={data}
-        trainNumberLabel={trainNumberLabel}
-        trainSpeedLabel={trainSpeedLabel}
-      />
+      <MarkerPosition position={position} trainIcon={trainIcon} data={data} trainNumberLabel={trainNumberLabel} trainSpeedLabel={trainSpeedLabel} />
     </MapContainer>
   );
 }
