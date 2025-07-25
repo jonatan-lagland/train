@@ -67,7 +67,7 @@ export const createColumns = ({
         const isButtonDisabled = liveDateTime < Date.now() || cancelled;
 
         return (
-          <div className="flex flex-col items-center justify-center text-center">
+          <div className="flex flex-col items-center justify-center text-center text-base">
             <Drawer
               onClose={() => {
                 setIsOpen(false);
@@ -85,6 +85,7 @@ export const createColumns = ({
                   size={"icon"}
                   style={{
                     touchAction: "manipulation",
+                    fontSize: "16px",
                   }}
                 >
                   <Image
@@ -101,7 +102,7 @@ export const createColumns = ({
                 <Sidebar size="minimized" data={data} destinationType={destinationType}></Sidebar>
               </DrawerContent>
             </Drawer>
-            <span className="text-base">{`${trainType} ${trainNumber}`}</span>
+            <span>{`${trainType} ${trainNumber}`}</span>
           </div>
         );
       },

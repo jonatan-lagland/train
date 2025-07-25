@@ -25,6 +25,7 @@ export default function LocaleLayout({ children, params: { locale } }: { childre
   return (
     <html lang={locale}>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon-16x16.png" sizes="16x16" />
         <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />

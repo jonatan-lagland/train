@@ -36,7 +36,7 @@ function Sidebar({ data, destinationType, size = "full" }: SidebarProps) {
   const { stationNextName, stationNextTrainType, stationNextTrainNumber, stationNextTimestamp, stationNextTrainTrack } = nextStation;
 
   return (
-    <div className={`flex flex-col ${size === "full" ? "px-4 gap-5" : "px-1 gap-2"} max-w-lg`}>
+    <div className={`flex flex-col ${size === "full" ? "px-4 gap-5" : "px-1 gap-2 text-base"} max-w-lg`}>
       <div className="grid grid-rows-[min-content_min_content]">
         {data.length === 0 ? null : (
           <div className={`flex flex-wrap justify-between ${size === "full" ? "py-8" : "py-2"}`}>
