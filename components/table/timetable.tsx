@@ -132,6 +132,9 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                 return (
                   <React.Fragment key={`${row.id}-fragment`}>
                     <TableRow
+                      onMouseDown={() => {
+                        setTrainNumber(trainNumber);
+                      }}
                       onClick={() => {
                         setTrainNumber(trainNumber);
                       }}
