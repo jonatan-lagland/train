@@ -67,7 +67,7 @@ export const createColumns = ({
         const isButtonDisabled = liveDateTime < Date.now() || cancelled;
 
         return (
-          <div className="flex flex-col items-center justify-center text-center text-base">
+          <div className="flex flex-col items-center justify-center text-center">
             <Drawer
               onClose={() => {
                 setIsOpen(false);

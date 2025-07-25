@@ -3,6 +3,7 @@ import Nav from "@/components/nav/nav";
 import { Besley, Inter, Roboto_Slab } from "next/font/google";
 import Footer from "@/components/footer/footer";
 import { Analytics } from "@vercel/analytics/react";
+import { Metadata, Viewport } from "next";
 
 const besley = Besley({
   subsets: ["latin"],
@@ -19,19 +20,29 @@ const robotoslab = Roboto_Slab({
   variable: "--robotoslab",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
+export const metadata: Metadata = {
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+};
+
 export default function LocaleLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
   const messages = useMessages();
 
   return (
     <html lang={locale}>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" />
-        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-      </head>
       <NextIntlClientProvider messages={messages}>
         <body className={`${inter.variable} ${besley.variable} ${robotoslab.variable} primary`}>
           {/* Header */}
