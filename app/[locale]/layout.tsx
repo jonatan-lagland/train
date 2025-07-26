@@ -4,6 +4,7 @@ import { Besley, Inter, Roboto_Slab } from "next/font/google";
 import Footer from "@/components/footer/footer";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata, Viewport } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const besley = Besley({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default function LocaleLayout({ children, params: { locale } }: { childre
           <main>
             {children}
             <Analytics />
+            <SpeedInsights />
           </main>
           <footer className="flex flex-col justify-center px-6 py-2 w-full h-28 border bg-highlight">
             <Footer></Footer>
