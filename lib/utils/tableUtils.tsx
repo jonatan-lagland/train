@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import Sidebar from "@/components/sidebar/sidebar";
 import Image from "next/image";
+import { DialogTitle } from "@/components/ui/dialog";
 
 type CreateColumnsProps = {
   data: TransformedTimeTableRow[];
@@ -79,7 +80,7 @@ export const createColumns = ({
                   onClick={() => {
                     handleOpenDrawer(trainNumber);
                   }}
-                  aria-label={`${translation("ariaMapViewButton")} ${trainType} ${trainNumber}`}
+                  aria-label={`${trainType} ${trainNumber}: ${translation("ariaMapViewButton")}`}
                   disabled={isButtonDisabled}
                   variant={"ghost"}
                   size={"icon"}

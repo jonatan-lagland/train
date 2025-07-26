@@ -55,6 +55,8 @@ function Sidebar({ data, destinationType, size = "full" }: SidebarProps) {
         )}
         <div className={`flex items-center justify-center ${size === "full" ? "text-xl" : "text-base"} min-h-16`}>
           <ArrivalTimestamp
+            stationNextTrainType={stationNextTrainType}
+            stationNextTrainNumber={stationNextTrainNumber}
             city={city}
             destinationType={destinationType}
             locale={locale}

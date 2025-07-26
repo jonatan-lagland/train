@@ -6,6 +6,8 @@ import Link from "next/link";
 import { AnimatedEllipses } from "../ui/spinner";
 
 type ArrivalTimestampProps = {
+  stationNextTrainType: string;
+  stationNextTrainNumber: number;
   city: string;
   destinationType: TrainTypeParam;
   locale: SiteLocale;
@@ -36,6 +38,8 @@ export default function ArrivalTimestamp({
   timeStampNow,
   data,
   commuterLink,
+  stationNextTrainType,
+  stationNextTrainNumber,
 }: ArrivalTimestampProps): React.ReactElement {
   const translation = useTranslations("TimeTable");
   const decodedCity = decodeURIComponent(city);
@@ -59,16 +63,16 @@ export default function ArrivalTimestamp({
     switch (locale) {
       case "se":
         return (
-          <>
+          <span aria-live="polite" aria-atomic="true">
             {destinationType.toLowerCase() === "arrival" ? "Anländer till" : "Avgår från"} <span className="capitalize">{decodedCity}</span> station
             om <span className="font-bold">{travelTimeLabel}</span>
             {destinationType.toLowerCase() === "arrival" ? "på spår " : " från spår "}
             <span>{stationNextTrainTrack}</span>.
-          </>
+          </span>
         );
       case "en":
         return (
-          <>
+          <span aria-live="polite" aria-atomic="true">
             {destinationType.toLowerCase() === "arrival" ? "Arrives at " : "Departs from "} <span className="capitalize">{decodedCity}</span> station
             in <span className="font-bold">{travelTimeLabel}</span>
             {stationNextTrainTrack ? (
@@ -78,11 +82,11 @@ export default function ArrivalTimestamp({
               </>
             ) : null}
             {"."}
-          </>
+          </span>
         );
       default:
         return (
-          <>
+          <span aria-live="polite" aria-atomic="true">
             {destinationType.toLowerCase() === "arrival" ? "Saapuu " : "Lähtee "} <span className="capitalize">{decodedCity}</span>{" "}
             {destinationType.toLowerCase() === "arrival" ? "asemalle " : "asemalta "} <span className="font-bold">{travelTimeLabel}</span> kuluttua
             {stationNextTrainTrack ? (
@@ -92,7 +96,7 @@ export default function ArrivalTimestamp({
               </>
             ) : null}
             {"."}
-          </>
+          </span>
         );
     }
   }, [stationNextTimestamp, timeStampNow, translation, locale, destinationType, decodedCity, stationNextTrainTrack]);

@@ -156,7 +156,7 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
                               style={{
                                 width: "100%",
                               }}
-                              aria-label={`${tTimeTable("ariaExpandButton")} ${row.original.trainType} ${row.original.trainNumber}`}
+                              aria-label={`${row.original.trainType} ${row.original.trainNumber}: ${tTimeTable("ariaExpandButton")}`}
                               className="flex-row justify-center gap-2 items-center p-3"
                             ></AccordionTrigger>
                             <AccordionContent className="flex flex-col items-center justify-center">
