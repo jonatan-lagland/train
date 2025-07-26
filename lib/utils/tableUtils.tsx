@@ -107,6 +107,13 @@ export const createColumns = ({
           </div>
         );
       },
+      filterFn: (row, columnId, filterValue) => {
+        const compositeId = `${row.original.trainType} ${row.original.trainNumber}`;
+        if (Array.isArray(filterValue) && filterValue.includes(compositeId)) {
+          return true;
+        }
+        return false;
+      },
     },
     {
       accessorKey: "commercialTrack",

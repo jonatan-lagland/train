@@ -38,8 +38,12 @@
     "reset": "Clear selections",
     "timeRangeLabel": "Time interval",
     "timeRangeDescription": "Set the time interval for the table.",
+    "trainNamePlaceholder": "Find a train...",
+    "trainNameDescription": "Filter the table by train.",
     "scrollToMap": "Go to map",
-    "city": "City"
+    "city": "City",
+    "search": "Search",
+    "searchnotfound": "No results."
   },
   "AriaTimeTable": {
     "select": "Select all"

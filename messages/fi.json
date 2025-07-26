@@ -38,8 +38,12 @@
     "reset": "Poista valinnat",
     "timeRangeLabel": "Aikaväli",
     "timeRangeDescription": "Määritä taulukon aikaväli.",
+    "trainNamePlaceholder": "Hae juna...",
+    "trainNameDescription": "Suodata taulukko junan mukaan.",
     "scrollToMap": "Siirry karttaan",
-    "city": "Kaupunki"
+    "city": "Kaupunki",
+    "search": "Etsi",
+    "searchnotfound": "Haulle ei löytynyt tuloksia."
   },
   "AriaTimeTable": {
     "select": "Valitse kaikki"

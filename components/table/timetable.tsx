@@ -7,6 +7,8 @@ import {
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
@@ -21,6 +23,7 @@ import TimetableEmptyRow from "./table-components/timetableEmptyRow";
 import TimeFilterComponent from "./table-components/timeFilterComponent";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import JourneyItem from "./table-components/journeyItem";
+import StationNumberFilterComponent from "./table-components/stationNumberFilterComponent";
 
 export type TimeTableProps = {
   data: TransformedTimeTableRow[];
@@ -60,7 +63,9 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
@@ -98,7 +103,9 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
         }}
         className="flex flex-wrap gap-1 items-center justify-start primary"
       >
+        <StationNumberFilterComponent table={table} tTimeTable={tTimeTable}></StationNumberFilterComponent>
         <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
+
         <div className="md:hidden flex justify-center items-center"></div>
       </div>
       <div className="border bg-background">

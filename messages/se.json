@@ -38,8 +38,12 @@
     "reset": "Rensa val",
     "timeRangeLabel": "Tidsintervall",
     "timeRangeDescription": "Ange tidsintervallet för tabellen.",
+    "trainNamePlaceholder": "Hitta ett tåg...",
+    "trainNameDescription": "Filtrera tabellen efter tåg.",
     "scrollToMap": "Gå till kartan",
-    "city": "Stad"
+    "city": "Stad",
+    "search": "Sök",
+    "searchnotfound": "Inga resultat."
   },
   "AriaTimeTable": {
     "select": "Välj alla"
