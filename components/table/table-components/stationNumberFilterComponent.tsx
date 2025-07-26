@@ -144,7 +144,7 @@ const StationNumberFilterComponent = ({ table, tTimeTable }: TimeFilterComponent
   }
 
   function handleSetTrainNumber() {
-    const filteredRows = table.getFilteredRowModel().rows;
+    const filteredRows = table.getSortedRowModel().rows;
     if (filteredRows.length > 0) {
       const firstTrainNumber = filteredRows[0].original.trainNumber;
       setTrainNumber(firstTrainNumber);
@@ -155,6 +155,9 @@ const StationNumberFilterComponent = ({ table, tTimeTable }: TimeFilterComponent
     form.resetField("trainTypes");
     table.getColumn("trainType")?.setFilterValue(undefined);
     setOpen(false);
+    setTimeout(() => {
+      handleSetTrainNumber();
+    }, 0);
   }
 
   return (
