@@ -14,6 +14,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { SelectedTrainContext } from "@/lib/context/SelectedTrainContext";
 
 export const timeRangeInputId = ["timeStartInput", "timeEndInput"];
 
@@ -99,6 +100,7 @@ const StationNumberFilterComponentContent = ({ tTimeTable, form, trainOptions, o
 };
 
 const StationNumberFilterComponent = ({ table, tTimeTable }: TimeFilterComponentProps) => {
+  const { setTrainNumber } = React.useContext(SelectedTrainContext);
   const { isSmallerThanBreakPoint } = useCalculateWindowSize();
   const [open, setOpen] = React.useState(false);
 
@@ -135,6 +137,18 @@ const StationNumberFilterComponent = ({ table, tTimeTable }: TimeFilterComponent
     const filterValues = values.trainTypes;
     table.getColumn("trainType")?.setFilterValue(filterValues && filterValues.length ? filterValues : undefined);
     setOpen(false);
+
+    setTimeout(() => {
+      handleSetTrainNumber();
+    }, 0);
+  }
+
+  function handleSetTrainNumber() {
+    const filteredRows = table.getFilteredRowModel().rows;
+    if (filteredRows.length > 0) {
+      const firstTrainNumber = filteredRows[0].original.trainNumber;
+      setTrainNumber(firstTrainNumber);
+    }
   }
 
   function handleReset() {

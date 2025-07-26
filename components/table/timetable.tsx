@@ -105,7 +105,6 @@ export function TimeTableComponent({ data, destinationType }: TimeTableProps) {
       >
         <StationNumberFilterComponent table={table} tTimeTable={tTimeTable}></StationNumberFilterComponent>
         <TimeFilterComponent table={table} data={data} tTimeTable={tTimeTable} isDisableFilter={isDisableFilter} />
-
         <div className="md:hidden flex justify-center items-center"></div>
       </div>
       <div className="border bg-background">
